@@ -8,7 +8,7 @@ import Login from './modules/login';
 import Home from './modules/home';
 import NotFound from './utils/views/404';
 
-import {SessionContext} from './utils/providers/auht'; 
+import {SessionContext} from './utils/providers/sessionProvider'; 
 
 function App() {
   const {isLoged , setLoged , checkSession } = React.useContext(SessionContext);
