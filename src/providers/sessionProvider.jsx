@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState } from 'react'; 
+import {createContext, useState } from 'react'; 
 
 const checkSession = async () =>{
     return new Promise((res, rej)=>{
@@ -15,7 +15,7 @@ function SessionProvider({children}){
         <SessionContext.Provider value={{
             isLoged,
             setLoged,
-            checkSession
+            checkSession,
         }}>
             {children}
         </SessionContext.Provider>

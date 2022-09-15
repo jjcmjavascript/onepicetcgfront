@@ -6,9 +6,9 @@ import {
 import React, { useEffect } from 'react';
 import Login from './modules/login';
 import Home from './modules/home';
-import NotFound from './utils/views/404';
+import NotFound from './views/404';
 
-import {SessionContext} from './utils/providers/sessionProvider'; 
+import {SessionContext} from './providers/sessionProvider'; 
 
 function App() {
   const {isLoged , setLoged , checkSession } = React.useContext(SessionContext);
