@@ -19,7 +19,7 @@ function List({ className }) {
                     cards.length > 0 
                         ? cards.map((card, indexKey)=>(<SimpleCard key={indexKey} id ={card.id}> 
                             {/* <FloatingCard>
-                                
+                                    asdaqsd
                             </FloatingCard> */}
                         🥋{card.name} | 💸{card.cost} </SimpleCard>))
                         : (<SimpleCard> Sin cartas ... </SimpleCard>)
