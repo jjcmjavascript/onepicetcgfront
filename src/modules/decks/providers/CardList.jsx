@@ -1,5 +1,4 @@
 import { createContext, useState } from 'react'; 
-
 import {usePaginatedCards} from "../hooks/usePaginatedCards";
 
 const CardContext = createContext(); 

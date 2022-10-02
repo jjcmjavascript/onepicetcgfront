@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import {SessionProvider} from './providers/sessionProvider'; 
+import {SessionProvider} from './providers/session'; 
 
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
