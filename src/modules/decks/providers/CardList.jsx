@@ -1,18 +1,17 @@
-import { createContext, useState } from 'react'; 
-import {usePaginatedCards} from "../hooks/usePaginatedCards";
+import { createContext, useState} from 'react'; 
+import { usePaginateCard } from "../hooks/usePaginatedCards";
+import useDeckHook from "../hooks/useDeck";
+import rules from '../services/deckRules';
 
 const CardContext = createContext(); 
 
 const CardProvider = ({children})=>{
-    const [filters, setFilters]= useState({
-        page : 1
-    });
-
-    const usePaginate = usePaginatedCards({filters});
+    const useFilters = useState({page : 1});
+    const useDeck = useDeckHook(rules);
+    const usePaginate = usePaginateCard({filters : useFilters[0]});
     
     return (
-        <CardContext.Provider 
-        value={{ usePaginate, filters, setFilters }}>
+        <CardContext.Provider value={{ usePaginate, useFilters, useDeck}}>
             {children}
         </CardContext.Provider>
     );

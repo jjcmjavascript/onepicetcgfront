@@ -1,4 +1,5 @@
 const defaultStyle = {
+    'zIndex': 2,
     'width': '300px',
     'position' : 'absolute',
     left : '49vw',

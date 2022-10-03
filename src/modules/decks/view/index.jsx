@@ -9,10 +9,8 @@ function Deck(){
     return <>
         <CardProvider>
             <Container className="container-fluid">
-                <SideList className="col-4 col-md-3"></SideList>
-                <Main className="col-8 col-md-9 pt-2">
-
-                </Main>
+                <SideList className="col-4 col-md-3" />
+                <Main className="col-8 col-md-9 pt-2" />
             </Container>
         </CardProvider>
     </>; 
