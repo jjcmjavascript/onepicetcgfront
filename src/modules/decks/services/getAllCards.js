@@ -5,7 +5,7 @@ const headers = {
     'Content-Type': 'application/json',
 }; 
 
-async function findAll(filters = {})  {
+export default async function findAll(filters = {})  {
     try {
         let formatedFilters = ''; 
         Object.keys(filters).forEach(function(key){
@@ -19,9 +19,3 @@ async function findAll(filters = {})  {
         console.log(error);
     }
 }
-
-
-
-export default {
-    findAll
-};

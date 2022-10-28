@@ -9,7 +9,7 @@ export default ({ className }) => {
     return <>
         <div className={className}>
             <div className='row'>
-                {deck.map((card, cardKey) => {
+                {deck.cards.map((card, cardKey) => {
                     return <div className="col-1 p-1" key={cardKey}>
                         <SimpleCard onClick={ ()=> removeFromDeck(cardKey )}> 
                             <img src={"http://localhost:8080/public/" + card._image.route} className="img-fluid" />

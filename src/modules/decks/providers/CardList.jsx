@@ -9,9 +9,10 @@ const CardProvider = ({children})=>{
     const useFilters = useState({page : 1});
     const useDeck = useDeckHook(rules);
     const usePaginate = usePaginateCard({filters : useFilters[0]});
+    const useActiveCard = useState(null);
     
     return (
-        <CardContext.Provider value={{ usePaginate, useFilters, useDeck}}>
+        <CardContext.Provider value={{ usePaginate, useFilters, useDeck, useActiveCard}}>
             {children}
         </CardContext.Provider>
     );
