@@ -1,12 +1,17 @@
-import react from "react"
+import React from "react";
 
-export default ({children, className, type, onClick}) => {
-    className = 'btn btn-outline-'.concat(className || 'default'); 
-    type = type || 'button';
+const getClassName = (className) => {
+  const defaultClass = "btn btn-outline-default";
 
-    return <>
-        <button className={className} type={type} onClick={onClick}>
-            {children}
-        </button>
-    </>
-}
+  return `btn btn-outline-${className}` || defaultClass;
+};
+
+const btn = ({ children, className, onClick }) => {
+  return (
+    <button className={getClassName(className)} type="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+};
+
+export default btn;
