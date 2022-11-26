@@ -1,14 +1,18 @@
 import React from 'react'; 
 import {CardProvider} from '../providers/CardList'; 
-import SideList from './SideList';
 import Container from '../../../components/Container';
 
-function Deck(){
+import LeftSide from './LeftSideList';
+import RightSide from './RightSide';
+import Main from './Main';
 
+function Deck(){
     return <>
         <CardProvider>
             <Container className="container-fluid">
-                <SideList className="col-4"></SideList>
+                <LeftSide className="col-3" />
+                <Main className="col-6 pt-2" />
+                <RightSide className="col-3" />
             </Container>
         </CardProvider>
     </>; 

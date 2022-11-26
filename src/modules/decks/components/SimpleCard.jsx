@@ -1,7 +1,16 @@
-export default ({children, id, borderColor}) => {
+export default ({children, id, onMouseEnter, onMouseLeave, onClick, className}) => {
+    const style = {
+        cursor : 'pointer',
+    }; 
+
     return (
-        <div className={"card col-12 mt-1 border-" + borderColor} key={id}>
-            <div className="card-body bg-outline-warning">
+        <div className={className} key={id} 
+            style={style}
+            onMouseEnter={onMouseEnter} 
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}>
+            
+            <div className="card-body">
                 {children}
             </div>
         </div>
