@@ -1,3 +1,3 @@
-1 - npm install
+0 - npx eslint --init
 
-2 - npm install eslint -g
+1 - npm install
