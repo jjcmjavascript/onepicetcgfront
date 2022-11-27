@@ -1,19 +1,16 @@
-const isFull = (deck)=>{
-    return deck.length >= 50;     
-}; 
+const isFull = (deck) => deck.length >= 50;
 
-const isMaxCardQuantityAllowed = (card, deck)=>{
-    return deck.filter(currentCard => currentCard.codigo === card.codigo).length >= 4; 
-}; 
+const isMaxCardQuantityAllowed = (card, deck) => {
+  return (
+    deck.filter((currentCard) => currentCard.codigo === card.codigo).length >= 4
+  );
+};
 
-const isAllowed = (card, deck)=>{
-    return !isFull(deck) && !isMaxCardQuantityAllowed(card, deck);
-}
+const isAllowed = (card, deck) =>
+  !isFull(deck) && !isMaxCardQuantityAllowed(card, deck);
 
 export default {
-    isMaxCardQuantityAllowed,
-    isFull,
-    isAllowed
-}
-
-
+  isMaxCardQuantityAllowed,
+  isFull,
+  isAllowed,
+};

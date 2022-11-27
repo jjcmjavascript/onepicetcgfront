@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes } from "react-router-dom";
 import React, { useEffect } from "react";
 import { SessionContext } from "./providers/session";
-import LogedHeader from "./components/LogedHeader";
+import LogedHeader from "./components/logedHeader";
 import privateRoutes from "./routes/private";
 import publicRoutes from "./routes/public";
 

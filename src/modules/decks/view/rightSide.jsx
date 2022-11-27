@@ -1,9 +1,9 @@
-import react, {useContext} from "react";
-import { CardContext } from '../providers/CardList';
-import SimpleCard from '../components/SimpleCard';
+import React, {useContext} from "react";
+import store from '../providers/store';
+import SimpleCard from '../components/simpleCard';
 
 function RightSide({ className }) {
-    const {useActiveCard} = useContext(CardContext);
+    const {useActiveCard} = useContext(store.cardContext);
     const [activeCard, setActiveCard] = useActiveCard;
 
     return <>       

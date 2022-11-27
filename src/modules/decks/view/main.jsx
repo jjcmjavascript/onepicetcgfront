@@ -1,0 +1,29 @@
+import React, { useContext } from "react";
+import SimpleCard from "../components/simpleCard";
+import store from "../providers/store";
+
+export default ({ className }) => {
+  const { useDeck } = useContext(store.cardContext);
+  const { deck, removeFromDeck } = useDeck;
+
+  return (
+    <>
+      <div className={className}>
+        <div className="row">
+          {deck.cards.map((card, cardKey) => {
+            return (
+              <div className="col-1 p-1" key={cardKey}>
+                <SimpleCard onClick={() => removeFromDeck(cardKey)}>
+                  <img
+                    src={"http://localhost:8080/public/" + card._image.route}
+                    className="img-fluid"
+                  />
+                </SimpleCard>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+};
