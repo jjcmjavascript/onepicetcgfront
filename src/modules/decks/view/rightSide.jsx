@@ -4,7 +4,7 @@ import SimpleCard from '../components/simpleCard';
 
 function RightSide({ className }) {
     const {useActiveCard} = useContext(store.cardContext);
-    const [activeCard, setActiveCard] = useActiveCard;
+    const [activeCard] = useActiveCard;
 
     return <>       
         <div className={className}>
