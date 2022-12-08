@@ -1,9 +1,7 @@
 const isFull = (deck) => deck.length >= 50;
 
 const isMaxCardQuantityAllowed = (card, deck) => {
-  return (
-    deck.filter((currentCard) => currentCard.codigo === card.codigo).length >= 4
-  );
+  return deck.filter((currentCard) => currentCard.code === card.code).length >= 4
 };
 
 const isAllowed = (card, deck) =>{
