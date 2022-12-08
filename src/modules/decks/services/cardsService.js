@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/v1/cards";
+const baseUrl = "http://localhost:4000/v1/cards";
 const headers = {
   "Content-Type": "application/json",
 };

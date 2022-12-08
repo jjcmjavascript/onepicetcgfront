@@ -15,7 +15,7 @@ export default ({ className }) => {
               <div className="col-1 p-1" key={cardKey}>
                 <SimpleCard onClick={() => removeFromDeck(cardKey)}>
                   <img
-                    src={"http://localhost:8080/public/" + card._image.route}
+                    src={card._image.route}
                     className="img-fluid"
                   />
                 </SimpleCard>

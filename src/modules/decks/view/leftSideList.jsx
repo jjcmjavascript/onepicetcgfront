@@ -8,7 +8,7 @@ const leftSide = ({ className }) => {
   const { usePaginate, useDeck, useActiveCard } = useContext(store.cardContext);
   const { cards } = usePaginate;
   const { setInDeck } = useDeck;
-  const [setActiveCard] = useActiveCard;
+  const [activeCard, setActiveCard] = useActiveCard;
 
   return (
     <div className={className}>
@@ -34,6 +34,7 @@ const leftSide = ({ className }) => {
         </div>
       </div>
 
+      
       <ListContainer className="col-12 mt-1 text-center px-2 ">
         {cards.length > 0 &&
           cards.map((card) => {

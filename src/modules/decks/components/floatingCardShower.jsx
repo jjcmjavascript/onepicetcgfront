@@ -10,7 +10,7 @@ export default ({ url, className }) => {
     return <>
         <span>
             <div className={className} style={defaultStyle}>
-                <img src={'http://localhost:8080/public/' + url} className="img-fluid" />
+                <img src={url} className="img-fluid" />
             </div>
         </span>
     </>

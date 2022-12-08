@@ -16,7 +16,7 @@ const usePaginateCard = ({ filters }) => {
   useEffect(() => {
     cardsService.getCards(filters).then((res) => {
       setPaginate(res);
-      setCards(cards.concat(res.rows));
+      setCards(cards.concat(res.data.rows));
     });
   }, [filters]);
 

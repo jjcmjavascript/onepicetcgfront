@@ -9,12 +9,12 @@ function RightSide({ className }) {
     return <>       
         <div className={className}>
             <SimpleCard className="card col-12 mt-1 border-default">
-                {activeCard  && <img src ={'http://localhost:8080/public/'+ activeCard._image_full.route} className="img-fluid"></img>}
+                {activeCard  && <img src ={activeCard._image_full.route} className="img-fluid"></img>}
             </SimpleCard>
             
             <SimpleCard className="card col-12 mt-1 border-default">
                 {activeCard && activeCard.name} <br/>
-                {activeCard && activeCard.codigo} -  {activeCard && activeCard.cost} - {activeCard && activeCard.power}<br/>
+                {activeCard && activeCard.code} -  {activeCard && activeCard.cost} - {activeCard && activeCard.power}<br/>
             </SimpleCard>
         </div>
     </>

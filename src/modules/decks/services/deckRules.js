@@ -6,8 +6,11 @@ const isMaxCardQuantityAllowed = (card, deck) => {
   );
 };
 
-const isAllowed = (card, deck) =>
-  !isFull(deck) && !isMaxCardQuantityAllowed(card, deck);
+const isAllowed = (card, deck) =>{
+  console.log(isFull(deck) , isMaxCardQuantityAllowed(card, deck), card , deck)
+
+  return !isFull(deck) && !isMaxCardQuantityAllowed(card, deck);
+}
 
 export default {
   isMaxCardQuantityAllowed,
