@@ -10,14 +10,11 @@ export default ({ className }) => {
     <>
       <div className={className}>
         <div className="row">
-          {deck.cards.map((card, cardKey) => {
+          {deck.map((card, cardKey) => {
             return (
               <div className="col-1 p-1" key={cardKey}>
                 <SimpleCard onClick={() => removeFromDeck(cardKey)}>
-                  <img
-                    src={card._image.route}
-                    className="img-fluid"
-                  />
+                  <img src={card._image.route} className="img-fluid" />
                 </SimpleCard>
               </div>
             );

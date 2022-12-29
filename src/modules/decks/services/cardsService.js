@@ -1,12 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "http://localhost:4000/v1/cards";
+const baseUrl = process.env.REACT_APP_BACKEND_URL + '/cards';
+
 const headers = {
-  "Content-Type": "application/json",
+  'Content-Type': 'application/json',
 };
 
 const getCards = (filters = {}) => {
-  let formatedFilters = "";
+  let formatedFilters = '';
 
   Object.keys(filters).forEach((key) => {
     formatedFilters = formatedFilters.concat(`${key}=${filters[key]}&`);

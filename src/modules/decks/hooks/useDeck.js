@@ -1,22 +1,16 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useDeck = (rules) => {
-  const [deck, setDeck] = useState({
-    cards: [],
-    leader: {},
-    don: {},
-  });
+  const [deck, setDeck] = useState([]);
 
   const setInDeck = (card) => {
-    if (rules.isAllowed(card, deck.cards)) {
-      deck.cards.push(card);
-      setDeck({ ...deck });
+    if (rules.isAllowed(card, deck)) {
+      setDeck([...deck, card]);
     }
   };
 
   const removeFromDeck = (index) => {
-    deck.cards.splice(index, 1);
-    setDeck({ ...deck });
+    setDeck(deck.filter((card, i) => i !== index));
   };
 
   return { deck, setDeck, setInDeck, removeFromDeck };

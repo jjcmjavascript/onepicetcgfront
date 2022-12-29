@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -15,9 +16,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider start build",
-    "test": "react-scripts --openssl-legacy-provider start test"
+    "start": "env-cmd -f .env react-scripts --openssl-legacy-provider start",
+    "build": "env-cmd -f .env react-scripts --openssl-legacy-provider start build",
+    "test":  "env-cmd -f .env react-scripts --openssl-legacy-provider start test"
   },
   "eslintConfig": {
     "extends": [
