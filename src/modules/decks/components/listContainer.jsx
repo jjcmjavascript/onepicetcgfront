@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext, forwardRef } from "react";
+import store from "../providers/store";
 
 const defaultDivStyle = {
   minHeight: "80vh",
@@ -13,12 +14,13 @@ const getComputedStyle = (divStyle = {}) => {
   };
 };
 
-const listContainer = ({ children, className, divStyle }) => {
+const listContainer = forwardRef((props, ref) => {
+  const { useFilters } = useContext(store.cardContext);
   return (
-    <div className={className} style={getComputedStyle(divStyle)}>
-      {children}
+    <div ref={ref} style={getComputedStyle(props.divStyle)} {...props}>
+      {props.children}
     </div>
   );
-};
+});
 
 export default listContainer;

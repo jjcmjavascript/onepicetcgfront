@@ -6,14 +6,14 @@ import rules from "../services/deckRules";
 const cardContext = createContext();
 
 const cardProvider = ({ children }) => {
-  const useFilters = useState({ page: 1 });
-  const useDeck = useDecks(rules);
-  const usePaginate = usePaginateCard({ filters: useFilters[0] });
-  const useActiveCard = useState(null);
+  const filterState = useState({ page: 1 });
+  const deckState = useDecks(rules);
+  const paginateState = usePaginateCard({ filters: filterState[0] });
+  const activeCardState = useState(null);
 
   return (
     <cardContext.Provider
-      value={{ usePaginate, useFilters, useDeck, useActiveCard }}
+      value={{ filterState, deckState, paginateState, activeCardState }}
     >
       {children}
     </cardContext.Provider>
