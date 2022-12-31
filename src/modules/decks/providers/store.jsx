@@ -1,20 +1,36 @@
 import React, { createContext, useState } from "react";
 import usePaginateCard from "../hooks/usePaginatedCards";
 import useDecks from "../hooks/useDeck";
+import useSelectFilters from "../hooks/useSelects";
 import rules from "../services/deckRules";
+import deckService from "../services/deckService";
 
 const cardContext = createContext();
 
 const cardProvider = ({ children }) => {
-  const filterState = useState({ page: 1 });
-  const deckState = useDecks(rules);
-  const paginateState = usePaginateCard({ filters: filterState[0] });
-  const activeCardState = useState(null);
+  const states = {
+    filters: useState({ page: 1 }),
+    activeCard: useState(null),
+  };
+
+  const hooks = {
+    deck: useDecks(rules),
+    selects: useSelectFilters(),
+    paginate: usePaginateCard({ filters: states.filters[0] }),
+  };
+
+  const actions = {
+    persistDeck: () => {
+      const deck = hooks.deck.deck;
+
+      if (!rules.isValidDeck(deck)) return;
+
+      deckService.saveDeck(hooks.deck.deck);
+    },
+  };
 
   return (
-    <cardContext.Provider
-      value={{ filterState, deckState, paginateState, activeCardState }}
-    >
+    <cardContext.Provider value={{ states, hooks, actions }}>
       {children}
     </cardContext.Provider>
   );

@@ -1,12 +1,14 @@
 import React from "react";
 
-const input = ({ placeholder, ariaLabel, type = "text" }) => {
+const input = ({ placeholder, value,  ariaLabel, onChange, type = "text" }) => {
   return (
     <input
+      value={value}
       className="form-control"
       type={type}
       placeholder={placeholder}
       aria-label={ariaLabel}
+      onChange={onChange}
     />
   );
 };

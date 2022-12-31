@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useDeck = (rules) => {
   const [deck, setDeck] = useState([]);

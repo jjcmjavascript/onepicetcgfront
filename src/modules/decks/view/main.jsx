@@ -3,8 +3,8 @@ import SimpleCard from "../components/simpleCard";
 import store from "../providers/store";
 
 export default ({ className }) => {
-  const { deckState } = useContext(store.cardContext);
-  const { deck, removeFromDeck } = deckState;
+  const { hooks } = useContext(store.cardContext);
+  const { deck, removeFromDeck } = hooks.deck;
 
   return (
     <>

@@ -1,26 +1,23 @@
 import React, { useContext, useEffect, useRef } from "react";
 import store from "../providers/store";
-import InputSeach from "../components/inputSeach";
+import FiltersSection from "../components/filtersSection";
 import ListContainer from "../components/listContainer";
 import SimpleCard from "../components/simpleCard";
-import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 
 const leftSide = ({ className }) => {
-  const { paginateState, deckState, activeCardState, filterState } = useContext(
-    store.cardContext
-  );
-  const { cards, paginate } = paginateState;
-  const { setInDeck } = deckState;
-  const [_, setActiveCard] = activeCardState;
-  const [filters, setFilters] = filterState;
+  const { hooks, states } = useContext(store.cardContext);
+  const { cards, paginate } = hooks.paginate;
+  const { setInDeck } = hooks.deck;
+  const [_, setActiveCard] = states.activeCard;
+  const [filters, setFilters] = states.filters;
 
-  const onScrollHandler = (event) => {
+  const getMorePagesOnScroll = (event) => {
     var scrollY = event.target.scrollHeight - event.target.scrollTop;
     var height = event.target.offsetHeight;
     var offset = height - scrollY;
 
     if (offset == 0 || offset == 1) {
-      if(filters.page + 1 <= paginate.nextPage){
+      if (filters.page + 1 <= paginate.nextPage) {
         setFilters({ ...filters, page: filters.page + 1 });
       }
     }
@@ -28,31 +25,12 @@ const leftSide = ({ className }) => {
 
   return (
     <div className={className}>
-      <InputSeach />
-      <div className="row mt-2 ">
-        <div className="col-6">
-          <select className="form-select">
-            <option defaultValue=""> Elija un Color</option>
-            <option value="1">Rojo</option>
-            <option value="2">Azul</option>
-            <option value="3">Verde</option>
-          </select>
-        </div>
-
-        <div className="col-6">
-          <select className="form-select">
-            <option defaultValue="">Elija un Tipo</option>
-            <option value="1">Rojo</option>
-            <option value="2">Azul</option>
-            <option value="3">Verde</option>
-          </select>
-        </div>
-      </div>
+      <FiltersSection />
 
       <ListContainer
         className="col-12 mt-1 text-center px-2"
         id="list_container_id"
-        onScroll={onScrollHandler}
+        onScroll={getMorePagesOnScroll}
       >
         {cards.length > 0 &&
           cards.map((card) => {
