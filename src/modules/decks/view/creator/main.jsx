@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import SimpleCard from "../components/simpleCard";
-import Container from "../../../components/container";
-import BadgeRounded from "../../../components/badgeRounded";
+import SimpleCard from "../../components/simpleCard";
+import Container from "../../../../components/container";
+import BadgeRounded from "../../../../components/badgeRounded";
 
-import store from "../provider/store";
-import { DON_ID, LEADER_ID } from "../../../helpers/deckRules";
+import store from "../../provider/store";
+import { DON_ID, LEADER_ID } from "../../../../helpers/deckRules";
 
-export default ({ className }) => {
+export default function MainCreatorSection ({ className }){
   const { hooks } = useContext(store.CardContext);
   const { deck, removeFromDeck } = hooks.deck;
 

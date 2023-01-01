@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef } from "react";
-import store from "../provider/store";
-import FiltersSection from "../components/filtersSection";
-import ListContainer from "../components/listContainer";
-import SimpleCard from "../components/simpleCard";
+import store from "../../provider/store";
+import FiltersSection from "../../components/filtersSection";
+import ListContainer from "../../components/listContainer";
+import SimpleCard from "../../components/simpleCard";
 
-const leftSide = ({ className }) => {
+export default function LeftSide({ className }) {
   const { hooks, states } = useContext(store.CardContext);
   const { cards, paginate } = hooks.paginate;
   const { setInDeck } = hooks.deck;
@@ -49,6 +49,4 @@ const leftSide = ({ className }) => {
       </ListContainer>
     </div>
   );
-};
-
-export default leftSide;
+}

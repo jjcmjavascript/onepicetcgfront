@@ -1,12 +1,12 @@
 import React from "react";
-import store from "../provider/store";
-import Container from "../../../components/container";
+import store from "../../provider/store";
+import Container from "../../../../components/container";
 
 import LeftSide from "./leftSideList";
 import RightSide from "./rightSide";
 import Main from "./main";
 
-const deck = () => {
+const Creator = () => {
   return (
     <store.CardProvider>
       <Container className="container-fluid">
@@ -18,4 +18,4 @@ const deck = () => {
   );
 };
 
-export default deck;
+export default Creator;
