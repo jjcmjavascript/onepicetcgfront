@@ -1,5 +1,5 @@
 import React, { useContext, forwardRef } from "react";
-import store from "../providers/store";
+import store from "../provider/store";
 
 const defaultDivStyle = {
   minHeight: "80vh",
@@ -15,7 +15,7 @@ const getComputedStyle = (divStyle = {}) => {
 };
 
 const listContainer = forwardRef((props, ref) => {
-  const { useFilters } = useContext(store.cardContext);
+  const { useFilters } = useContext(store.CardContext);
   return (
     <div ref={ref} style={getComputedStyle(props.divStyle)} {...props}>
       {props.children}

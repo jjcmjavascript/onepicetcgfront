@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes } from "react-router-dom";
-import React, { useEffect } from "react";
-import { SessionContext } from "./providers/session";
+import React, { useEffect, useContext } from "react";
+import { GlobalContext } from "./providers/global";
 import LogedHeader from "./components/logedHeader";
 import privateRoutes from "./routes/private";
 import publicRoutes from "./routes/public";
 
 function App() {
-  const { isLoged, setLoged, checkSession } = React.useContext(SessionContext);
+  const { isLoged, setLoged, checkSession } = useContext(GlobalContext);
 
   useEffect(() => {
     checkSession().then((res) => {

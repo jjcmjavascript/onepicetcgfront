@@ -1,19 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useDeck = (rules) => {
-  const [deck, setDeck] = useState([]);
+  const [deck, setDeck] = useState({
+    name: '',
+    cards: [],
+  });
 
   const setInDeck = (card) => {
     if (rules.isAllowed(card, deck)) {
-      setDeck([...deck, card]);
+      deck.cards.push(card);
+      setDeck({...deck });
     }
   };
 
   const removeFromDeck = (index) => {
-    setDeck(deck.filter((card, i) => i !== index));
+    setDeck({
+      ...deck,
+      cards: deck.cards.filter((card, i) => i !== index),
+    });
   };
 
-  return { deck, setDeck, setInDeck, removeFromDeck };
+  const setName = (name) => {
+    setDeck({ ...deck, name });
+  };
+
+  const reset = () => {
+    setDeck({
+      name: '',
+      cards: [],
+    });
+  };
+
+  return { deck, setDeck, setName, setInDeck, removeFromDeck, reset };
 };
 
 export default useDeck;

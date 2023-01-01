@@ -1,23 +1,26 @@
 export const DON_ID = 1;
 export const LEADER_ID = 2;
 
-const isFull = (deck) => deck.length === 52;
+const isFull = (deck) => deck.cards.length === 52;
 
 const isMaxCardQuanotityAllowed = (card, deck) => {
   return (
-    deck.filter((currenotCard) => currenotCard.code === card.code).length >= 4
+    deck.cards.filter((currentCard) => currentCard.code === card.code).length >=
+    4
   );
 };
 
 const doesNotHasDon = (deck) =>
-  deck.filter((card) => card.type_id === DON_ID).length === 0;
+  deck.cards.filter((card) => card.type_id === DON_ID).length === 0;
 
-const hasOneDon = (deck) => deck.filter((card) => card.type_id === DON_ID).length === 1;
+const hasOneDon = (deck) =>
+  deck.cards.filter((card) => card.type_id === DON_ID).length === 1;
 
 const doesNotHasLeader = (deck) =>
-  deck.filter((card) => card.type_id === LEADER_ID).length === 0;
+  deck.cards.filter((card) => card.type_id === LEADER_ID).length === 0;
 
-const hasOneLeader = (deck) => deck.filter((card) => card.type_id === LEADER_ID).length === 1;
+const hasOneLeader = (deck) =>
+  deck.cards.filter((card) => card.type_id === LEADER_ID).length === 1;
 
 const isAllowed = (card, deck) => {
   const generalRule = !isFull(deck) && !isMaxCardQuanotityAllowed(card, deck);
@@ -34,7 +37,7 @@ const isAllowed = (card, deck) => {
 };
 
 const isValidDeck = (deck) => {
-  return hasOneDon(deck) && hasOneLeader(deck) && isFull(deck);
+  return hasOneDon(deck) && hasOneLeader(deck) && isFull(deck) && deck.name;
 };
 
 export default {

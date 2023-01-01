@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
-import store from "../providers/store";
+import store from "../provider/store";
 import SimpleCard from "../components/simpleCard";
 import Btn from "../../../components/btn";
+import Input from "../../../components/input";
 
 function RightSide({ className }) {
-  const { hooks, actions, states } = useContext(store.cardContext);
+  const { hooks, actions, states } = useContext(store.CardContext);
   const [activeCard] = states.activeCard;
-  const { deck } = hooks.deck;
+  const { deck, setName } = hooks.deck;
 
   return (
     <>
@@ -20,6 +21,14 @@ function RightSide({ className }) {
         >
           Guardar
         </Btn>
+
+        <Input className="form-control col-12 mt-1"
+          placeholder="Nombre del mazo"
+          value={deck.name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
 
         <SimpleCard className="card col-12 mt-1 border-default">
           {activeCard && (

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef } from "react";
-import store from "../providers/store";
+import store from "../provider/store";
 import FiltersSection from "../components/filtersSection";
 import ListContainer from "../components/listContainer";
 import SimpleCard from "../components/simpleCard";
 
 const leftSide = ({ className }) => {
-  const { hooks, states } = useContext(store.cardContext);
+  const { hooks, states } = useContext(store.CardContext);
   const { cards, paginate } = hooks.paginate;
   const { setInDeck } = hooks.deck;
   const [_, setActiveCard] = states.activeCard;

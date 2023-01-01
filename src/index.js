@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { SessionProvider } from "./providers/session";
+import { GlobalProvider } from "./providers/global";
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
@@ -12,9 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 /*  eslint-disable */
 root.render(
   <React.StrictMode>
-    <SessionProvider>
+    <GlobalProvider>
       <App/>
-    </SessionProvider>
+    </GlobalProvider>
   </React.StrictMode>
 );
 /*  eslint-enable */

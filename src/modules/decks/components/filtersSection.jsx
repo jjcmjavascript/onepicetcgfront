@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import Input from "../../../components/input";
 import BtnOutline from "../../../components/btnOutline";
-import store from "../providers/store";
+import store from "../provider/store";
 
-const inputSearch = (props) => {
+const FiltersSection = (props) => {
   const validRegExp = /^[\w|\s]+$/i;
-  const { hooks, states } = useContext(store.cardContext);
+  const { hooks, states } = useContext(store.CardContext);
   const [selects] = hooks.selects;
   const [_, setFilters] = states.filters;
   const { setCards } = hooks.paginate;
@@ -102,4 +102,4 @@ const inputSearch = (props) => {
   );
 };
 
-export default inputSearch;
+export default FiltersSection;
