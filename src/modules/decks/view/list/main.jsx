@@ -26,11 +26,9 @@ export default function MainDeckListSection() {
 
   return (
     <Container className="container-fluid" style={style}>
-      <div>
-        <Link to="/decks/create" className="btn btn-success float_button">
-          Crear <BsPlus />
-        </Link>
-      </div>
+      <Link to="/decks/create" className="btn btn-success mt-1 vinyl fs-2">
+        Crear <BsPlus />
+      </Link>
 
       {filteredDeck.map((deck) => {
         return (

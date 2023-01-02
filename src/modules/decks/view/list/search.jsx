@@ -9,6 +9,9 @@ export default function SearchSection() {
 
   return (
     <Card className="card mt-4 bg-w bg-secondary">
+      <h1 className="text-center text-light vinyl">
+        Decks
+      </h1>
       <Input
         placeholder="Nombre del deck"
         onChange={(event) => {
