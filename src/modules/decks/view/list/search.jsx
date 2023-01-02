@@ -4,17 +4,17 @@ import Card from "../../../../components/card";
 import Input from "../../../../components/input";
 
 export default function SearchSection() {
-  const [search, setSearch] = useState("");
   const { decks } = useContext(store.CardContext).hooks;
-  const {filterByName} = decks;
+  const { filterByName } = decks;
 
   return (
-    <Card className="card mt-4 bg-dark">
-      <Input placeholder="Nombre del deck" value={search} onChange={
-        (event)=>{
-          setSearch(event.target.value)
-          filterByName(event.target.value)}
-      }/>
+    <Card className="card mt-4 bg-w bg-secondary">
+      <Input
+        placeholder="Nombre del deck"
+        onChange={(event) => {
+          filterByName(event.target.value);
+        }}
+      />
     </Card>
   );
 }

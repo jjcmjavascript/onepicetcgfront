@@ -10,6 +10,7 @@ export default () => {
       <Route path="/" element={<Deck />} />
       <Route path="decks" element={<Deck />} />
       <Route path="decks/create" element={<DeckCreate />} />
+      <Route path="decks/edit/:id" element={<DeckCreate />} />
     </>
   );
 };

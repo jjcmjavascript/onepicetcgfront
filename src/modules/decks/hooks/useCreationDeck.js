@@ -1,15 +1,18 @@
 import { useState } from 'react';
 
+const initialDeck = {
+  name: '',
+  id: '',
+  cards: [],
+};
+
 const useDeck = (rules) => {
-  const [deck, setDeck] = useState({
-    name: '',
-    cards: [],
-  });
+  const [deck, setDeck] = useState(initialDeck);
 
   const setInDeck = (card) => {
     if (rules.isAllowed(card, deck)) {
       deck.cards.push(card);
-      setDeck({...deck });
+      setDeck({ ...deck });
     }
   };
 
@@ -25,13 +28,27 @@ const useDeck = (rules) => {
   };
 
   const reset = () => {
-    setDeck({
-      name: '',
-      cards: [],
-    });
+    setDeck(initialDeck);
   };
 
-  return { deck, setDeck, setName, setInDeck, removeFromDeck, reset };
+  const setDeckFromBackend = (deck) => {
+    const newDeck = { ...initialDeck };
+    newDeck.name = deck.name;
+    newDeck.id = deck.id;
+
+    deck._cards.forEach((card) => {
+      const quantity = card.pivot_decks_cards.quantity;
+      for (let i = 0; i < quantity; i++) {
+        newDeck.cards.push(card);
+      }
+    });
+
+    console.log(newDeck)
+
+    setDeck(newDeck);
+  };
+
+  return { deck, setDeck, setName, setInDeck, removeFromDeck, reset , setDeckFromBackend};
 };
 
 export default useDeck;

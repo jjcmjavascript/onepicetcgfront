@@ -24,4 +24,15 @@ const saveDeck = (deck) => {
   return axios.post(baseUrl, deck, options);
 };
 
-export default { getDecks, saveDeck };
+const deleteDeck = (deckId) => {
+  const options = { headers };
+
+  return axios.delete(`${baseUrl}/${deckId}`, options);
+};
+
+const findDeck = (deckId) => {
+  const options = { headers };
+  return axios.get(`${baseUrl}/${deckId}/edit`, options);
+};
+
+export default { getDecks, saveDeck, deleteDeck, findDeck };

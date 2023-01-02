@@ -16,6 +16,14 @@ export default function MainDeckListSection() {
     minHeight: "70vh",
   };
 
+  decks.getDecks();
+
+  const deleteDeck = (id) => {
+    decks.deleteDeck(id);
+  };
+
+  const goToEditView = async (id) => {};
+
   return (
     <Container className="container-fluid" style={style}>
       <div>
@@ -33,12 +41,20 @@ export default function MainDeckListSection() {
             <Container>
               <div className="col-10">{deck.name}</div>
               <div className="col-2">
-                <Btn className="danger btn-sm" title="Borrar">
+                <Btn
+                  className="danger btn-sm"
+                  title="Borrar"
+                  onClick={(event) => deleteDeck(deck.id)}
+                >
                   <FiDelete />
                 </Btn>
-                <Btn className="warning btn-sm mx-1" title="Editar">
+                <Link
+                  to={`/decks/edit/${deck.id}`}
+                  className="btn btn-warning btn-sm mx-1"
+                  title="Editar"
+                >
                   <FiEdit />
-                </Btn>
+                </Link>
               </div>
             </Container>
           </CardComponent>

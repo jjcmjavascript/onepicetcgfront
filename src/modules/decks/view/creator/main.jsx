@@ -1,16 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import SimpleCard from "../../components/simpleCard";
 import Container from "../../../../components/container";
 import BadgeRounded from "../../../../components/badgeRounded";
-
+import { useParams } from "react-router-dom";
 import store from "../../provider/store";
 import { DON_ID, LEADER_ID } from "../../../../helpers/deckRules";
 
-export default function MainCreatorSection ({ className }){
+export default function MainCreatorSection({ className }) {
   const { hooks } = useContext(store.CardContext);
-  const { deck, removeFromDeck } = hooks.deck;
-
+  const { deck, removeFromDeck, setDeckFromBackend } = hooks.deck;
+  const { getDeckById } = hooks.decks;
+  const { id } = useParams();
   const leader = deck.cards.find((item) => item.type_id === LEADER_ID);
+
+  // Para editar
+  getDeckById(id, setDeckFromBackend);
 
   return (
     <>
@@ -43,4 +47,4 @@ export default function MainCreatorSection ({ className }){
       </div>
     </>
   );
-};
+}

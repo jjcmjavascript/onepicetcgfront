@@ -4,15 +4,10 @@ import useCreationDeck from "../hooks/useCreationDeck";
 import useDecks from "../hooks/useDecks";
 import useSelectFilters from "../hooks/useSelects";
 import rules from "../../../helpers/deckRules";
-import deckService from "../services/deckService";
-
-import { GlobalContext } from "../../../providers/global";
 
 const CardContext = createContext();
 
 const CardProvider = ({ children }) => {
-  const { actions: globalActions } = useContext(GlobalContext);
-
   const states = {
     filters: useState({ page: 1 }),
     activeCard: useState(null),
@@ -25,12 +20,8 @@ const CardProvider = ({ children }) => {
     decks: useDecks(),
   };
 
-  const actions = {
-
-  };
-
   return (
-    <CardContext.Provider value={{ states, hooks, actions }}>
+    <CardContext.Provider value={{ states, hooks }}>
       {children}
     </CardContext.Provider>
   );

@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import deckService from '../services/deckService';
 import rules from '../../../helpers/deckRules';
-import useCreationDeck from './useCreationDeck';
+
+const swalMessage = (title, html, icon) => {
+  Swal.fire({
+    title,
+    html,
+    icon,
+  });
+};
 
 export default function useDecks() {
   const [decks, setDecks] = useState([]);
   const [filteredDeck, setFilteredDeck] = useState([]);
 
-  useEffect(() => {
-    deckService.getDecks().then((res) => {
-      setDecks(res.data);
-      setFilteredDeck(res.data);
-    });
-  }, []);
-
-  const deleteDeck = (deckId) => {
-    deckService.deleteDeck(deckId).then((res) => {
-      setDecks(decks.filter((deck) => deck._id !== deckId));
-    });
+  const getDecks = () => {
+    useEffect(() => {
+      deckService.getDecks().then((res) => {
+        setDecks(res.data);
+        setFilteredDeck(res.data);
+      });
+    }, []);
   };
 
   const filterByName = (name) => {
@@ -28,44 +31,74 @@ export default function useDecks() {
     setFilteredDeck(filteredDecks);
   };
 
-  const saveDeck = (deck, resetDeck) => {
+  const saveDeck = async (deck, resetDeck) => {
     if (!rules.isValidDeck(deck)) {
-      return Swal.fire({
-        title: 'Invalid Deck',
-        html: [
+      return swalMessage(
+        'Invalid Deck',
+        [
           'Debes tener 50 cartas en el deck',
           'Debes tener 1 DON',
           'Debes tener 1 Leader',
           'Debe Ingresar un nombre al deck',
         ].join('<br />'),
-        icon: 'error',
-      });
+        'error'
+      );
     }
 
-    const cards = deck.cards.map((item) => item.id);
-    const name = deck.name;
+    try {
+      const cards = deck.cards.map((item) => item.id);
+      const name = deck.name;
 
-    deckService
-      .saveDeck({
-        cards,
-        name,
-      })
-      .then((res) => {
-        Swal.fire({
-          title: 'Ok',
-          html: 'Deck almacenado con exito',
-          icon: 'success',
-        });
-        resetDeck();
-      })
-      .catch((err) => {
-        const error =  err.message;
-        Swal.fire({
-          title: 'Error',
-          html: error,
-          icon: 'error',
-        });
-      });
+      const response = await deckService.saveDeck({ cards, name });
+
+      swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
+
+      resetDeck();
+    } catch (err) {
+      swalMessage('Error', err.message, 'error');
+    }
+  };
+
+  const deleteDeck = (deckId) => {
+    useEffect(() => {
+      (async () => {
+        try {
+          const swallResponse = await Swal.fire({
+            title: 'Estas Seguro?',
+            text: 'No podras revertir esta accion!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, borralo!',
+          });
+
+          if (swallResponse.isConfirmed) {
+            await deckService.deleteDeck(deckId);
+
+            const filteredDecks = decks.filter((deck) => deck.id !== deckId);
+
+            setDecks(filteredDecks);
+            setFilteredDeck(filteredDecks);
+          }
+        } catch (err) {
+          console.log(err);
+          swalMessage('Error', err.message, 'error');
+        }
+      })();
+    }, []);
+  };
+
+  const getDeckById = (deckId, setDeckFromBackend) => {
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await deckService.findDeck(deckId);
+          const deck = response.data;
+          setDeckFromBackend(deck);
+        } catch (err) {
+          swalMessage('Error', err.message, 'error');
+        }
+      })();
+    }, [deckId]);
   };
 
   return {
@@ -74,5 +107,7 @@ export default function useDecks() {
     deleteDeck,
     filterByName,
     saveDeck,
+    getDecks,
+    getDeckById,
   };
 }
