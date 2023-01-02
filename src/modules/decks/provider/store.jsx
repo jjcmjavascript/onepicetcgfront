@@ -26,37 +26,7 @@ const CardProvider = ({ children }) => {
   };
 
   const actions = {
-    persistDeck: () => {
-      const deck = hooks.deck.deck;
 
-      if (!rules.isValidDeck(deck)) {
-        return globalActions.swalError(
-          "Invalid Deck",
-          [
-            "Debes tener 50 cartas en el deck",
-            "Debes tener 1 DON",
-            "Debes tener 1 Leader",
-            "Debe Ingresar un nombre al deck",
-          ].join("<br />")
-        );
-      }
-
-      const cards = deck.cards.map((item) => item.id);
-      const name = deck.name;
-
-      deckService
-        .saveDeck({
-          cards,
-          name,
-        })
-        .then((res) => {
-          globalActions.swalSuccess("Success", "Deck almacenado con exíto");
-          hooks.deck.reset();
-        })
-        .catch((err) => {
-          globalActions.swalError("Error", err.message);
-        });
-    },
   };
 
   return (

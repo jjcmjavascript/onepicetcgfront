@@ -4,6 +4,8 @@ import Container from "../../../../components/container";
 import CardComponent from "../../../../components/card";
 import Btn from "../../../../components/btn";
 import { FiEdit, FiDelete } from "react-icons/fi";
+import { BsPlus } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 export default function MainDeckListSection() {
   const { decks } = useContext(store.CardContext).hooks;
@@ -16,6 +18,12 @@ export default function MainDeckListSection() {
 
   return (
     <Container className="container-fluid" style={style}>
+      <div>
+        <Link to="/decks/create" className="btn btn-success float_button">
+          Crear <BsPlus />
+        </Link>
+      </div>
+
       {filteredDeck.map((deck) => {
         return (
           <CardComponent

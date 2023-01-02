@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
 import Input from "../../../components/input";
+import Btn from "../../../components/btn";
 import BtnOutline from "../../../components/btnOutline";
 import store from "../provider/store";
+import { BsSearch } from "react-icons/bs";
 
 const FiltersSection = (props) => {
   const validRegExp = /^[\w|\s]+$/i;
@@ -26,6 +28,16 @@ const FiltersSection = (props) => {
     setTypeValue(event.target.value);
   };
 
+  const clearFilters = () => {
+    setNameValue("");
+    setColorValue("");
+    setTypeValue("");
+    setCards([]);
+    setFilters({
+      page: 1,
+    });
+  };
+
   const searchHandler = () => {
     const newFilters = {};
 
@@ -40,11 +52,6 @@ const FiltersSection = (props) => {
         page: 1,
         ...newFilters,
       });
-    } else {
-      setCards([]);
-      setFilters({
-        page: 1,
-      });
     }
   };
 
@@ -58,7 +65,7 @@ const FiltersSection = (props) => {
         />
 
         <BtnOutline className="success mx-1" onClick={searchHandler}>
-          Buscar
+          <BsSearch />
         </BtnOutline>
       </div>
 
@@ -98,6 +105,12 @@ const FiltersSection = (props) => {
           </select>
         </div>
       </div>
+      <Btn
+        className="warning mt-1 col-12 text-dark"
+        onClick={clearFilters}
+      >
+        Limpiar
+      </Btn>
     </>
   );
 };
