@@ -13,8 +13,8 @@ export default function MainCreatorSection({ className }) {
   const { id } = useParams();
   const leader = deck.cards.find((item) => item.type_id === LEADER_ID);
 
-  // Para editar
-  getDeckById(id, setDeckFromBackend);
+  // Si tiene id, entonces se llama a la api para obtener el deck
+  id && getDeckById(id, setDeckFromBackend);
 
   return (
     <>

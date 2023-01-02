@@ -35,4 +35,9 @@ const findDeck = (deckId) => {
   return axios.get(`${baseUrl}/${deckId}/edit`, options);
 };
 
-export default { getDecks, saveDeck, deleteDeck, findDeck };
+const updateDeck = (deck) => {
+  const options = { headers };
+  return axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+};
+
+export default { getDecks, saveDeck, deleteDeck, findDeck , updateDeck };

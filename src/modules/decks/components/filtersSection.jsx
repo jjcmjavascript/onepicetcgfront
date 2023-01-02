@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import Input from "../../../components/input";
 import Btn from "../../../components/btn";
 import BtnOutline from "../../../components/btnOutline";
@@ -8,7 +8,7 @@ import { BsSearch } from "react-icons/bs";
 const FiltersSection = (props) => {
   const validRegExp = /^[\w|\s]+$/i;
   const { hooks, states } = useContext(store.CardContext);
-  const [selects] = hooks.selects;
+  const { filtersSelects, getSelects } = hooks.selects;
   const [_, setFilters] = states.filters;
   const { setCards } = hooks.paginate;
 
@@ -55,6 +55,8 @@ const FiltersSection = (props) => {
     }
   };
 
+  getSelects()
+
   return (
     <>
       <div className="d-flex mt-2">
@@ -78,7 +80,7 @@ const FiltersSection = (props) => {
           >
             <option value=""> Colores ...</option>
 
-            {selects.colors.map((color) => {
+            {filtersSelects.colors.map((color) => {
               return (
                 <option key={color.id} value={color.id}>
                   {color.name}
@@ -95,7 +97,7 @@ const FiltersSection = (props) => {
             onChange={typeChangeHandler}
           >
             <option value=""> Tipos ... </option>
-            {selects.types.map((type) => {
+            {filtersSelects.types.map((type) => {
               return (
                 <option key={type.id} value={type.id}>
                   {type.name}
@@ -105,10 +107,7 @@ const FiltersSection = (props) => {
           </select>
         </div>
       </div>
-      <Btn
-        className="warning mt-1 col-12 text-dark"
-        onClick={clearFilters}
-      >
+      <Btn className="warning mt-1 col-12 text-dark" onClick={clearFilters}>
         Limpiar
       </Btn>
     </>

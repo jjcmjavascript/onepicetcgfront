@@ -32,23 +32,31 @@ const useDeck = (rules) => {
   };
 
   const setDeckFromBackend = (deck) => {
-    const newDeck = { ...initialDeck };
-    newDeck.name = deck.name;
-    newDeck.id = deck.id;
+    const cards = [];
 
     deck._cards.forEach((card) => {
       const quantity = card.pivot_decks_cards.quantity;
       for (let i = 0; i < quantity; i++) {
-        newDeck.cards.push(card);
+        cards.push(card);
       }
     });
 
-    console.log(newDeck)
-
-    setDeck(newDeck);
+    setDeck({
+      name: deck.name,
+      id: deck.id,
+      cards,
+    });
   };
 
-  return { deck, setDeck, setName, setInDeck, removeFromDeck, reset , setDeckFromBackend};
+  return {
+    deck,
+    setDeck,
+    setName,
+    setInDeck,
+    removeFromDeck,
+    reset,
+    setDeckFromBackend,
+  };
 };
 
 export default useDeck;

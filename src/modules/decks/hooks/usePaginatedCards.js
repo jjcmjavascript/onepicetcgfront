@@ -12,18 +12,21 @@ const usePaginateCard = ({ filters }) => {
   const [paginate, setPaginate] = useState(paginateSchema);
   const [cards, setCards] = useState([]);
 
+  const getPaginateCards = () => {
     useEffect(() => {
       cardService.getCards(filters).then((res) => {
         setPaginate(res.data);
         setCards(cards.concat(res.data.rows));
       });
     }, [filters]);
+  }
 
   return {
     paginate,
     setPaginate,
     cards,
-    setCards
+    setCards,
+    getPaginateCards
   };
 };
 

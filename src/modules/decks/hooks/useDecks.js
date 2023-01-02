@@ -48,8 +48,11 @@ export default function useDecks() {
     try {
       const cards = deck.cards.map((item) => item.id);
       const name = deck.name;
+      const id = deck.id;
 
-      const response = await deckService.saveDeck({ cards, name });
+      const response = id
+        ? await deckService.updateDeck({ cards, name, id })
+        : await deckService.saveDeck({ cards, name, id });
 
       swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
 

@@ -6,7 +6,7 @@ import SimpleCard from "../../components/simpleCard";
 
 export default function LeftSide({ className }) {
   const { hooks, states } = useContext(store.CardContext);
-  const { cards, paginate } = hooks.paginate;
+  const { cards, paginate, getPaginateCards } = hooks.paginate;
   const { setInDeck } = hooks.deck;
   const [_, setActiveCard] = states.activeCard;
   const [filters, setFilters] = states.filters;
@@ -22,6 +22,8 @@ export default function LeftSide({ className }) {
       }
     }
   };
+
+  getPaginateCards(filters);
 
   return (
     <div className={className}>

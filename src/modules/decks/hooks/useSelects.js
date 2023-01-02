@@ -11,16 +11,15 @@ const useSelects = () => {
     categories: [],
   });
 
-  useEffect(() => {
-    cardService.getSelects().then((res) => {
-      setFiltersSelects(res.data);
-    });
-  }, []);
+  const getSelects = () => {
+    useEffect(() => {
+      cardService.getSelects().then((res) => {
+        setFiltersSelects(res.data);
+      });
+    }, []);
+  };
 
-  return [
-    filtersSelects,
-    setFiltersSelects,
-  ]
+  return {filtersSelects, setFiltersSelects, getSelects};
 };
 
 export default useSelects;
