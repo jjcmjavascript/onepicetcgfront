@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import deckService from '../services/deckService';
+import cardService from '../services/cardService';
 
 const useSelects = () => {
   const [filtersSelects, setFiltersSelects] = useState({
@@ -12,7 +12,7 @@ const useSelects = () => {
   });
 
   useEffect(() => {
-    deckService.getSelects().then((res) => {
+    cardService.getSelects().then((res) => {
       setFiltersSelects(res.data);
     });
   }, []);

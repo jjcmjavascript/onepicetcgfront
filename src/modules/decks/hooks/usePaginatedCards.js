@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import deckService from '../services/deckService';
+import cardService from '../services/cardService';
 
 const paginateSchema = {
   total: 0,
@@ -13,7 +13,7 @@ const usePaginateCard = ({ filters }) => {
   const [cards, setCards] = useState([]);
 
     useEffect(() => {
-      deckService.getCards(filters).then((res) => {
+      cardService.getCards(filters).then((res) => {
         setPaginate(res.data);
         setCards(cards.concat(res.data.rows));
       });

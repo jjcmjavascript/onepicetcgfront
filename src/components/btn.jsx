@@ -1,14 +1,11 @@
 import React from "react";
 
-const getClassName = (className) => {
+const btn = ({ children, className, onClick, disabled, title }) => {
   const defaultClass = "btn btn-success";
+  const newClassName = `btn btn-${className}`;
 
-  return `btn btn-${className}` || defaultClass;
-};
-
-const btn = ({ children, className, onClick, disabled }) => {
   return (
-    <button className={getClassName(className)} type="button" onClick={onClick} disabled={disabled}>
+    <button className={newClassName || defaultClass } type="button" onClick={onClick} disabled={disabled} title={title}>
       {children}
     </button>
   );

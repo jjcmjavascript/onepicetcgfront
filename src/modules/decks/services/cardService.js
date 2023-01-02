@@ -6,7 +6,7 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const getDecks = (filters = {}) => {
+const getCards = (filters = {}) => {
   let formatedFilters = '';
 
   Object.keys(filters).forEach((key) => {
@@ -15,13 +15,13 @@ const getDecks = (filters = {}) => {
 
   const options = { headers };
 
-  return axios.get(`${baseUrl}?${formatedFilters}`, options);
+  return axios.get(`${baseUrl}/create?${formatedFilters}`, options);
 };
 
-const saveDeck = (deck) => {
+const getSelects = () => {
   const options = { headers };
 
-  return axios.post(baseUrl, deck, options);
-};
+  return  axios.get(`${baseUrl}/create/filters`, options);
+}
 
-export default { getDecks, saveDeck };
+export default { getCards, getSelects };

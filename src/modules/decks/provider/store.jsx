@@ -1,9 +1,11 @@
 import React, { createContext, useState, useContext } from "react";
 import usePaginateCard from "../hooks/usePaginatedCards";
-import useDecks from "../hooks/useDeck";
+import useCreationDeck from "../hooks/useCreationDeck";
+import useDecks from "../hooks/useDecks";
 import useSelectFilters from "../hooks/useSelects";
 import rules from "../../../helpers/deckRules";
 import deckService from "../services/deckService";
+
 import { GlobalContext } from "../../../providers/global";
 
 const CardContext = createContext();
@@ -17,9 +19,10 @@ const CardProvider = ({ children }) => {
   };
 
   const hooks = {
-    deck: useDecks(rules),
+    deck: useCreationDeck(rules),
     selects: useSelectFilters(),
     paginate: usePaginateCard({ filters: states.filters[0] }),
+    decks: useDecks(),
   };
 
   const actions = {
