@@ -1,5 +1,5 @@
 import React, { useContext, forwardRef } from "react";
-import store from "../provider/store";
+import store from "../provider/deckProvider";
 
 const defaultDivStyle = {
   minHeight: "80vh",

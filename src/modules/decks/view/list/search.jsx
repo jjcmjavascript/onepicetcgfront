@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import Card from "../../../../components/card";
 import Input from "../../../../components/input";
 

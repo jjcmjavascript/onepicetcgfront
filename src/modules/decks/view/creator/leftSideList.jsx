@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import FiltersSection from "../../components/filtersSection";
 import ListContainer from "../../components/listContainer";
 import SimpleCard from "../../components/simpleCard";

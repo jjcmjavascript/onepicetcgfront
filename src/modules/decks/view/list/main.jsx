@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import Container from "../../../../components/container";
 import CardComponent from "../../../../components/card";
 import Btn from "../../../../components/btn";
@@ -21,8 +21,6 @@ export default function MainDeckListSection() {
   const deleteDeck = (id) => {
     decks.deleteDeck(id);
   };
-
-  const goToEditView = async (id) => {};
 
   return (
     <Container className="container-fluid" style={style}>

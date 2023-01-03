@@ -1,5 +1,5 @@
 import React from "react";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import Container from "../../../../components/container";
 
 import LeftSide from "./leftSideList";

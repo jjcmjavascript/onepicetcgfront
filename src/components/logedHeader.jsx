@@ -11,7 +11,7 @@ const logedHeader = () => {
         <Link to="/decks" className="navbar-brand">
           Decks
         </Link>
-        <Link to="/decks" className="navbar-brand">
+        <Link to="/duels" className="navbar-brand">
           Duels
         </Link>
         <Link to="/decks" className="navbar-brand">

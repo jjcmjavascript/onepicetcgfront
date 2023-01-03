@@ -3,7 +3,7 @@ import SimpleCard from "../../components/simpleCard";
 import Container from "../../../../components/container";
 import BadgeRounded from "../../../../components/badgeRounded";
 import { useParams } from "react-router-dom";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import { DON_ID, LEADER_ID } from "../../../../helpers/deckRules";
 
 export default function MainCreatorSection({ className }) {

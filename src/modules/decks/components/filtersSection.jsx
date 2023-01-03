@@ -2,7 +2,7 @@ import React, { useState, useContext, useCallback } from "react";
 import Input from "../../../components/input";
 import Btn from "../../../components/btn";
 import BtnOutline from "../../../components/btnOutline";
-import store from "../provider/store";
+import store from "../provider/deckProvider";
 import { BsSearch } from "react-icons/bs";
 
 const FiltersSection = (props) => {

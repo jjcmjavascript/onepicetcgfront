@@ -10,3 +10,11 @@
 .vinyl {
   font-family: 'Rubik Vinyl', cursive;
 }
+
+.min100vh {
+  min-height: 100vh;
+}
+
+.min80vh {
+  min-height: 80vh;
+}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import store from "../../provider/store";
+import store from "../../provider/deckProvider";
 import SimpleCard from "../../components/simpleCard";
 import Btn from "../../../../components/btn";
 import Input from "../../../../components/input";
