@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import store from "../../provider/deckProvider";
 import FiltersSection from "../../components/filtersSection";
 import ListContainer from "../../components/listContainer";
@@ -8,7 +8,7 @@ export default function LeftSide({ className }) {
   const { hooks, states } = useContext(store.CardContext);
   const { cards, paginate, getPaginateCards } = hooks.paginate;
   const { setInDeck } = hooks.deck;
-  const [_, setActiveCard] = states.activeCard;
+  const [, setActiveCard] = states.activeCard;
   const [filters, setFilters] = states.filters;
 
   const getMorePagesOnScroll = (event) => {
@@ -16,7 +16,7 @@ export default function LeftSide({ className }) {
     var height = event.target.offsetHeight;
     var offset = height - scrollY;
 
-    if (offset == 0 || offset == 1) {
+    if (offset === 0 || offset === 1) {
       if (filters.page + 1 <= paginate.nextPage) {
         setFilters({ ...filters, page: filters.page + 1 });
       }

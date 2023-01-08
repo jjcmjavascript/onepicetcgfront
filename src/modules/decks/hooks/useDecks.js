@@ -24,6 +24,20 @@ export default function useDecks() {
     }, []);
   };
 
+  const getDeckById = (deckId, setDeckFromBackend) => {
+    useEffect(() => {
+      (async () => {
+        try {
+          const response = await deckService.findDeck(deckId);
+          const deck = response.data;
+          setDeckFromBackend(deck);
+        } catch (err) {
+          swalMessage('Error', err.message, 'error');
+        }
+      })();
+    }, [deckId]);
+  };
+
   const filterByName = (name) => {
     const filteredDecks = decks.filter((deck) => {
       return deck.name.toLowerCase().includes(name.toLowerCase());
@@ -52,7 +66,7 @@ export default function useDecks() {
 
       const response = id
         ? await deckService.updateDeck({ cards, name, id })
-        : await deckService.saveDeck({ cards, name, id });
+        : await deckService.saveDeck({ cards, name });
 
       swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
 
@@ -62,46 +76,28 @@ export default function useDecks() {
     }
   };
 
-  const deleteDeck = (deckId) => {
-    useEffect(() => {
-      (async () => {
-        try {
-          const swallResponse = await Swal.fire({
-            title: 'Estas Seguro?',
-            text: 'No podras revertir esta accion!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, borralo!',
-          });
+  const deleteDeck = async (deckId) => {
+    try {
+      const swallResponse = await Swal.fire({
+        title: 'Estas Seguro?',
+        text: 'No podras revertir esta accion!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, borralo!',
+      });
 
-          if (swallResponse.isConfirmed) {
-            await deckService.deleteDeck(deckId);
+      if (swallResponse.isConfirmed) {
+        await deckService.deleteDeck(deckId);
 
-            const filteredDecks = decks.filter((deck) => deck.id !== deckId);
+        const filteredDecks = decks.filter((deck) => deck.id !== deckId);
 
-            setDecks(filteredDecks);
-            setFilteredDeck(filteredDecks);
-          }
-        } catch (err) {
-          console.log(err);
-          swalMessage('Error', err.message, 'error');
-        }
-      })();
-    }, []);
-  };
-
-  const getDeckById = (deckId, setDeckFromBackend) => {
-    useEffect(() => {
-      (async () => {
-        try {
-          const response = await deckService.findDeck(deckId);
-          const deck = response.data;
-          setDeckFromBackend(deck);
-        } catch (err) {
-          swalMessage('Error', err.message, 'error');
-        }
-      })();
-    }, [deckId]);
+        setDecks(filteredDecks);
+        setFilteredDeck(filteredDecks);
+      }
+    } catch (err) {
+      console.log(err);
+      swalMessage('Error', err.message, 'error');
+    }
   };
 
   return {
