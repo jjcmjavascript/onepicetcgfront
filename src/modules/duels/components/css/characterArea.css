@@ -1,0 +1,144 @@
+.duel--area {
+  display: grid;
+  min-height: 35vh;
+  max-height: 35vh;
+  grid-template-columns: 20% 80%;
+  width: 70%;
+  margin: 0 5%;
+}
+
+.duel--area__left {
+  display: grid;
+  background-color: white;
+}
+
+.duel--area_right {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 33.3% 33.3% 33.3%;
+}
+
+.life--area {
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.life--area__card {
+  border: 1px solid gray;
+  border-radius: 2px;
+}
+
+.cost--area {
+  display: grid;
+  grid-template-columns: repeat(10, 10%);
+  justify-content: space-around;
+  background-color: white;
+  margin: 5px;
+}
+
+.botton-area {
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+.cost--area__card {
+  border: 1px solid gray;
+  border-radius: 2px;
+}
+
+.cost--trash-area {
+  border: 1px solid gray;
+  border-radius: 2px;
+}
+
+.character--area {
+  display: grid;
+  grid-template-columns: 16.5% 16.5% 16.5% 16.5% 16.5%;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 2px;
+  justify-content: center;
+  margin: 5px;
+}
+
+.character--area__card {
+  display: grid;
+  justify-content: space-around;
+}
+
+.leader--area {
+  display: grid;
+  grid-template-columns: 1fr repeat(3, 19.5%);
+  justify-content: space-around;
+  border: 1px solid gold;
+  margin: 5px;
+}
+
+.leader--area__card {
+  display: grid;
+  justify-content: space-around;
+}
+
+.leader--area__title {
+  display: flex;
+  font-weight: bold;
+  font-size: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+}
+
+.rotated {
+  transform: rotate(180deg); /* Equal to rotateZ(45deg) */
+}
+
+.op_card {
+  width: 120px;
+  background-color: brown;
+  height: 100%;
+}
+
+.hand--area {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.hand--area__card {
+  display: inline-block;
+  width: 150px;
+  height: 29vh;
+  background-color: white;
+  border-radius: 2px;
+  margin: 5px;
+  position: relative;
+}
+
+.card--in__hand {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hand--area__card__options {
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(9, 9, 9, 0.7);
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+
+.hand--area__card__options__option:hover {
+  cursor: pointer;
+  background-color: rgba(9, 9, 9, 0.9);
+}
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}

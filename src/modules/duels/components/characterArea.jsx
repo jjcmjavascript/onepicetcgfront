@@ -1,12 +1,34 @@
 import React from "react";
 
-import Store from "../provider/duelProvider";
-import Container from "../../../components/container";
+import "./css/characterArea.css";
 
-function DuelZone({children}) {
-  return (<>
+function CharactedArea({ children }) {
+  return (
+    <>
+      <div className="character--area">
+        <div className="character--area__card text-light">
+          <div className="op_card"></div>
+        </div>
+        <div className="character--area__card">
 
-  </>);
+        <div className="op_card"></div>
+
+        </div>
+        <div className="character--area__card">
+        <div className="op_card"></div>
+
+        </div>
+        <div className="character--area__card">
+        <div className="op_card"></div>
+
+        </div>
+        <div className="character--area__card">
+        <div className="op_card"></div>
+
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default DuelZone;
+export default CharactedArea;
