@@ -1,5 +1,4 @@
-export const DON_ID = 1;
-export const LEADER_ID = 2;
+import {DON as DON_ID, LEADER as LEADER_ID} from './cardTypes';
 
 const isFull = (deck) => deck.cards.length === 52;
 

@@ -12,7 +12,7 @@ function Hand({ hand }) {
     <>
       <div className="hand--area">
         {hand.map((card, index) => (
-          <HandCard key={card.code + card.id * index} card={card} />
+          <HandCard key={card.code + card.id * index} card={card} index={index}/>
         ))}
       </div>
     </>

@@ -9,7 +9,6 @@
 
 .duel--area__left {
   display: grid;
-  background-color: white;
 }
 
 .duel--area_right {
@@ -32,7 +31,6 @@
   display: grid;
   grid-template-columns: repeat(10, 10%);
   justify-content: space-around;
-  background-color: white;
   margin: 5px;
 }
 
@@ -54,7 +52,6 @@
 .character--area {
   display: grid;
   grid-template-columns: 16.5% 16.5% 16.5% 16.5% 16.5%;
-  background-color: white;
   border: 1px solid gray;
   border-radius: 2px;
   justify-content: center;
@@ -94,7 +91,6 @@
 
 .op_card {
   width: 120px;
-  background-color: brown;
   height: 100%;
 }
 
@@ -110,10 +106,13 @@
   display: inline-block;
   width: 150px;
   height: 29vh;
-  background-color: white;
   border-radius: 2px;
   margin: 5px;
   position: relative;
+}
+.hand--area__card:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .card--in__hand {
@@ -124,7 +123,9 @@
 
 .hand--area__card__options {
   position: absolute;
-  z-index: 2;
+  top: 10px;
+  min-height: 100px;
+  z-index: 3;
   background-color: rgba(9, 9, 9, 0.7);
   width: 100%;
   color: white;
@@ -135,10 +136,17 @@
   cursor: pointer;
   background-color: rgba(9, 9, 9, 0.9);
 }
+
+
 .hide {
   display: none;
 }
 
-.show {
-  display: block;
+.amplify {
+  transition: 0.5s;
+  transform: scale(1.7);
+  position: fixed;
+  z-index: 3;
+  top: 20vh;
+  left: 40vw;
 }

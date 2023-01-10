@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import Store from "../provider/duelProvider";
 
 import HandCardOptions from "./handCardOptions";
 
-function HandCard({ key, card }) {
+function HandCard({ card }) {
+  const id = card.code + card.id * Math.random().toString().substring(2, 3);
+  const { state, hooks } = useContext(Store.DuelContext);
+  const { cardBasicEffects } = hooks;
+
+  const cardshowOptions = () => {
+    cardBasicEffects.setShowingOptions()
+  };
+
   return (
     <>
-      <div className="hand--area__card" key={key}>
-        <HandCardOptions />
+      <div className="hand--area__card" onClick={cardshowOptions} id={id}>
+        {cardBasicEffects.isShowingOptions(id) && <HandCardOptions card={card} />}
 
         <img src={card._image.route} className="card--in__hand" />
       </div>

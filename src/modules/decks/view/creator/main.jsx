@@ -4,7 +4,7 @@ import Container from "../../../../components/container";
 import BadgeRounded from "../../../../components/badgeRounded";
 import { useParams } from "react-router-dom";
 import store from "../../provider/deckProvider";
-import { DON_ID, LEADER_ID } from "../../../../helpers/deckRules";
+import { DON as DON_ID, LEADER as LEADER_ID } from "../../../../helpers/cardTypes";
 
 export default function MainCreatorSection({ className }) {
   const { hooks } = useContext(store.CardContext);
