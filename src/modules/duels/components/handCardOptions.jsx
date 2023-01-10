@@ -11,8 +11,7 @@ function HandCardOptions({ id, card }) {
     cardBasicEffects.reveal(grantParent);
   };
 
-  const playHandler = (event) => {
-  };
+  const playHandler = (event) => {};
 
   return (
     <>
