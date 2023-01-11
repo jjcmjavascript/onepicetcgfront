@@ -1,25 +1,22 @@
 import { useState } from 'react';
 
 function useHandCardBasicEffect() {
-  const [isReavealing, setRevealing] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
-  const [activeHtmlElement, setActiveCardOption] = useState(null);
+  const [activeCardHtml, setActiveCardHtml] = useState(null);
 
-  const reveal = (item) => {
-    setRevealing(true);
-    const activeCard = activeHtmlElement.parentNode;
+  const reveal = () => {
+    hideOptions();
+
+    const activeCard = activeCardHtml.parentNode;
 
     activeCard.classList.add('amplify');
 
     setTimeout(() => {
-      setRevealing(false);
       activeCard.classList.remove('amplify');
     }, 1000);
   };
 
-  const play = (item) => {
-    const activeCard = activeHtmlElement.parentNode;
-  };
+  const play = (item) => {};
 
   const hideOptions = () => {
     const optionsElement = document.querySelector('.hand--area__card__options');
@@ -29,8 +26,8 @@ function useHandCardBasicEffect() {
   const toggleOptions = (cardHtmlElement, card) => {
     const optionsElement = document.querySelector('.hand--area__card__options');
 
-    if (activeHtmlElement != cardHtmlElement) {
-      setActiveCardOption(cardHtmlElement);
+    if (activeCardHtml != cardHtmlElement) {
+      setActiveCardHtml(cardHtmlElement);
 
       optionsElement.style.width = `${cardHtmlElement.clientWidth}px`;
 
@@ -50,12 +47,12 @@ function useHandCardBasicEffect() {
   };
 
   return {
-    isReavealing,
     reveal,
     play,
     toggleOptions,
     activeCard,
     hideOptions,
+    activeCardHtml,
   };
 }
 

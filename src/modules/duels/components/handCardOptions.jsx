@@ -5,6 +5,7 @@ function HandCardOptions({ id }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { cardBasicEffects } = hooks;
   const [hand, setHand] = states.hand;
+  const [board, setBoard] = states.player1Board;
 
   const revealHandler = (event) => {
     const grantParent = event.target;
@@ -21,7 +22,32 @@ function HandCardOptions({ id }) {
     cardBasicEffects.hideOptions();
   };
 
-  const playHandler = (event) => {};
+  const playHandler = () => {
+    const active = cardBasicEffects.activeCard;
+    const activeHtml = cardBasicEffects.activeCardHtml;
+
+    console.log(cardBasicEffects);
+    const newHand = hand.filter(
+      (card) => card.uuid !== cardBasicEffects.activeCard.uuid
+    );
+
+    setHand(newHand);
+
+    let characters = {};
+
+    const length = Object.values(board.characters).length;
+    const existEmptyPosition = length < 5;
+
+    characters[length] = {
+      card: active,
+      htmlCard: activeHtml,
+    };
+
+    setBoard({
+      ...board,
+      characters,
+    });
+  };
 
   return (
     <>

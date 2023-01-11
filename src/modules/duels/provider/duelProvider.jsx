@@ -16,7 +16,7 @@ const getBoardSchema = () => {
   return {
     leader: null,
     stage: null,
-    characters: [],
+    characters: {},
     costs: [],
     trash: [],
     dons: 10,
