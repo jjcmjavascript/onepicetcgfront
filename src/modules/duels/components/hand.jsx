@@ -13,10 +13,14 @@ function Hand({ hand }) {
   return (
     <>
       <div className="hand--area">
-        {/* {cardBasicEffects.isShowingOptions(id) && <HandCardOptions card={card} />} */}
+        <HandCardOptions />
 
         {hand.map((card, index) => (
-          <HandCard key={card.code + card.id * index} card={card} index={index}/>
+          <HandCard
+            key={card.code + card.id * index}
+            card={card}
+            index={index}
+          />
         ))}
       </div>
     </>

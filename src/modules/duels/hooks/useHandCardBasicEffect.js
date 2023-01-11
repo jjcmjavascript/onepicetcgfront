@@ -3,7 +3,7 @@ import { useState } from 'react';
 function useHandCardBasicEffect() {
   const [isReavealing, setRevealing] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
-  const [isShowingOptions, setShowingOptions] = useState(false);
+  const [activeCardOptions, setActiveCardOption] = useState(null);
 
   const reveal = (item) => {
     setRevealing(true);
@@ -22,16 +22,29 @@ function useHandCardBasicEffect() {
     // const cardsInHandElementsOptions = document.querySelectorAll(
     //   `.hand--area__card__options`
     // );
-
     // cardsInHandElementsOptions.forEach((cardHtml) => {
     //   cardHtml.classList.add('hide');
     // });
   };
 
   const showOptions = (cardHtmlElement) => {
-    // hideOptions();
+    const optionsElement = document.querySelector('.hand--area__card__options');
 
-    // cardHtmlElement.children[0].classList.remove('hide');
+    if (activeCardOptions != cardHtmlElement) {
+      setActiveCardOption(cardHtmlElement);
+
+      optionsElement.style.width = `${cardHtmlElement.clientWidth}px`;
+
+      optionsElement.style.top = `${cardHtmlElement.y + 20}px`;
+
+      optionsElement.style.left = `${cardHtmlElement.x}px`;
+
+      optionsElement.classList.remove('hide');
+
+      return;
+    }
+
+    optionsElement.classList.toggle('hide');
   };
 
   return {
@@ -39,8 +52,6 @@ function useHandCardBasicEffect() {
     reveal,
     play,
     showOptions,
-    setShowingOptions,
-    isShowingOptions
   };
 }
 

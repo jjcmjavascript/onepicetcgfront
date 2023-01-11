@@ -7,8 +7,8 @@ function HandCard({ card }) {
   const { state, hooks } = useContext(Store.DuelContext);
   const { cardBasicEffects } = hooks;
 
-  const cardshowOptions = () => {
-    cardBasicEffects.setShowingOptions();
+  const cardshowOptions = (event) => {
+    cardBasicEffects.showOptions(event.target);
   };
 
   return (

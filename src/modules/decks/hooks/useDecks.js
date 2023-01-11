@@ -92,6 +92,7 @@ export default function useDecks() {
         const filteredDecks = decks.filter((deck) => deck.id !== deckId);
 
         setDecks(filteredDecks);
+
         setFilteredDeck(filteredDecks);
       }
     } catch (err) {
