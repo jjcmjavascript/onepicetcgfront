@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import Store from "../provider/duelProvider";
 
 import HandCardOptions from "./handCardOptions";
 
@@ -6,7 +8,10 @@ import HandCard from "./handCard";
 
 import "./css/characterArea.css";
 
-function Hand({ hand }) {
+function Hand({ children }) {
+  const { states, hooks } = useContext(Store.DuelContext);
+  const [hand] = states.hand;
+
   const syle = {
     width: "100px",
   };

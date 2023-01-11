@@ -3,11 +3,11 @@ import { useState } from 'react';
 function useHandCardBasicEffect() {
   const [isReavealing, setRevealing] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
-  const [activeCardOptions, setActiveCardOption] = useState(null);
+  const [activeHtmlElement, setActiveCardOption] = useState(null);
 
   const reveal = (item) => {
     setRevealing(true);
-    const activeCard = activeCardOptions.parentNode;
+    const activeCard = activeHtmlElement.parentNode;
 
     activeCard.classList.add('amplify');
 
@@ -17,12 +17,19 @@ function useHandCardBasicEffect() {
     }, 1000);
   };
 
-  const play = (card, item) => {};
+  const play = (item) => {
+    const activeCard = activeHtmlElement.parentNode;
+  };
 
-  const showOptions = (cardHtmlElement) => {
+  const hideOptions = () => {
+    const optionsElement = document.querySelector('.hand--area__card__options');
+    optionsElement.classList.add('hide');
+  };
+
+  const toggleOptions = (cardHtmlElement, card) => {
     const optionsElement = document.querySelector('.hand--area__card__options');
 
-    if (activeCardOptions != cardHtmlElement) {
+    if (activeHtmlElement != cardHtmlElement) {
       setActiveCardOption(cardHtmlElement);
 
       optionsElement.style.width = `${cardHtmlElement.clientWidth}px`;
@@ -33,17 +40,22 @@ function useHandCardBasicEffect() {
 
       optionsElement.classList.remove('hide');
 
+      setActiveCard(card);
+
       return;
     }
 
     optionsElement.classList.toggle('hide');
+    setActiveCard(null);
   };
 
   return {
     isReavealing,
     reveal,
     play,
-    showOptions,
+    toggleOptions,
+    activeCard,
+    hideOptions,
   };
 }
 

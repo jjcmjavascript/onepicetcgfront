@@ -8,7 +8,7 @@ function HandCard({ card }) {
   const { cardBasicEffects } = hooks;
 
   const cardshowOptions = (event) => {
-    cardBasicEffects.showOptions(event.target);
+    cardBasicEffects.toggleOptions(event.target, card);
   };
 
   return (
