@@ -6,7 +6,7 @@ function HandCardOptions({ id, card }) {
   const { cardBasicEffects } = hooks;
 
   const revealHandler = (event) => {
-    const grantParent = event.target.parentNode.parentNode;
+    const grantParent = event.target;
 
     cardBasicEffects.reveal(grantParent);
   };
@@ -22,6 +22,7 @@ function HandCardOptions({ id, card }) {
         >
           Revelar
         </div>
+
         <div
           className="hand--area__card__options__option"
           onClick={playHandler}

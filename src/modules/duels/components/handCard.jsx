@@ -4,7 +4,7 @@ import Store from "../provider/duelProvider";
 
 function HandCard({ card }) {
   const id = card.code + card.id * Math.random().toString().substring(2, 3);
-  const { state, hooks } = useContext(Store.DuelContext);
+  const { _, hooks } = useContext(Store.DuelContext);
   const { cardBasicEffects } = hooks;
 
   const cardshowOptions = (event) => {

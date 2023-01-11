@@ -7,25 +7,17 @@ function useHandCardBasicEffect() {
 
   const reveal = (item) => {
     setRevealing(true);
+    const activeCard = activeCardOptions.parentNode;
 
-    item.classList.add('amplify');
+    activeCard.classList.add('amplify');
 
     setTimeout(() => {
       setRevealing(false);
-      item.classList.remove('amplify');
+      activeCard.classList.remove('amplify');
     }, 1000);
   };
 
   const play = (card, item) => {};
-
-  const hideOptions = () => {
-    // const cardsInHandElementsOptions = document.querySelectorAll(
-    //   `.hand--area__card__options`
-    // );
-    // cardsInHandElementsOptions.forEach((cardHtml) => {
-    //   cardHtml.classList.add('hide');
-    // });
-  };
 
   const showOptions = (cardHtmlElement) => {
     const optionsElement = document.querySelector('.hand--area__card__options');
