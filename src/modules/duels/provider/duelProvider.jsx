@@ -42,26 +42,20 @@ function DuelProvider({ children }) {
   };
 
   useEffect(() => {
-    deckService.getDecks().then((res) => {
-      const deckCards = res.data[0]._cards;
-      const [_, setDeck] = states.deck;
-      const [hand, setHand] = states.hand;
+    deckService.getDecks().then((decks) => {
+      if (decks.length > 0) {
+        const deckCards = decks[0]._cards;
+        const [_, setDeck] = states.deck;
+        const [hand, setHand] = states.hand;
 
-      setDeck({
-        deck: deckCards,
-        id: res.data[0].id,
-        name: res.data[0].name,
-      });
+        setDeck({
+          deck: deckCards,
+          id: decks[0].id,
+          name: decks[0].name,
+        });
 
-      let slice = deckCards.slice(0, 5);
-      slice = slice.map((card) => {
-        card.uuid =
-          card.code + card.id * Math.random().toString().substring(2, 5);
-
-        return card;
-      });
-
-      setHand(slice);
+        setHand(deckCards.slice(0, 5));
+      }
     });
   }, []);
 

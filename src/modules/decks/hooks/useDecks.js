@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import deckService from '../services/deckService';
 import rules from '../../../helpers/deckRules';
+import formatCardsForDeck from '../../../helpers/formatCardsForDeck';
 
 const swalMessage = (title, html, icon) => {
   Swal.fire({
@@ -17,10 +18,16 @@ export default function useDecks() {
 
   const getDecks = () => {
     useEffect(() => {
-      deckService.getDecks().then((res) => {
-        setDecks(res.data);
-        setFilteredDeck(res.data);
-      });
+      deckService
+        .getDecks()
+        .then((decks) => {
+          decks = formatCardsForDeck(decks);
+          setDecks(decks);
+          setFilteredDeck(decks);
+        })
+        .catch((err) => {
+          swalMessage('Error', err.message, 'error');
+        });
     }, []);
   };
 
@@ -28,9 +35,10 @@ export default function useDecks() {
     useEffect(() => {
       (async () => {
         try {
-          const response = await deckService.findDeck(deckId);
-          const deck = response.data;
-          setDeckFromBackend(deck);
+          const deck = await deckService.findDeck(deckId);
+          const formatedDeck = formatCardsForDeck(deck);
+
+          setDeckFromBackend(formatedDeck);
         } catch (err) {
           swalMessage('Error', err.message, 'error');
         }
@@ -64,9 +72,11 @@ export default function useDecks() {
       const name = deck.name;
       const id = deck.id;
 
-      const response = id
+      const deck = id
         ? await deckService.updateDeck({ cards, name, id })
         : await deckService.saveDeck({ cards, name });
+
+      deck = formatCardsForDeck(deck);
 
       swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
 

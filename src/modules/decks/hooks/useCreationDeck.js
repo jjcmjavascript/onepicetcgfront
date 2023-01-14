@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const initialDeck = {
   name: '',
@@ -32,14 +32,7 @@ const useDeck = (rules) => {
   };
 
   const setDeckFromBackend = (deck) => {
-    const cards = [];
-
-    deck._cards.forEach((card) => {
-      const quantity = card.pivot_decks_cards.quantity;
-      for (let i = 0; i < quantity; i++) {
-        cards.push(card);
-      }
-    });
+    const cards = deck._cards;
 
     setDeck({
       name: deck.name,

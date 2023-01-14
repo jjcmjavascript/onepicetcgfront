@@ -26,7 +26,6 @@ function HandCardOptions({ id }) {
     const active = cardBasicEffects.activeCard;
     const activeHtml = cardBasicEffects.activeCardHtml;
 
-    console.log(cardBasicEffects);
     const newHand = hand.filter(
       (card) => card.uuid !== cardBasicEffects.activeCard.uuid
     );

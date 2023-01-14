@@ -6,22 +6,32 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const getDecks = (filters = {}) => {
+const getDecks = async (filters = {}) => {
   let formatedFilters = '';
 
   Object.keys(filters).forEach((key) => {
     formatedFilters = formatedFilters.concat(`${key}=${filters[key]}&`);
   });
 
-  const options = { headers };
-
-  return axios.get(`${baseUrl}?${formatedFilters}`, options);
+  try {
+    const options = { headers };
+    const response = await axios.get(`${baseUrl}?${formatedFilters}`, options);
+    const decks = response.data;
+    return decks;
+  } catch (err) {
+    throw err;
+  }
 };
 
-const saveDeck = (deck) => {
-  const options = { headers };
-
-  return axios.post(baseUrl, deck, options);
+const saveDeck = async (deck) => {
+  try {
+    const options = { headers };
+    const response = axios.post(baseUrl, deck, options);
+    const deck = response.data;
+    return deck;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const deleteDeck = (deckId) => {
@@ -30,14 +40,26 @@ const deleteDeck = (deckId) => {
   return axios.delete(`${baseUrl}/${deckId}`, options);
 };
 
-const findDeck = (deckId) => {
-  const options = { headers };
-  return axios.get(`${baseUrl}/${deckId}/edit`, options);
+const findDeck = async (deckId) => {
+  try {
+    const options = { headers };
+    const response = await axios.get(`${baseUrl}/${deckId}/edit`, options);
+    const deck = response.data;
+    return deck;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const updateDeck = (deck) => {
-  const options = { headers };
-  return axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+  try {
+    const options = { headers };
+    const response = axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+    const deck = response.data;
+    return deck;
+  } catch (err) {
+    throw err;
+  }
 };
 
-export default { getDecks, saveDeck, deleteDeck, findDeck , updateDeck };
+export default { getDecks, saveDeck, deleteDeck, findDeck, updateDeck };

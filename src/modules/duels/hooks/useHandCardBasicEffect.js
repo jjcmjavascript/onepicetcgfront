@@ -13,6 +13,8 @@ function useHandCardBasicEffect() {
 
     setTimeout(() => {
       activeCard.classList.remove('amplify');
+      setActiveCard(null);
+      setActiveCardHtml(null);
     }, 1000);
   };
 
