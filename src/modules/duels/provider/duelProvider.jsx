@@ -15,7 +15,7 @@ const getBoardSchema = () => {
     characters: [],
     costs: [],
     trash: [],
-    dons: 10,
+    dons: [],
     lives: 0,
   };
 };
@@ -56,6 +56,7 @@ function DuelProvider({ children }) {
   const separeDeck = (deck) => {
     const don = deck.find((card) => card.type_id === DON);
     const leader = deck.find((card) => card.type_id === LEADER);
+    const dons = deck.filter((card) => card.type_id === DON);
     const characters = deck.filter(
       (card) => card.type_id !== DON && card.type_id !== LEADER
     );
@@ -64,6 +65,7 @@ function DuelProvider({ children }) {
       don,
       leader,
       characters,
+      dons,
     };
   };
 
@@ -84,12 +86,12 @@ function DuelProvider({ children }) {
 
         setHand(newHand);
 
-        console.log(suffledDeck);
-
+        console.log(separatedCards);
         setBoardOne({
           ...boardOne,
           don: separatedCards.don,
           leader: separatedCards.leader,
+          dons: separatedCards.dons,
         });
       }
     });
