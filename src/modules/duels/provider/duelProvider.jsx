@@ -1,22 +1,18 @@
 import React, { createContext, useState, useEffect } from "react";
 
 import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
-
 import deckService from "../../decks/services/deckService";
+import { DON, LEADER } from "../../../helpers/cardTypes";
+import formatCardsForDeck from "../../../helpers/formatCardsForDeck";
 
 const DuelContext = createContext();
-
-const getCostStateSchema = () => {
-  return {
-    active: true,
-  };
-};
 
 const getBoardSchema = () => {
   return {
     leader: null,
+    don: null,
     stage: null,
-    characters: {},
+    characters: [],
     costs: [],
     trash: [],
     dons: 10,
@@ -27,34 +23,74 @@ const getBoardSchema = () => {
 function DuelProvider({ children }) {
   const states = {
     activeView: useState("deck"),
-    player1Board: useState(getBoardSchema()),
-    player2Board: useState(getBoardSchema()),
+    boardOne: useState(getBoardSchema()),
+    boardTwo: useState(getBoardSchema()),
     hand: useState([]),
-    deck: useState({
-      deck: [],
-      id: "",
-      name: "",
-    }),
+    deck: useState([]),
   };
 
   const hooks = {
     cardBasicEffects: useHandCardBasicEffect(),
   };
 
+  // The de-facto unbiased shuffle algorithm is
+  const shuffle = (array) => {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  };
+  const separeDeck = (deck) => {
+    const don = deck.find((card) => card.type_id === DON);
+    const leader = deck.find((card) => card.type_id === LEADER);
+    const characters = deck.filter(
+      (card) => card.type_id !== DON && card.type_id !== LEADER
+    );
+
+    return {
+      don,
+      leader,
+      characters,
+    };
+  };
+
   useEffect(() => {
-    deckService.getDecks().then((decks) => {
-      if (decks.length > 0) {
-        const deckCards = decks[0]._cards;
+    deckService.findDeck(2).then((deck) => {
+      if (deck) {
         const [_, setDeck] = states.deck;
         const [hand, setHand] = states.hand;
+        const [boardOne, setBoardOne] = states.boardOne;
 
-        setDeck({
-          deck: deckCards,
-          id: decks[0].id,
-          name: decks[0].name,
+        const deckCards = formatCardsForDeck(deck)._cards;
+        const separatedCards = separeDeck(deckCards);
+        const suffledDeck = shuffle(separatedCards.characters);
+
+        const newHand = suffledDeck.splice(0, 5);
+
+        setDeck(suffledDeck);
+
+        setHand(newHand);
+
+        console.log(suffledDeck);
+
+        setBoardOne({
+          ...boardOne,
+          don: separatedCards.don,
+          leader: separatedCards.leader,
         });
-
-        setHand(deckCards.slice(0, 5));
       }
     });
   }, []);

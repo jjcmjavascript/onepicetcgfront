@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./css/characterArea.css";
-
 function TrashArea({ children }) {
   return (
     <>

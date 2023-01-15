@@ -2,13 +2,12 @@ import React, { useContext } from "react";
 
 import Store from "../provider/duelProvider";
 
-import "./css/characterArea.css";
-
 function CharactedArea({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [board, setBoard] = states.player1Board;
 
   const chracterAreas = Object.values(board.characters);
+  console.log(chracterAreas);
   return (
     <>
       <div className="character--area">

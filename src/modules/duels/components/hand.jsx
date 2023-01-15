@@ -6,8 +6,6 @@ import HandCardOptions from "./handCardOptions";
 
 import HandCard from "./handCard";
 
-import "./css/characterArea.css";
-
 function Hand({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [hand] = states.hand;

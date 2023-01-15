@@ -1,50 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import Store from "../provider/duelProvider";
-import CharactedArea from "./characterArea";
-import LifeArea from "./lifeArea";
-import CostsArea from "./costsArea";
-import LeaderArea from "./leaderArea";
-import TrashArea from "./trashArea";
-import DonArea from "./donArea";
-import Hand from "./hand";
+
+import CharacterZone from "./characterZone";
+import DonZone from "./donZone";
+import HandZone from "./handZone";
+import LeaderZone from "./leaderZone";
+
+import "./css/test.css";
 
 function DuelZone({ children }) {
   const { state, hooks } = useContext(Store.DuelContext);
 
   return (
     <>
-      <div className="duel--area rotated">
-        <div className="duel--area__left">
-          <LifeArea />
-          <DonArea />
-        </div>
-        <div className="duel--area_right">
-          <CharactedArea />
-          <LeaderArea />
-          <div className="botton-area">
-            <CostsArea />
-            <TrashArea />
-          </div>
-        </div>
+      <div className="field">
+        <CharacterZone />
+        <DonZone />
+        <LeaderZone />
+        <HandZone />
       </div>
-
-      <div className="duel--area">
-        <div className="duel--area__left">
-          <LifeArea />
-          <DonArea />
-        </div>
-        <div className="duel--area_right">
-          <CharactedArea />
-          <LeaderArea />
-          <div className="botton-area">
-            <CostsArea />
-            <TrashArea />
-          </div>
-        </div>
-      </div>
-
-      <Hand />
     </>
   );
 }

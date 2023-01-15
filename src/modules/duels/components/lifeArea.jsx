@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./css/characterArea.css";
-
 function LifeArea({ children }) {
   const lifes = Array(10)
     .fill(0)

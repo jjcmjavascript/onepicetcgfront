@@ -106,7 +106,6 @@ export default function useDecks() {
         setFilteredDeck(filteredDecks);
       }
     } catch (err) {
-      console.log(err);
       swalMessage('Error', err.message, 'error');
     }
   };
