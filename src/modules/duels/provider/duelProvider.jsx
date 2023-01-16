@@ -27,6 +27,7 @@ function DuelProvider({ children }) {
     boardTwo: useState(getBoardSchema()),
     hand: useState([]),
     deck: useState([]),
+    preview: useState(null),
   };
 
   const hooks = {
