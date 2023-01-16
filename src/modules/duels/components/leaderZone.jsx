@@ -5,12 +5,25 @@ import FieldCardFull from "./fieldCardFull";
 function LeaderZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardOne } = states;
-  const [board, _] = boardOne;
+  const [board] = boardOne;
+  const [, setPreview] = states.preview;
+
+  const onMouseOver = (card) => {
+    setPreview(card);
+  };
+
+  const onMouseOut = (card) => {
+    setPreview(null);
+  };
 
   return (
     <>
       <div className="field--card_area">
-        <FieldCardFull card={board.leader} />
+        <FieldCardFull
+          card={board.leader}
+          onMouseOut={() => onMouseOut(board.leader)}
+          onMouseOver={() => onMouseOver(board.leader)}
+        />
         <div className="field--card_half"></div>
       </div>
     </>

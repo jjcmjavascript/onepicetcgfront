@@ -73,21 +73,17 @@ function DuelProvider({ children }) {
   useEffect(() => {
     deckService.findDeck(2).then((deck) => {
       if (deck) {
-        const [_, setDeck] = states.deck;
-        const [hand, setHand] = states.hand;
+        const [, setDeck] = states.deck;
+        const [, setHand] = states.hand;
         const [boardOne, setBoardOne] = states.boardOne;
 
         const deckCards = formatCardsForDeck(deck)._cards;
         const separatedCards = separeDeck(deckCards);
         const suffledDeck = shuffle(separatedCards.characters);
-
         const newHand = suffledDeck.splice(0, 5);
 
         setDeck(suffledDeck);
-
         setHand(newHand);
-
-        console.log(separatedCards);
         setBoardOne({
           ...boardOne,
           don: separatedCards.don,

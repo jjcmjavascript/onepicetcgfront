@@ -6,7 +6,7 @@ import FieldCardFull from "./fieldCardFull";
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [hand] = states.hand;
-  const [preview, setPreview] = states.preview;
+  const [_, setPreview] = states.preview;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -24,6 +24,7 @@ function HandZone({ children }) {
             <FieldCardFull
               card={card}
               key={card.uuid}
+              onClick={(card) => () => {}}
               onMouseOver={() => onMouseOver(card)}
               onMouseOut={() => onMouseOut(card)}
             />

@@ -8,7 +8,6 @@ const DuelMode = () => {
     <Store.DuelProvider>
       <div className="field--duelMode">
         <PreviewAndPhaseZone />
-
         <DuelZone />
       </div>
     </Store.DuelProvider>
