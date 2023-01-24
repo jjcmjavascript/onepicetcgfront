@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
 import deckService from "../../decks/services/deckService";
 import { DON, LEADER } from "../../../helpers/cardTypes";
-import formatCardsForDeck from "../../../helpers/formatCardsForDeck";
+import { shuffle, formatCardsForDeck } from "../../../helpers";
 
 const DuelContext = createContext();
 
@@ -34,26 +34,6 @@ function DuelProvider({ children }) {
     cardBasicEffects: useHandCardBasicEffect(),
   };
 
-  // The de-facto unbiased shuffle algorithm is
-  const shuffle = (array) => {
-    let currentIndex = array.length,
-      randomIndex;
-
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
-    }
-
-    return array;
-  };
   const separeDeck = (deck) => {
     const don = deck.find((card) => card.type_id === DON);
     const leader = deck.find((card) => card.type_id === LEADER);

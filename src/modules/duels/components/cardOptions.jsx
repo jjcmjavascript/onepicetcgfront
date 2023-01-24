@@ -1,12 +1,10 @@
 import React from "react";
 
-function CardOptions() {
+function CardOptions({ children }) {
   return (
     <>
       <div className="hand--options hide">
-        <div className="hand--options__item">Jugar</div>
-        <div className="hand--options__item">Descartar</div>
-        <div className="hand--options__item">Activar</div>
+        {children}
       </div>
     </>
   );

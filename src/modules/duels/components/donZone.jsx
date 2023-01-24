@@ -4,6 +4,7 @@ import Store from "../provider/duelProvider";
 import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
 import DonOptions from "./donOptions";
+import DonOptionItem from "./donOptionItem";
 
 function DonZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
@@ -77,12 +78,8 @@ function DonZone({ children }) {
         />
 
         <DonOptions>
-          <div className="don--options__item" onClick={devolverDon}>
-            Devolver
-          </div>
-          <div className="don--options__item" onClick={toggleDonStatus}>
-            Usar
-          </div>
+          <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
+          <DonOptionItem onClick={toggleDonStatus}>Usar</DonOptionItem>
         </DonOptions>
 
         <div className="field--card_half"></div>

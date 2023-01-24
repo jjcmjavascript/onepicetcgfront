@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import Store from "../provider/duelProvider";
 import FieldCardFull from "./fieldCardFull";
 import CardOptions from "./cardOptions";
+import CardOptionItem from "./cardOptionItem";
 
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
@@ -44,16 +45,21 @@ function HandZone({ children }) {
   return (
     <>
       <div className="field--card_area">
-        <CardOptions />
+        <CardOptions>
+          <CardOptionItem>Jugar</CardOptionItem>
+          <CardOptionItem>Revelar</CardOptionItem>
+          <CardOptionItem>Descartar</CardOptionItem>
+        </CardOptions>
+
         {hand.map((card) => {
           return (
             <FieldCardFull
               card={card}
               key={card.uuid}
               id={`id_${card.uuid}`}
-              onClick={(event) => toggleOptions(card)}
-              onMouseOver={() => onMouseOver(card)}
-              onMouseOut={() => onMouseOut(card)}
+              onClick={(_) => toggleOptions(card)}
+              onMouseOver={(_) => onMouseOver(card)}
+              onMouseOut={(_) => onMouseOut(card)}
             />
           );
         })}
