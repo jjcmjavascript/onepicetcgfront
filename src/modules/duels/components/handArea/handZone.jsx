@@ -73,13 +73,26 @@ function HandZone({ children }) {
     }, 1500);
   }
 
+  const discardCard = () => {
+    hideOptions();
+
+    setBoardOneState((prevState) => {
+      return {
+        ...prevState,
+        trash: [...prevState.trash, activeCard],
+      }
+    });
+
+    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+  };
+
   return (
     <>
       <div className="field--card_area">
         <CardOptions>
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
-          <CardOptionItem>Descartar</CardOptionItem>
+          <CardOptionItem onClick={discardCard} >Descartar</CardOptionItem>
         </CardOptions>
 
         {hand.map((card) => {
