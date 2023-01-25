@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
-import Store from "../provider/duelProvider";
-import FieldCardFull from "./fieldCardFull";
+import Store from "../../provider/duelProvider";
+import FieldCardFull from "../fieldCardFull";
 
 function CharactedZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
@@ -11,6 +11,7 @@ function CharactedZone({ children }) {
 
   const onMouseOver = (card) => {
     setPreview(card);
+    console.log(card)
   };
 
   const onMouseOut = (card) => {
@@ -23,10 +24,11 @@ function CharactedZone({ children }) {
         {boardOneState.characters.map((card, index) => {
           return (
             <FieldCardFull
+              id={`id_${card.uuid}`}
               key={card.uuid}
               card={card}
-              onMouseOut={(card) => onMouseOut(card)}
-              onMouseOver={(card) => onMouseOver(card)}
+              onMouseOut={(_) => onMouseOut(card)}
+              onMouseOver={(_) => onMouseOver(card)}
             />
           );
         })}

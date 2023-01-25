@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Store from "../provider/duelProvider";
+import Store from "../../provider/duelProvider";
 
 import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";

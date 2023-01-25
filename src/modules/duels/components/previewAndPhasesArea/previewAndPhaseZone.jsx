@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import Store from "../provider/duelProvider";
+import Store from "../../provider/duelProvider";
 import CardPreview from "./cardPreview";
 import PhaseZone from "./phaseZone";
 

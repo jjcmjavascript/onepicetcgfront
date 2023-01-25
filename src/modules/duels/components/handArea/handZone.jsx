@@ -1,15 +1,19 @@
 import React, { useContext, useState } from "react";
 
-import Store from "../provider/duelProvider";
-import FieldCardFull from "./fieldCardFull";
-import CardOptions from "./cardOptions";
-import CardOptionItem from "./cardOptionItem";
+import Store from "../../provider/duelProvider";
+import FieldCardFull from "../fieldCardFull";
+import CardOptions from "../handArea/cardOptions";
+import CardOptionItem from "../handArea/cardOptionItem";
 
+/**
+ * 1 - When Options is open, the "card" is active
+ */
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const [hand] = states.hand;
-  const [_, setPreview] = states.preview;
+  const [hand, setHand] = states.hand;
+  const [, setPreview] = states.preview;
   const [activeCard, setActiveCard] = useState(null);
+  const [boardOneState, setBoardOneState] = states.boardOne;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -42,16 +46,39 @@ function HandZone({ children }) {
     }
   };
 
-  const playCard = (card) => {
+  const playCard = () => {
+    setBoardOneState((prevState) => {
+      return {
+        ...prevState,
+        characters: [...prevState.characters, activeCard],
+      };
+    });
 
+    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+
+    hideOptions();
+  }
+
+  const revealCard = () => {
+    hideOptions();
+
+    const revealZoneElement = document.querySelector(".revealZone");
+    revealZoneElement.classList.remove("hideFull");
+    revealZoneElement.firstChild.src = activeCard._image_full.route;
+
+    setPreview(activeCard);
+
+    setTimeout(() => {
+      revealZoneElement.classList.add("hideFull");
+    }, 1500);
   }
 
   return (
     <>
       <div className="field--card_area">
         <CardOptions>
-          <CardOptionItem>Jugar</CardOptionItem>
-          <CardOptionItem>Revelar</CardOptionItem>
+          <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
+          <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
           <CardOptionItem>Descartar</CardOptionItem>
         </CardOptions>
 

@@ -24,7 +24,23 @@ function LeaderZone({ children }) {
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
         />
+
         <div className="field--card_half"></div>
+
+        <FieldCardFull
+          card={board.leader}
+          onMouseOut={() => onMouseOut(board.leader)}
+          onMouseOver={() => onMouseOver(board.leader)}
+        />
+
+        <div className="field--card_half"></div>
+
+        <FieldCardFull
+          card={board.leader}
+          onMouseOut={() => onMouseOut(board.leader)}
+          onMouseOver={() => onMouseOver(board.leader)}
+        />
+
       </div>
     </>
   );
