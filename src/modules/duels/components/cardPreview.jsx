@@ -15,7 +15,7 @@ function CardPreview() {
           />
         )}
       </div>
-      <span className="text-light">{preview && preview.card_text}</span>
+      <span className="text_preview text-light">{preview && preview.card_text}</span>
     </>
   );
 }

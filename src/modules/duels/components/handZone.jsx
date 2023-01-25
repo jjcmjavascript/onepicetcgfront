@@ -42,6 +42,10 @@ function HandZone({ children }) {
     }
   };
 
+  const playCard = (card) => {
+
+  }
+
   return (
     <>
       <div className="field--card_area">

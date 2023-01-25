@@ -159,7 +159,7 @@
   height: 90%;
 }
 
-span {
+.text_preview {
   height: 10vh;
   padding: 2px;
   font-size: 0.7rem;
