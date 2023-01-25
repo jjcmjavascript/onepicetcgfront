@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import Store from "../provider/duelProvider";
-import FieldCardFull from "./fieldCardFull";
+import Store from "../../provider/duelProvider";
+import FieldCardFull from "../fieldCardFull";
+import Deck from "./deck";
 
 function LeaderZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
@@ -35,7 +36,7 @@ function LeaderZone({ children }) {
 
         <div className="field--card_half"></div>
 
-        <FieldCardFull
+        <Deck
           card={board.leader}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
