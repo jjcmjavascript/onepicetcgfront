@@ -41,7 +41,7 @@ function HandZone({ children }) {
       setActiveCard(card);
       optionsElement.style.width = `${cardHtmlElement.clientWidth * 1.5}px`;
       optionsElement.style.left = `${cardHtmlElement.offsetLeft / 1.05}px`;
-      optionsElement.style.top = `-30px`;
+      optionsElement.style.top = `-50px`;
       optionsElement.classList.remove("hide");
     } else {
       optionsElement.style.width = `0px`;
@@ -60,7 +60,7 @@ function HandZone({ children }) {
     setHand(hand.filter((card) => card.uuid != activeCard.uuid));
 
     hideOptions();
-  }
+  };
 
   const revealCard = () => {
     hideOptions();
@@ -74,7 +74,7 @@ function HandZone({ children }) {
     setTimeout(() => {
       revealZoneElement.classList.add("hideFull");
     }, 1500);
-  }
+  };
 
   const discardCard = () => {
     hideOptions();
@@ -83,7 +83,7 @@ function HandZone({ children }) {
       return {
         ...prevState,
         trash: [...prevState.trash, activeCard],
-      }
+      };
     });
 
     setHand(hand.filter((card) => card.uuid != activeCard.uuid));
@@ -96,21 +96,38 @@ function HandZone({ children }) {
       return {
         ...prevState,
         deck: [activeCard, ...prevState.deck],
-      }
+      };
     });
+
+    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
   const putCardOnBottomDeck = () => {
     hideOptions();
+
+    setBoardOneState((prevState) => {
+      return {
+        ...prevState,
+        deck: [...prevState.deck, activeCard],
+      };
+    });
+
+    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
   return (
     <>
       <div className="field--card_area">
-        <CardOptions ref={handOptionElementRef} >
+        <CardOptions ref={handOptionElementRef}>
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
-          <CardOptionItem onClick={discardCard} >Descartar</CardOptionItem>
+          <CardOptionItem onClick={discardCard}>Descartar</CardOptionItem>
+          <CardOptionItem onClick={putCardOnTopDeck}>
+            Colocar en Tope
+          </CardOptionItem>
+          <CardOptionItem onClick={putCardOnBottomDeck}>
+            Colocar en Fondo
+          </CardOptionItem>
         </CardOptions>
 
         {hand.map((card) => {

@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import Store from "../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
 import Trash from "./trash";
 import DeckOptions from "./deckOptions";
 import DeckOptionItem from "./deckOptionItem";
-import { getUuid } from "../../../../helpers";
 
 function LeaderZone({ children }) {
-  const trashId = 'id_' + getUuid();
-  const trashOptionsId = `id_${getUuid()}`;
+  const trashElementRef = useRef();
+  const trashOptionElementRef = useRef();
+  const deckElementRef = useRef();
+  const deckOptionElementRef = useRef();
 
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardOne } = states;
@@ -25,14 +26,14 @@ function LeaderZone({ children }) {
   };
 
   const hideDeckOptions = () => {
-    const optionsElement = document.querySelector(`#${trashOptionsId}`);
+    const optionsElement = deckOptionElementRef.current;
     optionsElement.classList.add("hide");
   };
 
-  const toggleDeckOptions = (card) => {
+  const toggleDeckOptions = () => {
     hideDeckOptions();
-    const optionsElement = document.querySelector(`#${trashOptionsId}`);
-    const trashElement = document.querySelector(`#${trashId}`);
+    const optionsElement = deckOptionElementRef.current;
+    const trashElement = deckElementRef.current;
 
     if (optionsElement.classList.contains("hide")) {
       optionsElement.style.width = `${trashElement.clientWidth * 1.5}px`;
@@ -46,7 +47,7 @@ function LeaderZone({ children }) {
 
   return (
     <>
-      <DeckOptions id={trashOptionsId}>
+      <DeckOptions ref={deckOptionElementRef}>
         <DeckOptionItem onClick={() => console.log("test")}> </DeckOptionItem>
       </DeckOptions>
 
@@ -60,16 +61,18 @@ function LeaderZone({ children }) {
         <div className="field--card_half"></div>
 
         <Deck
+          ref={deckElementRef}
           count={board.deck.length}
           card={board.leader}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
+          onClick={() => toggleDeckOptions}
         />
 
         <div className="field--card_half"></div>
 
         <Trash
-          id={trashId}
+          ref={trashElementRef}
           count={board.trash.length}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}

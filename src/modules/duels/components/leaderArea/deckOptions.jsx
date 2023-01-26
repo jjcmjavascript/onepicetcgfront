@@ -1,13 +1,13 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-function DeckOptions({ children, id }) {
+function DeckOptions({ children, id }, ref) {
   return (
     <>
-      <div className="hand--options hide" id={id}>
+      <div className="hand--options hide" id={id} ref={ref}>
         {children}
       </div>
     </>
   );
 }
 
-export default DeckOptions;
+export default forwardRef(DeckOptions);

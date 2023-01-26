@@ -11,7 +11,6 @@ function CharactedZone({ children }) {
 
   const onMouseOver = (card) => {
     setPreview(card);
-    console.log(card)
   };
 
   const onMouseOut = (card) => {

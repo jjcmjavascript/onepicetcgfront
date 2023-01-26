@@ -1,11 +1,10 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-function Deck({ children, count = 0, id, onClick }) {
-  const tempImg =
-    "https://pbs.twimg.com/tweet_video_thumb/Dq3QwNuXgAMfVN-.jpg";
+function Trash({ children, count = 0, id, onClick }, ref) {
+  const tempImg = "https://pbs.twimg.com/tweet_video_thumb/Dq3QwNuXgAMfVN-.jpg";
   return (
     <>
-      <div id={id} className="field--card_full" onClick={onClick}>
+      <div id={id} className="field--card_full" onClick={onClick} ref={ref}>
         <div className="field--card__image_deckQuantity bgBlack60">{count}</div>
         <img src={tempImg} className="field--card__image" />
       </div>
@@ -13,4 +12,4 @@ function Deck({ children, count = 0, id, onClick }) {
   );
 }
 
-export default Deck;
+export default forwardRef(Trash);
