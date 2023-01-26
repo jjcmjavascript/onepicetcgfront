@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 
 import Store from "../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -12,8 +12,10 @@ function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [hand, setHand] = states.hand;
   const [, setPreview] = states.preview;
-  const [activeCard, setActiveCard] = useState(null);
   const [boardOneState, setBoardOneState] = states.boardOne;
+
+  const handOptionElementRef = useRef();
+  const [activeCard, setActiveCard] = useState(null);
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -24,7 +26,7 @@ function HandZone({ children }) {
   };
 
   const hideOptions = () => {
-    const optionsElement = document.querySelector(".hand--options");
+    const optionsElement = handOptionElementRef.current;
     optionsElement.classList.add("hide");
     setActiveCard(null);
   };
@@ -33,12 +35,13 @@ function HandZone({ children }) {
     hideOptions();
     const id = `id_${card.uuid}`;
     const cardHtmlElement = document.getElementById(id);
-    const optionsElement = document.querySelector(".hand--options");
+    const optionsElement = handOptionElementRef.current;
 
     if (!activeCard || activeCard != card) {
       setActiveCard(card);
       optionsElement.style.width = `${cardHtmlElement.clientWidth * 1.5}px`;
       optionsElement.style.left = `${cardHtmlElement.offsetLeft / 1.05}px`;
+      optionsElement.style.top = `-30px`;
       optionsElement.classList.remove("hide");
     } else {
       optionsElement.style.width = `0px`;
@@ -86,10 +89,25 @@ function HandZone({ children }) {
     setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
+  const putCardOnTopDeck = () => {
+    hideOptions();
+
+    setBoardOneState((prevState) => {
+      return {
+        ...prevState,
+        deck: [activeCard, ...prevState.deck],
+      }
+    });
+  };
+
+  const putCardOnBottomDeck = () => {
+    hideOptions();
+  };
+
   return (
     <>
       <div className="field--card_area">
-        <CardOptions>
+        <CardOptions ref={handOptionElementRef} >
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
           <CardOptionItem onClick={discardCard} >Descartar</CardOptionItem>

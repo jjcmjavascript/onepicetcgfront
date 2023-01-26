@@ -17,6 +17,7 @@ const getBoardSchema = () => {
     trash: [],
     dons: [],
     lives: 0,
+    deck: [],
   };
 };
 
@@ -26,7 +27,6 @@ function DuelProvider({ children }) {
     boardOne: useState(getBoardSchema()),
     boardTwo: useState(getBoardSchema()),
     hand: useState([]),
-    deck: useState([]),
     preview: useState(null),
   };
 
@@ -53,7 +53,6 @@ function DuelProvider({ children }) {
   useEffect(() => {
     deckService.findDeck(2).then((deck) => {
       if (deck) {
-        const [, setDeck] = states.deck;
         const [, setHand] = states.hand;
         const [boardOne, setBoardOne] = states.boardOne;
 
@@ -62,10 +61,10 @@ function DuelProvider({ children }) {
         const suffledDeck = shuffle(separatedCards.characters);
         const newHand = suffledDeck.splice(0, 5);
 
-        setDeck(suffledDeck);
         setHand(newHand);
         setBoardOne({
           ...boardOne,
+          deck: suffledDeck,
           don: separatedCards.don,
           leader: separatedCards.leader,
           dons: separatedCards.dons,

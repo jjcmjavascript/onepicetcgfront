@@ -1,13 +1,15 @@
-import React from "react";
+import React, {forwardRef} from "react";
 
-function CardOptions({ children }) {
+function CardOptions(props, ref) {
+  const { children } = props;
+
   return (
     <>
-      <div className="hand--options hide">
+      <div className="hand--options hide" ref={ref}>
         {children}
       </div>
     </>
   );
 }
 
-export default CardOptions;
+export default forwardRef(CardOptions);
