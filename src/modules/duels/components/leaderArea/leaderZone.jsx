@@ -20,10 +20,10 @@ function LeaderZone({ children }) {
   const deckOptionElementRef = useRef();
 
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states;
-  const [board, setBoardOneState] = boardOne;
+  const [board, setBoardOneState] = states.boardOne;
   const [, setPreview] = states.preview;
   const [hand, setHand] = states.hand;
+  const [, setShowTrashModal] = states.showTrashModal;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -97,7 +97,10 @@ function LeaderZone({ children }) {
     }
   };
 
-  const showTrash = () => {};
+  const showTrash = () => {
+    setShowTrashModal(true);
+    toggleTrashOptions();
+  };
 
   return (
     <>
@@ -136,6 +139,7 @@ function LeaderZone({ children }) {
           count={board.trash.length}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
+          onClick={toggleTrashOptions}
         />
       </div>
     </>
