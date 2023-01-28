@@ -29,7 +29,7 @@ function LeaderZone({ children }) {
     setPreview(card);
   };
 
-  const onMouseOut = (card) => {
+  const onMouseOut = () => {
     setPreview(null);
   };
 
