@@ -79,7 +79,7 @@ function DonZone({ children }) {
 
         <DonOptions>
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
-          <DonOptionItem onClick={toggleDonStatus}>Usar</DonOptionItem>
+          <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
         </DonOptions>
 
         <div className="field--card_half"></div>

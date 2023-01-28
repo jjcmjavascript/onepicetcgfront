@@ -5,7 +5,7 @@ import DonZone from "./donArea/donZone";
 import HandZone from "./handArea/handZone";
 import LeaderZone from "./leaderArea/leaderZone";
 import RevealCard from "./revealCard";
-import TrashModal from "./trashModal";
+import TrashModal from "./trashModal/trashModal";
 
 import "./css/test.css";
 

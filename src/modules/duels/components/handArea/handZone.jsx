@@ -117,7 +117,7 @@ function HandZone({ children }) {
 
   return (
     <>
-      <div className="field--card_area">
+      <div className="field--card_area__hand">
         <CardOptions ref={handOptionElementRef}>
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
