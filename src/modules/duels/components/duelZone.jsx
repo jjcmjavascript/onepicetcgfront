@@ -9,10 +9,10 @@ import TrashModal from "./trashModal/trashModal";
 
 import "./css/test.css";
 
-function DuelZone({ children }) {
+function DuelZone({ children, rotate}) {
   return (
     <>
-      <div className="field">
+      <div className={`field ${rotate ? 'rotated' : '' }`}>
         <RevealCard/>
         <TrashModal/>
         <CharacterZone />

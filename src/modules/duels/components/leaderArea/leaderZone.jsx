@@ -77,10 +77,10 @@ function LeaderZone({ children }) {
       return {
         ...current,
         deck: current.deck.filter((card) => card.uuid !== newCard.uuid),
-        trash : [...current.trash, newCard]
+        trash: [...current.trash, newCard],
       };
     });
-  }
+  };
 
   const toggleTrashOptions = () => {
     const optionsElement = trashOptionElementRef.current;

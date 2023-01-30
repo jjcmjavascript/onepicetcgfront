@@ -1,3 +1,7 @@
+.rotated {
+  transform: rotate(180deg); /* Equal to rotateZ(45deg) */
+}
+
 .field--duelMode {
   display: grid;
   grid-template-columns: 1fr 1fr;

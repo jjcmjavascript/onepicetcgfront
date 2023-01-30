@@ -81,6 +81,18 @@ function TrashModal({ children }) {
     hideOptions();
   };
 
+  const playTrashCardInCharacterArea = () => {
+    setBoardOneState((prevState) => {
+      return {
+        ...prevState,
+        trash: prevState.trash.filter((card) => card.uuid != activeCard.uuid),
+        characters: [...prevState.characters, activeCard]
+      };
+    });
+
+    hideOptions();
+  };
+
   useEffect(() => {
     document.querySelector("body").addEventListener("keyup", (evt) => {
       if (evt.keyCode === SCAPE_KEY) {
@@ -94,6 +106,9 @@ function TrashModal({ children }) {
       <TrashModalOptions ref={modalTrashRef}>
         <TrashModalOptionItem onClick={putTrashCardInHand}>
           A la mano
+        </TrashModalOptionItem>
+        <TrashModalOptionItem onClick={playTrashCardInCharacterArea}>
+          Jugar
         </TrashModalOptionItem>
         <TrashModalOptionItem onClick={putTrashCardOnTopDeck}>
           Colocar en Tope
