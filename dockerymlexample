@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${API_NAME}
+  labels:
+    app: ${API_NAME}
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: ${API_NAME}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${API_NAME}
+  labels:
+    app: ${API_NAME}
+spec:
+  selector:
+    matchLabels:
+      app: ${API_NAME}
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ${API_NAME}
+    spec:
+      containers:
+        - name: ${API_NAME}
+          image: REPLACE_ME
+          imagePullPolicy: Always
+          env:
+            - name: VITE_API_VERSION
+              value: v1
+            - name: VITE_GATEWAY_URL
+              value: gtwy
+            - name: VITE_API_URL
+              value: https://micredito-staging.nacionservicios.com.ar
+            - name: VITE_APP_NAME
+              value: BNA mi Tienda
+            - name: VITE_PUSHER_APP_KEY
+              value: "12345"
+            - name: VITE_PUSHER_HTTP
+              value: localhost:9088
+            - name: VITE_PUSHER_HOST
+              value: localhost
+            - name: VITE_PUSHER_PORT
+              value: "6001"
+            - name: VITE_PUSHER_AUTH
+              value: http://localhost:9088/laravel-websockets/auth
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: 350Mi
+              cpu: "0.05"
+            limits:
+              memory: 700Mi
+              cpu: "0.20"
+      serviceAccountName: ${NAMESPACE}
