@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Store from "../provider/duelProvider";
+import Store from "../../provider/duelProvider";
 
 import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
@@ -79,7 +79,7 @@ function DonZone({ children }) {
 
         <DonOptions>
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
-          <DonOptionItem onClick={toggleDonStatus}>Usar</DonOptionItem>
+          <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
         </DonOptions>
 
         <div className="field--card_half"></div>

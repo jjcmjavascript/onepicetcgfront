@@ -16,7 +16,8 @@ const getBoardSchema = () => {
     costs: [],
     trash: [],
     dons: [],
-    lives: 0,
+    lives: [],
+    deck: [],
   };
 };
 
@@ -26,8 +27,8 @@ function DuelProvider({ children }) {
     boardOne: useState(getBoardSchema()),
     boardTwo: useState(getBoardSchema()),
     hand: useState([]),
-    deck: useState([]),
     preview: useState(null),
+    showTrashModal: useState(false),
   };
 
   const hooks = {
@@ -38,14 +39,14 @@ function DuelProvider({ children }) {
     const don = deck.find((card) => card.type_id === DON);
     const leader = deck.find((card) => card.type_id === LEADER);
     const dons = deck.filter((card) => card.type_id === DON);
-    const characters = deck.filter(
+    const cards = deck.filter(
       (card) => card.type_id !== DON && card.type_id !== LEADER
     );
 
     return {
       don,
       leader,
-      characters,
+      cards,
       dons,
     };
   };
@@ -53,22 +54,23 @@ function DuelProvider({ children }) {
   useEffect(() => {
     deckService.findDeck(2).then((deck) => {
       if (deck) {
-        const [, setDeck] = states.deck;
         const [, setHand] = states.hand;
         const [boardOne, setBoardOne] = states.boardOne;
 
         const deckCards = formatCardsForDeck(deck)._cards;
         const separatedCards = separeDeck(deckCards);
-        const suffledDeck = shuffle(separatedCards.characters);
+        const suffledDeck = shuffle(separatedCards.cards);
         const newHand = suffledDeck.splice(0, 5);
+        const lives = suffledDeck.splice(0, separatedCards.leader.lives);
 
-        setDeck(suffledDeck);
         setHand(newHand);
         setBoardOne({
           ...boardOne,
+          deck: suffledDeck,
           don: separatedCards.don,
           leader: separatedCards.leader,
           dons: separatedCards.dons,
+          lives,
         });
       }
     });

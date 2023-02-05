@@ -3,5 +3,8 @@ import setUuid from './setUuid';
 import formatCardsForDeck from './formatCardsForDeck';
 import deckRules from './deckRules';
 import cardTypes from './cardTypes';
+import { faker } from '@faker-js/faker';
 
-export { shuffle, setUuid, formatCardsForDeck, deckRules, cardTypes };
+const getUuid = () => faker.datatype.uuid();
+
+export { shuffle, setUuid, formatCardsForDeck, deckRules, cardTypes, getUuid };
