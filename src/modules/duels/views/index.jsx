@@ -9,7 +9,6 @@ const DuelMode = () => {
       <div className="field--duelMode">
         <PreviewAndPhaseZone />
         <div>
-          <DuelZone rotate={true}/>
           <DuelZone />
         </div>
       </div>
