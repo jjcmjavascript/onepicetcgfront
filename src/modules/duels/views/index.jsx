@@ -11,7 +11,6 @@ const views = {
 
 const DuelMode = () => {
   const location = useLocation();
-  console.log(location.pathname);
   return views[location.pathname];
 };
 
