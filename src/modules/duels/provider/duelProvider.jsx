@@ -30,6 +30,7 @@ function DuelProvider({ children }) {
     hand: useState([]),
     preview: useState(null),
     showTrashModal: useState(false),
+    mode: useState("modeSelector"),
   };
 
   const hooks = {

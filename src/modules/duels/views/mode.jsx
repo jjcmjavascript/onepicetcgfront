@@ -4,28 +4,33 @@ import { FiEdit } from "react-icons/fi";
 import Container from "../../../components/container";
 import CardComponent from "../../../components/card";
 
-function DuelMode({ className, style, children }) {
-  const modes = ["Vs IA", "Vs Jugador", "Vs Amigo", "Ver duelo Aletaorio"];
+function DuelMode() {
+  const modes = [
+    { mode: "vsia", name: "Vs IA" },
+    { mode: "vsplayer", name: "Vs Jugador" },
+    { mode: "vsfriend", name: "Vs Amigo" },
+    { mode: "ramdon", name: "Ver duelo Aletaorio" },
+  ];
 
   return (
-    <Container className="container-fluid" style={style}>
+    <Container className="container-fluid bg-dark min100vh">
       <div className="col-xs-12 text-light fs-2 vinyl text-center">
         Modos De Juego
       </div>
 
-      {modes.map((mode) => {
+      {modes.map((option) => {
         return (
           <CardComponent
             className="card mt-1 bg-secondary text-light offset-2 col-8"
-            key={mode}
+            key={option.mode}
           >
             <Container>
               <Link
-                to={`/decks/edit/${mode}`}
+                to={`/duels/${option.mode}`}
                 title="Editar"
                 className="text-light text-center"
               >
-                <div className="vinyl">{mode}</div>
+                <div className="vinyl">{option.name}</div>
               </Link>
             </Container>
           </CardComponent>

@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import Store from "../provider/duelProvider";
-import DuelZone from "../components/duelZone";
-import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
+import Mode from "./mode";
+import VsPlayer from "./vsPlayer";
+import { useLocation } from 'react-router-dom'
 
-const DuelMode = () => {
-  return (
-    <Store.DuelProvider>
-      <div className="field--duelMode">
-        <PreviewAndPhaseZone />
-        <div>
-          <DuelZone />
-        </div>
-      </div>
-    </Store.DuelProvider>
-  );
+const views = {
+  "/duels": <Mode />,
+  "/duels/vsplayer": <VsPlayer />,
 };
 
-export default DuelMode;
+const DuelMode = () => {
+  const location = useLocation();
+  console.log(location.pathname);
+  return views[location.pathname];
+};
+
+function Wraper() {
+  return (
+    <Store.DuelProvider>
+      <DuelMode />
+    </Store.DuelProvider>
+  );
+}
+
+export default Wraper;

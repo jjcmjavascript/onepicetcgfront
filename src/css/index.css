@@ -17,3 +17,7 @@
 .min80vh {
   min-height: 80vh;
 }
+
+.pointer {
+  cursor: pointer;
+}
