@@ -53,6 +53,10 @@
   color: gold;
 }
 
+.rockScissorsPaperContainer--box__item_active {
+  color: gold;
+}
+
 .rockScissorsPaperContainer--box__item--message {
   text-decoration: underline;
 }

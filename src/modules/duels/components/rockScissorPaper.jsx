@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ContainerFluidDark from "../../../components/containerFluidDark";
 import {
   FaRegHandRock,
@@ -10,32 +10,55 @@ const RockScissorsPaperContainer = ({ children }) => {
   return <div className="rockScissorsPaperContainer--box">{children}</div>;
 };
 
-const RockScissorsPaperContainerItem = ({ children }) => {
+const RockScissorsPaperContainerItem = ({ children, onClick, active }) => {
+  const activeEffect = active
+    ? "rockScissorsPaperContainer--box__item_active"
+    : "";
+
+  const className = `rockScissorsPaperContainer--box__item ${activeEffect}`;
+
   return (
-    <div className="rockScissorsPaperContainer--box__item">{children}</div>
+    <div className={className} onClick={onClick}>
+      {children}
+    </div>
   );
 };
 
-const Message = ({ children }) => (
-  <h1 className="text-light text-center rockScissorsPaperContainer--box__item--message">
-    {children}
-  </h1>
-);
+const Message = ({ children, active }) => {
+  const className = `text-light text-center rockScissorsPaperContainer--box__item--message`;
+  return <h1 className={className}>{children}</h1>;
+};
 
 function RockScissorPaper() {
-  const [message, setMessage] = React.useState("Choose your weapon");
+  const [choice, setChoice] = useState(null);
+  const [message, setMessage] = useState("Choose your weapon");
+
+  const onClick = (choice) => {
+    setChoice(choice);
+  };
 
   return (
     <>
       <div className="rockScissorsPaperContainer">
         <RockScissorsPaperContainer>
-          <RockScissorsPaperContainerItem>
+          <RockScissorsPaperContainerItem
+            onClick={() => !choice && onClick("scissor")}
+            active={choice == "scissor"}
+          >
             <FaRegHandScissors></FaRegHandScissors>
           </RockScissorsPaperContainerItem>
-          <RockScissorsPaperContainerItem>
+
+          <RockScissorsPaperContainerItem
+            onClick={() => !choice && onClick("rock")}
+            active={choice == "rock"}
+          >
             <FaRegHandRock></FaRegHandRock>
           </RockScissorsPaperContainerItem>
-          <RockScissorsPaperContainerItem>
+
+          <RockScissorsPaperContainerItem
+            onClick={() => !choice && onClick("paper")}
+            active={choice == "paper"}
+          >
             <FaRegHandPaper></FaRegHandPaper>
           </RockScissorsPaperContainerItem>
         </RockScissorsPaperContainer>
@@ -50,6 +73,7 @@ function wrapper() {
   const style = {
     top: "50vh",
   };
+
   return (
     <ContainerFluidDark>
       <RockScissorPaper />

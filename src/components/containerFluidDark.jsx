@@ -1,9 +1,10 @@
 import React from "react";
 import Container from "./container";
 
-function ContainerFluidDark({ children }) {
+function ContainerFluidDark({ children , className = '' }) {
+  const classes = `container-fluid bg-dark min100vh ${className}`;
   return (
-    <Container className="container-fluid bg-dark min100vh">
+    <Container className={classes}>
       {children}
     </Container>
   );
