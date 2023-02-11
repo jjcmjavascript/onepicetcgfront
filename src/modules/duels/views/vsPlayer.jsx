@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DuelZone from "../components/duelZone";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
-import RockScisorPaper from "../components/rockScisorPaper";
+import RockScissorPaper from "../components/rockScissorPaper";
 
 const VsPlayer = () => {
   return (
@@ -16,11 +16,11 @@ const VsPlayer = () => {
 
 const views = {
   duel: <VsPlayer />,
-  rockScisorPaper: <RockScisorPaper />,
+  rockScissorPaper: <RockScissorPaper />,
 };
 
 function wrapper() {
-  const [view, setView] = useState("rockScisorPaper");
+  const [view, setView] = useState("rockScissorPaper");
 
   return <>{views[view]}</>;
 }
