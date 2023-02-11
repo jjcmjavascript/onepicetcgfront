@@ -3,7 +3,7 @@ import DuelZone from "../components/duelZone";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
 import RockScisorPaper from "../components/rockScisorPaper";
 
-const NewDuelZone = () => {
+const VsPlayer = () => {
   return (
     <div className="field--duelMode">
       <PreviewAndPhaseZone />
@@ -15,16 +15,14 @@ const NewDuelZone = () => {
 };
 
 const views = {
-  "duel": <NewDuelZone />,
-  "rockScisorPaper": <RockScisorPaper />,
+  duel: <VsPlayer />,
+  rockScisorPaper: <RockScisorPaper />,
 };
 
-function vsPlayer() {
+function wrapper() {
   const [view, setView] = useState("rockScisorPaper");
 
-  return <>
-    {views[view]}
-  </>;
+  return <>{views[view]}</>;
 }
 
-export default vsPlayer;
+export default wrapper;

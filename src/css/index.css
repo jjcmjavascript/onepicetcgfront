@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Vinyl&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik+Vinyl&display=swap");
 
-.float_button{
-	position:fixed;
-	bottom:40px;
-	right:40px;
+.float_button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
 }
 
 .vinyl {
-  font-family: 'Rubik Vinyl', cursive;
+  font-family: "Rubik Vinyl", cursive;
 }
 
 .min100vh {
@@ -20,4 +20,34 @@
 
 .pointer {
   cursor: pointer;
+}
+
+.rockScirsorPaperContainter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 30vh;
+  border: 1px solid red;
+}
+
+.rockScirsorPaperContainter--box {
+  border: 1px solid blue;
+  padding: 1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+}
+
+.rockScirsorPaperContainter--box__item {
+  border: 1px solid green;
+  height: 100%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: 10em;
+  cursor: pointer;
+}
+
+.rockScirsorPaperContainter--box__item:hover {
+  box-shadow: 0 0 20px 0px #fff;
 }
