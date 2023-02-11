@@ -22,32 +22,37 @@
   cursor: pointer;
 }
 
-.rockScirsorPaperContainter {
+.rockScissorsPaperContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+  margin-top: 20vh;
   height: 30vh;
-  border: 1px solid red;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-.rockScirsorPaperContainter--box {
-  border: 1px solid blue;
+.rockScissorsPaperContainer--box {
   padding: 1em;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  justify-content: center;
-  align-items: center;
+  grid-template-rows: 1fr 1fr;
 }
 
-.rockScirsorPaperContainter--box__item {
-  border: 1px solid green;
+.rockScissorsPaperContainer--box__item {
   height: 100%;
   display: grid;
   justify-content: center;
   align-items: center;
   font-size: 10em;
   cursor: pointer;
+  color: white;
 }
 
-.rockScirsorPaperContainter--box__item:hover {
-  box-shadow: 0 0 20px 0px #fff;
+.rockScissorsPaperContainer--box__item:hover {
+  color: gold;
+}
+
+.rockScissorsPaperContainer--box__item--message {
+  text-decoration: underline;
 }

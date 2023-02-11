@@ -16,33 +16,31 @@ const RockScissorsPaperContainerItem = ({ children }) => {
   );
 };
 
+const Message = ({ children }) => (
+  <h1 className="text-light text-center rockScissorsPaperContainer--box__item--message">
+    {children}
+  </h1>
+);
+
 function RockScissorPaper() {
+  const [message, setMessage] = React.useState("Choose your weapon");
+
   return (
     <>
       <div className="rockScissorsPaperContainer">
         <RockScissorsPaperContainer>
           <RockScissorsPaperContainerItem>
-            <FaRegHandScissors className="text-light"></FaRegHandScissors>
+            <FaRegHandScissors></FaRegHandScissors>
           </RockScissorsPaperContainerItem>
           <RockScissorsPaperContainerItem>
-            <FaRegHandRock className="text-light"></FaRegHandRock>
+            <FaRegHandRock></FaRegHandRock>
           </RockScissorsPaperContainerItem>
           <RockScissorsPaperContainerItem>
-            <FaRegHandPaper className="text-light"></FaRegHandPaper>
+            <FaRegHandPaper></FaRegHandPaper>
           </RockScissorsPaperContainerItem>
         </RockScissorsPaperContainer>
 
-        <div className="rockScissorsPaperContainer--box">
-          <div className="rockScissorsPaperContainer--box__item">
-            <FaRegHandScissors className="text-light"></FaRegHandScissors>
-          </div>
-          <div className="rockScissorsPaperContainer--box__item">
-            <FaRegHandRock className="text-light"></FaRegHandRock>
-          </div>
-          <div className="rockScissorsPaperContainer--box__item">
-            <FaRegHandPaper className="text-light"></FaRegHandPaper>
-          </div>
-        </div>
+        <Message> {message}</Message>
       </div>
     </>
   );
