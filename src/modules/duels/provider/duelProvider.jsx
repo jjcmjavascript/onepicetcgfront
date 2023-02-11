@@ -35,7 +35,7 @@ function DuelProvider({ children }) {
 
   const hooks = {
     cardBasicEffects: useHandCardBasicEffect(),
-    socket: useSocket("/duel"),
+    socket: useSocket(),
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import Store from "../provider/duelProvider";
 import ContainerFluidDark from "../../../components/containerFluidDark";

@@ -12,25 +12,26 @@ const defaultOptions = {
   upgrade: false,
   rejectUnauthorized: false,
 };
+const GENERAL = '/';
+const DUEL = '/duel';
 
-export default function useSocket(url = '', options = defaultOptions) {
-  const [socket, setSocket] = useState(null);
-  const [rooms, setRooms] = useState({
-    general: '/',
-    duel: '',
+export default function useSocket(options = defaultOptions) {
+  const [sockets, setSockets] = useState({
+    [GENERAL]: null,
+    [DUEL]: null,
   });
 
-  useEffect(() => {
-    const newSocket = io(`${appUrl}${url}`, options);
+  const initSocket = (url) => {
+    if (sockets[url]) return sockets[url];
 
-    setSocket(newSocket);
+    const newSocket = io(`${appUrl}`, options);
 
-    return () => newSocket.close();
-  }, [url]);
-
-  const setActiveRooms = (room, roomName) => {
-    setRooms({ ...rooms, [room]: roomName });
+    setSockets((prev) => ({ ...prev, [url]: newSocket }));
   };
 
-  return { socket, rooms, setActiveRooms};
+  useEffect(() => {
+    initSocket(GENERAL);
+  }, [defaultOptions]);
+
+  return { sockets };
 }
