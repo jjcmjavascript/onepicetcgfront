@@ -33,6 +33,16 @@ function DuelMode() {
           </CardComponent>
         );
       })}
+
+      <div className="mt-2 col-12 text-light fs-2 text-center">
+        <div className="offset-3 col-6 form-group">
+          <label className="vinyl">Mi Deck</label>
+          <select className="form-control">
+            <option value="1">Deck One</option>
+            <option value="2">Deck Two</option>
+          </select>
+        </div>
+      </div>
     </ContainerFluidDark>
   );
 }

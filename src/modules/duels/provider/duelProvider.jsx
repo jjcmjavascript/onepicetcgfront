@@ -1,9 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 
 import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
-import deckService from "../../decks/services/deckService";
-import { DON, LEADER } from "../../../helpers/cardTypes";
-import { shuffle, formatCardsForDeck } from "../../../helpers";
+import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 
 const DuelContext = createContext();
@@ -31,12 +29,20 @@ function DuelProvider({ children }) {
     preview: useState(null),
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
+    decks : useState([]),
+    selectedDeck: useState(null),
   };
 
   const hooks = {
     cardBasicEffects: useHandCardBasicEffect(),
     socket: useSocket("/duel"),
   };
+
+  useEffect(()=>{
+    deckService.getDecks().then((response)=>{
+      states.decks[1](response.data);
+    });
+  });
 
   return (
     <DuelContext.Provider value={{ states, hooks }}>
