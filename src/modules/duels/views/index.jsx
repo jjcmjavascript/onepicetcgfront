@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import Store from "../provider/duelProvider";
-import Mode from "./mode";
+import Mode from "./selectionMode";
 import VsPlayer from "./vsPlayer";
 import { useLocation } from 'react-router-dom'
 

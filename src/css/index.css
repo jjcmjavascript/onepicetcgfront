@@ -60,3 +60,7 @@
 .rockScissorsPaperContainer--box__item--message {
   text-decoration: underline;
 }
+
+.strike {
+  text-decoration: line-through;
+}

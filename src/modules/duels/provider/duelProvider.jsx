@@ -29,7 +29,7 @@ function DuelProvider({ children }) {
     preview: useState(null),
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
-    decks : useState([]),
+    decks: useState([]),
     selectedDeck: useState(null),
   };
 
@@ -38,11 +38,11 @@ function DuelProvider({ children }) {
     socket: useSocket("/duel"),
   };
 
-  useEffect(()=>{
-    deckService.getDecks().then((response)=>{
-      states.decks[1](response.data);
+  useEffect(() => {
+    deckService.getDecks().then((decks) => {
+      states.decks[1](decks);
     });
-  });
+  }, []);
 
   return (
     <DuelContext.Provider value={{ states, hooks }}>
