@@ -30,12 +30,12 @@ function DuelProvider({ children }) {
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
     decks: useState([]),
-    selectedDeck: useState(null),
+    selectedDeck: useState(''),
   };
 
   const hooks = {
     cardBasicEffects: useHandCardBasicEffect(),
-    socket: useSocket(),
+    sockets: useSocket(),
   };
 
   useEffect(() => {

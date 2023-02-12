@@ -12,26 +12,54 @@ const defaultOptions = {
   upgrade: false,
   rejectUnauthorized: false,
 };
-const GENERAL = '/';
-const DUEL = '/duel';
+
+const SOCKET_GENERAL_URL = '/';
+const SOCKET_DUEL_URL = '/duel';
 
 export default function useSocket(options = defaultOptions) {
   const [sockets, setSockets] = useState({
-    [GENERAL]: null,
-    [DUEL]: null,
+    [SOCKET_GENERAL_URL]: null,
+    [SOCKET_DUEL_URL]: null,
   });
 
-  const initSocket = (url) => {
-    if (sockets[url]) return sockets[url];
+  const [rooms,  setRooms] = useState({
+    [SOCKET_GENERAL_URL]: null,
+    [SOCKET_DUEL_URL]: null,
+  });
+
+  const initSocket = (socketUrl) => {
+    if (sockets[socketUrl]) return sockets[socketUrl];
 
     const newSocket = io(`${appUrl}`, options);
 
-    setSockets((prev) => ({ ...prev, [url]: newSocket }));
+    setSockets((prev) => ({ ...prev, [socketUrl]: newSocket }));
   };
 
+  const initDuelSocket = () => {
+    if (sockets[SOCKET_DUEL_URL]) return sockets[SOCKET_DUEL_URL];
+
+    const newSocket = io(`${appUrl}${SOCKET_DUEL_URL}`, options);
+
+    setSockets((prev) => ({ ...prev, [SOCKET_DUEL_URL]: newSocket }));
+  };
+
+  const joinRoom = (socket, room) => {
+    setRooms((prev) => ({ ...prev, [socket]: room }));
+  };
+
+
   useEffect(() => {
-    initSocket(GENERAL);
+    initSocket(SOCKET_GENERAL_URL);
   }, [defaultOptions]);
 
-  return { sockets };
+  return {
+    duelSocket: () => sockets[SOCKET_DUEL_URL],
+    sockets,
+    rooms,
+    joinRoom,
+    initSocket,
+    initDuelSocket,
+    SOCKET_GENERAL_URL,
+    SOCKET_DUEL_URL,
+  };
 }

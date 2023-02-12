@@ -42,7 +42,7 @@ function DuelMode() {
       <div className="mt-2 col-12 text-light fs-2 text-center">
         <div className="offset-3 offset-md-4 col-6 col-md-4 form-group">
           <label className="vinyl">Mi Deck</label>
-          <select className="form-control" onChange={handleSelect}>
+          <select className="form-control" onChange={handleSelect} defaultValue={selectedDeck && selectedDeck.id}>
             <option value="">Selecciona un deck</option>
             {decks.map((deck) => {
               return (

@@ -16,35 +16,31 @@ function DuelZone({ children, rotate }) {
   const { boardOne } = states;
   const [board, setBoard] = boardOne;
 
-  const { socket, setActiveRooms, rooms } = hooks.socket;
+  const { rooms, duelSocket } = hooks.sockets;
 
-  if (socket) {
-    socket.on("duel:connected", (data) => {
-      setActiveRooms("duel", data.room);
-    });
+  if (duelSocket()) {
+    duelSocket().on("duel:started", (data) => {});
 
-    socket.on("duel:started", (data) => {});
-
-    socket.on("duel:removeLife", (data) => {
+    duelSocket().on("duel:removeLife", (data) => {
       console.log(data);
     });
 
-    socket.on("duel:setBoard", (data) => {
+    duelSocket().on("duel:setBoard", (data) => {
       console.log(data);
 
-      if (data.id == socket.id) {
+      if (data.id == duelSocket().id) {
         setBoard(data.board);
       }
     });
   }
 
   const removeLife = (life) => {
-    socket.emit("duel:removeLife", { life, room: rooms.duel });
+    duelSocket().emit("duel:removeLife", { life, room: rooms.duel });
   };
 
   const chooseRockPaperScissors = () => {
-    socket.emit("duel:playerSelected", {
-      player: socket.id,
+    duelSocket().emit("duel:playerSelected", {
+      player: duelSocket().id,
       room: rooms.duel,
     });
   };
@@ -63,9 +59,7 @@ function DuelZone({ children, rotate }) {
 
         <div className="lives">
           <span className="rotate270">Vidas</span>
-          <button onClick={chooseRockPaperScissors}>
-            Rock Paper Scissors
-          </button>
+          <button onClick={chooseRockPaperScissors}>Rock Paper Scissors</button>
 
           {board.lives.map((live) => {
             return (

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+
 import DuelZone from "../components/duelZone";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
+import Store from "../provider/duelProvider";
+import { onDuelConnected } from "../services/socketEvents";
 
 const VsPlayer = () => {
   return (
@@ -22,7 +25,25 @@ const views = {
 };
 
 function wrapper() {
+  const { sockets: hookSocket } = useContext(Store.DuelContext).hooks;
+  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hookSocket;
   const [view, setView] = useState("waitingArea");
+
+  useEffect(() => {
+    initDuelSocket();
+
+    return () => {
+      duelSocket() && duelSocket().close();
+      duelSocket() && duelSocket().disconnect();
+    }
+  }, []);
+
+  if (duelSocket()) {
+    onDuelConnected(duelSocket(), (data) => {
+      joinRoom(SOCKET_DUEL_URL, data.room);
+      setView("rockScissorPaper");
+    });
+  }
 
   return <>{views[view]}</>;
 }

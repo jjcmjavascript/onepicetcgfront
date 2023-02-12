@@ -1,4 +1,4 @@
-import constans from '../constants';
+import constans from './constants';
 
 export const RockScissorsPaperStart = () => {
   return {
@@ -21,7 +21,7 @@ export const RockScissorsPaperCancel = () => {
   };
 };
 
-export const RockScissorsPaperChoice = (choice) => {
+export const RockScissorsPaperChoice = (socket, choice) => {
   return {
     type: constans.ROCK_SCISSORS_PAPER_CHOICE,
     payload: {
@@ -37,4 +37,15 @@ export const RockScissorsPaperResult = (result) => {
       result,
     },
   };
+};
+
+export const emitDuelRemoveLife = (socket, payload = {}) => {
+  socket.emit(constans.DUEL_REMOVE_LIFE, { life: 1 });
+};
+
+// LISTENER
+export const onDuelConnected = (socket, cb) => {
+  socket.on(constans.DUEL_CONNECTED, (data) => {
+    cb(data);
+  });
 };
