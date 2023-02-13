@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import Store from "../provider/duelProvider";
+import { emitRockScissorsPaperChoice } from "../services/socketEvents";
+
 import ContainerFluidDark from "../../../components/containerFluidDark";
 import {
   FaRegHandRock,
@@ -30,11 +33,19 @@ const Message = ({ children, active }) => {
 };
 
 function RockScissorPaper() {
+  const { hooks } = useContext(Store.DuelContext);
+  const { sockets } = hooks;
+  const { duelSocket, duelRoom } = sockets;
+
   const [choice, setChoice] = useState(null);
   const [message, setMessage] = useState("Choose your weapon");
 
   const onClick = (choice) => {
     setChoice(choice);
+    emitRockScissorsPaperChoice(duelSocket, {
+      room: duelRoom,
+      choice,
+    });
   };
 
   return (
@@ -42,8 +53,8 @@ function RockScissorPaper() {
       <div className="rockScissorsPaperContainer">
         <RockScissorsPaperContainer>
           <RockScissorsPaperContainerItem
-            onClick={() => !choice && onClick("scissor")}
-            active={choice == "scissor"}
+            onClick={() => !choice && onClick("scissors")}
+            active={choice == "scissors"}
           >
             <FaRegHandScissors></FaRegHandScissors>
           </RockScissorsPaperContainerItem>

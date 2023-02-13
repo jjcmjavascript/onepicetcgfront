@@ -5,7 +5,7 @@ import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPh
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
 import Store from "../provider/duelProvider";
-import { onDuelConnected } from "../services/socketEvents";
+import { onDuelConnected , onRockScissorPaperResult, onRockScissorPaperStart} from "../services/socketEvents";
 
 const VsPlayer = () => {
   return (
@@ -33,15 +33,23 @@ function wrapper() {
     initDuelSocket();
 
     return () => {
-      duelSocket() && duelSocket().close();
-      duelSocket() && duelSocket().disconnect();
+      duelSocket && duelSocket.close();
+      duelSocket && duelSocket.disconnect();
     }
   }, []);
 
-  if (duelSocket()) {
-    onDuelConnected(duelSocket(), (data) => {
+  if (duelSocket) {
+
+    onDuelConnected(duelSocket, (data) => {
       joinRoom(SOCKET_DUEL_URL, data.room);
+    });
+
+    onRockScissorPaperStart(duelSocket, (data) => {
       setView("rockScissorPaper");
+    });
+
+    onRockScissorPaperResult(duelSocket, (data) => {
+
     });
   }
 

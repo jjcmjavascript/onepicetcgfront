@@ -1,51 +1,25 @@
 import constans from './constants';
 
-export const RockScissorsPaperStart = () => {
-  return {
-    type: constans.ROCK_SCISSORS_PAPER_START,
-    payload: {},
-  };
-};
-
-export const RockScissorsPaperEnd = () => {
-  return {
-    type: constans.ROCK_SCISSORS_PAPER_END,
-    payload: {},
-  };
-};
-
-export const RockScissorsPaperCancel = () => {
-  return {
-    type: constans.ROCK_SCISSORS_PAPER_CANCEL,
-    payload: {},
-  };
-};
-
-export const RockScissorsPaperChoice = (socket, choice) => {
-  return {
-    type: constans.ROCK_SCISSORS_PAPER_CHOICE,
-    payload: {
-      choice,
-    },
-  };
-};
-
-export const RockScissorsPaperResult = (result) => {
-  return {
-    type: constans.ROCK_SCISSORS_PAPER_RESULT,
-    payload: {
-      result,
-    },
-  };
-};
-
-export const emitDuelRemoveLife = (socket, payload = {}) => {
-  socket.emit(constans.DUEL_REMOVE_LIFE, { life: 1 });
+export const emitRockScissorsPaperChoice = (socket, choice) => {
+  console.log('emitRockScissorsPaperChoice', choice);
+  socket.emit(constans.GAME_ROCK_PAPER_SCISSORS_CHOISE, { choice });
 };
 
 // LISTENER
+export const onRockScissorPaperStart = (socket, cb) => {
+  socket.on(constans.GAME_ROCK_SCISSORS_PAPER_START, (data) => {
+    cb(data);
+  });
+};
+
 export const onDuelConnected = (socket, cb) => {
-  socket.on(constans.DUEL_CONNECTED, (data) => {
+  socket.on(constans.GAME_ROOM_JOIN, (data) => {
+    cb(data);
+  });
+};
+
+export const onRockScissorPaperResult = (socket, cb) => {
+  socket.on(constans.GAME_ROCK_SCISSORS_PAPER_RESULT, (data) => {
     cb(data);
   });
 };

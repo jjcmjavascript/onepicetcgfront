@@ -18,17 +18,17 @@ function DuelZone({ children, rotate }) {
 
   const { rooms, duelSocket } = hooks.sockets;
 
-  if (duelSocket()) {
-    duelSocket().on("duel:started", (data) => {});
+  if (duelSocket) {
+    duelSocket.on("duel:started", (data) => {});
 
-    duelSocket().on("duel:removeLife", (data) => {
+    duelSocket.on("duel:removeLife", (data) => {
       console.log(data);
     });
 
-    duelSocket().on("duel:setBoard", (data) => {
+    duelSocket.on("duel:setBoard", (data) => {
       console.log(data);
 
-      if (data.id == duelSocket().id) {
+      if (data.id == duelSocket.id) {
         setBoard(data.board);
       }
     });
@@ -39,8 +39,8 @@ function DuelZone({ children, rotate }) {
   };
 
   const chooseRockPaperScissors = () => {
-    duelSocket().emit("duel:playerSelected", {
-      player: duelSocket().id,
+    duelSocket.emit("duel:playerSelected", {
+      player: duelSocket.id,
       room: rooms.duel,
     });
   };

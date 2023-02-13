@@ -22,7 +22,7 @@ export default function useSocket(options = defaultOptions) {
     [SOCKET_DUEL_URL]: null,
   });
 
-  const [rooms,  setRooms] = useState({
+  const [rooms, setRooms] = useState({
     [SOCKET_GENERAL_URL]: null,
     [SOCKET_DUEL_URL]: null,
   });
@@ -47,13 +47,17 @@ export default function useSocket(options = defaultOptions) {
     setRooms((prev) => ({ ...prev, [socket]: room }));
   };
 
-
   useEffect(() => {
     initSocket(SOCKET_GENERAL_URL);
   }, [defaultOptions]);
 
   return {
-    duelSocket: () => sockets[SOCKET_DUEL_URL],
+    get duelSocket() {
+      return sockets[SOCKET_DUEL_URL];
+    },
+    get duelRoom() {
+      return rooms[SOCKET_DUEL_URL];
+    },
     sockets,
     rooms,
     joinRoom,

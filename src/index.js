@@ -14,10 +14,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 /*  eslint-disable */
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <GlobalProvider>
       <App />
     </GlobalProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 /*  eslint-enable */
