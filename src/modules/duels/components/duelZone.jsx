@@ -34,10 +34,6 @@ function DuelZone({ children, rotate }) {
     });
   }
 
-  const removeLife = (life) => {
-    duelSocket().emit("duel:removeLife", { life, room: rooms.duel });
-  };
-
   const chooseRockPaperScissors = () => {
     duelSocket.emit("duel:playerSelected", {
       player: duelSocket.id,

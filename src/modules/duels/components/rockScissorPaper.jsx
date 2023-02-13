@@ -38,10 +38,11 @@ function RockScissorPaper() {
   const { duelSocket, duelRoom } = sockets;
 
   const [choice, setChoice] = useState(null);
-  const [message, setMessage] = useState("Choose your weapon");
+  const [message] = useState("Choose your weapon");
 
   const onClick = (choice) => {
     setChoice(choice);
+    console.log("choice", duelRoom);
     emitRockScissorsPaperChoice(duelSocket, {
       room: duelRoom,
       choice,
