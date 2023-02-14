@@ -33,7 +33,8 @@ const views = {
 function wrapper() {
   const history = useNavigate();
   const { sockets: hookSocket } = useContext(Store.DuelContext).hooks;
-  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hookSocket;
+  const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
+    hookSocket;
   const [view, setView] = useState("waitingArea");
 
   useEffect(() => {
@@ -47,6 +48,7 @@ function wrapper() {
 
   if (duelSocket) {
     onDuelConnected(duelSocket, (data) => {
+      console.log("data", data);
       joinRoom(SOCKET_DUEL_URL, data.room);
     });
 
@@ -62,7 +64,10 @@ function wrapper() {
     });
 
     onDuelCanceled(duelSocket, (data) => {
-      history.push("/duels");
+      if (data.players.includes(duelSocket.id)) {
+        duelSocket.leave(duelRoom);
+        history.push("/duels");
+      }
     });
   }
 
