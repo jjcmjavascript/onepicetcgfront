@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import DuelZone from "../components/duelZone";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
@@ -7,6 +8,7 @@ import WatingArea from "../components/waitingArea";
 import Store from "../provider/duelProvider";
 import {
   onDuelConnected,
+  onDuelCanceled,
   onRockScissorPaperResult,
   onRockScissorPaperStart,
 } from "../services/socketEvents";
@@ -29,6 +31,7 @@ const views = {
 };
 
 function wrapper() {
+  const history = useNavigate();
   const { sockets: hookSocket } = useContext(Store.DuelContext).hooks;
   const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hookSocket;
   const [view, setView] = useState("waitingArea");
@@ -52,11 +55,14 @@ function wrapper() {
     });
 
     onRockScissorPaperResult(duelSocket, (data) => {
-      console.log(data);
       console.log("Do I win? :", data.result === duelSocket.id);
       if (data.result) {
         setView("duel");
       }
+    });
+
+    onDuelCanceled(duelSocket, (data) => {
+      history.push("/duels");
     });
   }
 

@@ -23,3 +23,9 @@ export const onRockScissorPaperResult = (socket, cb) => {
     cb(data);
   });
 };
+
+export const onDuelCanceled = (socket, cb) => {
+  socket.on(constans.DUEL_CANCELED, (data) => {
+    cb(data);
+  });
+}
