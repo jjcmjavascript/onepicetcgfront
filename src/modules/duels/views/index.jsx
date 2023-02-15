@@ -13,14 +13,13 @@ const views = {
 
 const DuelMode = () => {
   const location = useLocation();
-  // return views[location.pathname];
-  return views["test"];
+  return views[location.pathname];
 };
 
 function Wraper() {
   return (
     <Store.DuelProvider>
-      <DuelMode />
+      <Board></Board>
     </Store.DuelProvider>
   );
 }
