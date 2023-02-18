@@ -7,10 +7,10 @@ import LeaderArea from "./leaderArea";
 import DonArea from "./donArea";
 import HandArea from "./handArea";
 
-function Board() {
+function Board({ className = ''}) {
   return (
     <>
-      <section className="tablero">
+      <section className={"tablero " + className}>
         <LifeContainer></LifeContainer>
         <CharacterArea></CharacterArea>
         <LeaderArea></LeaderArea>
