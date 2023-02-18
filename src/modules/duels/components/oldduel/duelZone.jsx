@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useEffect, useRef } from "react";
 
-import CharacterZone from "./characterArea/characterZone";
+import CharacterZone from "./oldduel/characterArea/characterZone";
 import DonZone from "./donArea/donZone";
 import HandZone from "./handArea/handZone";
 import LeaderZone from "./leaderArea/leaderZone";
 import RevealCard from "./revealCard";
 import TrashModal from "./trashModal/trashModal";
-import LifeCardHalf from "./LifeCardHalf";
+import LifeCardHalf from "./oldduel/LifeCardHalf";
 import Store from "../provider/duelProvider";
 
 import "./css/test.css";

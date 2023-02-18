@@ -11,11 +11,11 @@ function Board({ className = ''}) {
   return (
     <>
       <section className={"tablero " + className}>
-        <LifeContainer></LifeContainer>
-        <CharacterArea></CharacterArea>
-        <LeaderArea></LeaderArea>
-        <DonArea></DonArea>
-        <HandArea></HandArea>
+        <LifeContainer className="life"></LifeContainer>
+        <CharacterArea className="tablero-arriba"></CharacterArea>
+        <LeaderArea className="tablero-arriba-dos"></LeaderArea>
+        <DonArea className="tablero-abajo"></DonArea>
+        <HandArea className="mano"></HandArea>
       </section>
     </>
   );

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 
-import Store from "../../provider/duelProvider";
+import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import CardOptionsCharacterArea from "./cardOptionsCharacterArea";
 import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
