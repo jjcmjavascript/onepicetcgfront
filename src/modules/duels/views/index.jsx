@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import Store from "../provider/duelProvider";
 import Mode from "./selectionMode";
-import VsPlayer from "./vsPlayer";
-import Board from "./board";
-import { useLocation } from 'react-router-dom'
+import Vs from "./vs";
+import { useLocation } from "react-router-dom";
+import "../components/css/duel.css";
 
 const views = {
-  "test" : <Board></Board>,
   "/duels": <Mode />,
-  "/duels/vsplayer": <VsPlayer />,
+  "/duels/vsplayer": <Vs />,
 };
 
 const DuelMode = () => {
@@ -19,7 +18,7 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      <Board></Board>
+      <DuelMode></DuelMode>
     </Store.DuelProvider>
   );
 }
