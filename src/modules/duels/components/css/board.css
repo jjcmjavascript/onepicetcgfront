@@ -1,5 +1,6 @@
 :root {
   --w: 5.5vw;
+  overflow-x: hidden;
 }
 
 * {
@@ -47,6 +48,7 @@ img {
   width: 75vw;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  overflow: hidden;
 }
 
 .vidas {

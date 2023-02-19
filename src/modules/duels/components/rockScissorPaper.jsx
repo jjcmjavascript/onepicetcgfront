@@ -9,6 +9,8 @@ import {
   FaRegHandPaper,
 } from "react-icons/fa";
 
+import { onRockScissorPaperResult } from "../services/socketEvents";
+
 const RockScissorsPaperContainer = ({ children }) => {
   return <div className="rockScissorsPaperContainer--box">{children}</div>;
 };
@@ -47,6 +49,10 @@ function RockScissorPaper() {
       choice,
     });
   };
+
+  onRockScissorPaperResult(duelSocket, (data) => {
+    setChoice(null);
+  });
 
   return (
     <>

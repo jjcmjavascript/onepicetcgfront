@@ -5,7 +5,7 @@ import BasicCard from "./basicCard";
 function HandArea({ className = "" }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardOne } = states.boardOne;
-  const hand = [1, 2, 3, 4];
+  const hand = [1, 2, 3, 4, 1, 2, 3];
 
   return (
     <article className={className}>
