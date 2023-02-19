@@ -12,9 +12,11 @@ const modes = [
 ];
 
 function DuelMode() {
-  const { states } = useContext(Store.DuelContext);
+  const { states, hooks } = useContext(Store.DuelContext);
   const [decks] = states.decks;
+  const { sockets } = hooks;
   const [selectedDeck, setDeck] = states.selectedDeck;
+  const { disconectSocket, SOCKET_DUEL_URL, duel } = sockets;
 
   const handleSelect = (e) => {
     const id = parseInt(e.target.value);
@@ -22,6 +24,10 @@ function DuelMode() {
 
     setDeck(deck || null);
   };
+
+  useEffect(() => {
+    disconectSocket(SOCKET_DUEL_URL);
+  }, []);
 
   return (
     <ContainerFluidDark>
@@ -42,7 +48,11 @@ function DuelMode() {
       <div className="mt-2 col-12 text-light fs-2 text-center">
         <div className="offset-3 offset-md-4 col-6 col-md-4 form-group">
           <label className="vinyl">Mi Deck</label>
-          <select className="form-control" onChange={handleSelect} defaultValue={selectedDeck && selectedDeck.id}>
+          <select
+            className="form-control"
+            onChange={handleSelect}
+            defaultValue={selectedDeck && selectedDeck.id}
+          >
             <option value="">Selecciona un deck</option>
             {decks.map((deck) => {
               return (

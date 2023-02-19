@@ -11,6 +11,7 @@ import {
   onDuelCanceled,
   onRockScissorPaperResult,
   onRockScissorPaperStart,
+  emitDeckSelected,
 } from "../services/socketEvents";
 
 const views = {
@@ -21,13 +22,24 @@ const views = {
 
 function wrapper() {
   const history = useNavigate();
-  const [view, setView] = useState("duel");
 
-  const { sockets: hookSocket } = useContext(Store.DuelContext).hooks;
-  const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hookSocket;
+  const [view, setView] = useState("waitingArea");
+
+  const { states, hooks } = useContext(Store.DuelContext);
+
+  const { selectedDeck: selectedDeckState } = states;
+  const { sockets: hookSocket } = hooks;
+
+  const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
+    hookSocket;
+  const [selectedDeck] = selectedDeckState;
 
   useEffect(() => {
     initDuelSocket();
+
+    if (!selectedDeck) {
+      history("/duels");
+    }
 
     return () => {
       duelSocket && duelSocket.close();
@@ -35,9 +47,12 @@ function wrapper() {
     };
   }, []);
 
+  useEffect(()=>{
+    duelSocket && emitDeckSelected(duelSocket, { deckId: selectedDeck.id });
+  },[duelSocket]);
+
   if (duelSocket) {
     onDuelConnected(duelSocket, (data) => {
-      console.log("data", data);
       joinRoom(SOCKET_DUEL_URL, data.room);
     });
 
@@ -46,7 +61,6 @@ function wrapper() {
     });
 
     onRockScissorPaperResult(duelSocket, (data) => {
-      console.log("Do I win? :", data.result === duelSocket.id);
       if (data.result) {
         setView("duel");
       }
@@ -55,7 +69,7 @@ function wrapper() {
     onDuelCanceled(duelSocket, (data) => {
       if (data.players.includes(duelSocket.id)) {
         duelSocket.leave(duelRoom);
-        history.push("/duels");
+        history("/duels");
       }
     });
   }

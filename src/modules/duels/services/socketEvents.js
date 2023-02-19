@@ -1,8 +1,11 @@
 import constans from './constants';
 
 export const emitRockScissorsPaperChoice = (socket, payload) => {
-  console.log('emitRockScissorsPaperChoice', payload);
   socket.emit(constans.GAME_ROCK_PAPER_SCISSORS_CHOISE, payload);
+};
+
+export const emitDeckSelected = (socket, payload) => {
+  socket.emit(constans.GAME_DECK_SELECTED, payload);
 };
 
 // LISTENER
@@ -28,4 +31,4 @@ export const onDuelCanceled = (socket, cb) => {
   socket.on(constans.DUEL_CANCELED, (data) => {
     cb(data);
   });
-}
+};

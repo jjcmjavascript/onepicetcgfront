@@ -47,6 +47,14 @@ export default function useSocket(options = defaultOptions) {
     setRooms((prev) => ({ ...prev, [socket]: room }));
   };
 
+  const disconectSocket = (socketUrl) => {
+    if (!sockets[socketUrl]) return;
+
+    sockets[socketUrl].disconnect();
+
+    setSockets((prev) => ({ ...prev, [socketUrl]: null }));
+  };
+
   useEffect(() => {
     initSocket(SOCKET_GENERAL_URL);
   }, [defaultOptions]);
@@ -65,5 +73,6 @@ export default function useSocket(options = defaultOptions) {
     initDuelSocket,
     SOCKET_GENERAL_URL,
     SOCKET_DUEL_URL,
+    disconectSocket,
   };
 }
