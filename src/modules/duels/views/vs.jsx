@@ -12,6 +12,7 @@ import {
   onRockScissorPaperResult,
   onRockScissorPaperStart,
   emitDeckSelected,
+  onGameBoardStateChange,
 } from "../services/socketEvents";
 
 const views = {
@@ -27,8 +28,10 @@ function wrapper() {
 
   const { states, hooks } = useContext(Store.DuelContext);
 
-  const { selectedDeck: selectedDeckState } = states;
+  const { selectedDeck: selectedDeckState, boardOne } = states;
   const { sockets: hookSocket } = hooks;
+
+  const [, setBoardOneState] = boardOne;
 
   const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
     hookSocket;
@@ -47,30 +50,36 @@ function wrapper() {
     };
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     duelSocket && emitDeckSelected(duelSocket, { deckId: selectedDeck.id });
-  },[duelSocket]);
+  }, [duelSocket]);
 
   if (duelSocket) {
-    onDuelConnected(duelSocket, (data) => {
-      joinRoom(SOCKET_DUEL_URL, data.room);
+    onDuelConnected(duelSocket, (payload) => {
+      joinRoom(SOCKET_DUEL_URL, payload.room);
     });
 
-    onRockScissorPaperStart(duelSocket, (data) => {
+    onRockScissorPaperStart(duelSocket, (payload) => {
       setView("rockScissorPaper");
     });
 
-    onRockScissorPaperResult(duelSocket, (data) => {
-      if (data.result) {
+    onRockScissorPaperResult(duelSocket, (payload) => {
+      if (payload.result) {
         setView("duel");
       }
     });
 
-    onDuelCanceled(duelSocket, (data) => {
-      if (data.players.includes(duelSocket.id)) {
+    onDuelCanceled(duelSocket, (payload) => {
+      if (payload.players.includes(duelSocket.id)) {
         duelSocket.leave(duelRoom);
         history("/duels");
       }
+    });
+
+    onGameBoardStateChange(duelSocket, (payload) => {
+      setBoardOneState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
     });
   }
 
