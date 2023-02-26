@@ -3,15 +3,18 @@ import Store from "../provider/duelProvider";
 import BasicCard from "./basicCard";
 
 function LifeArea({ className = "" }) {
-  const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states.boardOne;
-  // const { lives } = boardOne;
-  const lives = [1, 2, 3, 4, 5];
+  const { states } = useContext(Store.DuelContext);
+  const [boardOneState] = states.boardOne;
 
   return (
     <article className={className}>
-      {lives.map((life, index) => (
-        <BasicCard key={index} className={"vida"} />
+      {boardOneState.lives.map((lifeCard) => (
+        <BasicCard
+          key={lifeCard.uuid}
+          className={"vida"}
+          cardObject={lifeCard}
+          id={lifeCard.uuid}
+        />
       ))}
     </article>
   );

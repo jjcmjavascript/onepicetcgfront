@@ -7,13 +7,14 @@ function BasicCard({
   id,
   onClick,
   className = "",
+  flipped = false,
 }) {
   let alt = "Some Card";
   let src = "https://i.ibb.co/5FN0k67/pic1737624.webp";
 
   if (cardObject) {
     alt = cardObject.name;
-    src = cardObject._image.route;
+    src = flipped ? cardObject._image.route : src;
   }
 
   return (

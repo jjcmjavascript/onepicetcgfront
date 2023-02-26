@@ -2,16 +2,14 @@ import React, { useContext } from "react";
 import Store from "../provider/duelProvider";
 import BasicCard from "./basicCard";
 
-function CharacterArea({className=""}) {
+function CharacterArea({ className = "" }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states.boardOne;
-  // const { characters } = boardOne;
-  const characters = [1, 2, 3, 4, 5];
+  const [boardOneState] = states.boardOne;
 
   return (
     <article className={className}>
-      {characters.map((life, index) => (
-        <BasicCard key={index} />
+      {boardOneState.deck.slice(0,5).map((card, index) => (
+        <BasicCard key={card.uuid} cardObject={card} id={card.uuid} />
       ))}
     </article>
   );

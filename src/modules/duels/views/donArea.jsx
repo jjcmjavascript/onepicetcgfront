@@ -4,14 +4,13 @@ import BasicCard from "./basicCard";
 
 function DonArea({ className = "" }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states.boardOne;
-  const dons = [1, 2, 3, 4];
+  const [boardOne] = states.boardOne;
 
   return (
     <article className={className}>
-      <BasicCard className="carta carta-derecha" />
+      <BasicCard className="carta carta-derecha" text/>
 
-      {dons.map((don, index) => (
+      {boardOne.costs.map((don, index) => (
         <BasicCard key={index} className="mini-carta" />
       ))}
 

@@ -3,16 +3,20 @@ import Store from "../provider/duelProvider";
 import BasicCard from "./basicCard";
 
 function HandArea({ className = "" }) {
-  const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states.boardOne;
-  const hand = [1, 2, 3, 4, 1, 2, 3];
+  const { states } = useContext(Store.DuelContext);
+  const { boardOne } = states;
+
+  const [boardOneState, _] = boardOne;
 
   return (
     <article className={className}>
-      {hand.map((card, index) => (
+      {boardOneState.hand.map((card, index) => (
         <BasicCard
-          key={index}
           className={"carta carta-mano"}
+          cardObject={card}
+          key={card.uuid}
+          flipped={true}
+          id={card.uuid}
         />
       ))}
     </article>

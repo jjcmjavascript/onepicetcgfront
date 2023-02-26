@@ -17,6 +17,7 @@ const getBoardSchema = () => {
     dons: [],
     lives: [],
     deck: [],
+    hand: [],
   };
 };
 
@@ -25,12 +26,11 @@ function DuelProvider({ children }) {
     activeView: useState("deck"),
     boardOne: useState(getBoardSchema()),
     boardTwo: useState(getBoardSchema()),
-    hand: useState([]),
     preview: useState(null),
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
     decks: useState([]),
-    selectedDeck: useState(''),
+    selectedDeck: useState(""),
   };
 
   const hooks = {

@@ -2,8 +2,8 @@ import React, { useContext, useState, useRef } from "react";
 
 import Store from "../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
-import CardOptions from "../handArea/cardOptions";
-import CardOptionItem from "../handArea/cardOptionItem";
+import CardOptions from "./cardOptions";
+import CardOptionItem from "./cardOptionItem";
 
 /**
  * 1 - When Options is open, the "card" is active
