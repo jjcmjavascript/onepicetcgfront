@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Store from "../provider/duelProvider";
+import Store from "../../provider/duelProvider";
 import BasicCard from "./basicCard";
 
 function CharacterArea({ className = "" }) {
