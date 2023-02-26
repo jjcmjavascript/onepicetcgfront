@@ -1,6 +1,5 @@
 import React from "react";
 
-import "../components/css/board.css";
 import LifeContainer from "./lifeArea";
 import CharacterArea from "./characterArea";
 import LeaderArea from "./leaderArea";

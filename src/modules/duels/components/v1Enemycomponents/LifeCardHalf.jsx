@@ -5,7 +5,7 @@ function LifeCardHalf({ card, onClick, id }) {
 
   return (
     <>
-      <div className="field--card_half_live" onClick={onClick} id={id}>
+      <div className="field--card_half_live rotated" onClick={onClick} id={id}>
         <img src={image} className="field--card__image" />
       </div>
     </>

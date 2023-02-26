@@ -7,9 +7,14 @@
 }
 
 .lives {
-  max-height: 50vh;
   overflow-y: scroll;
   position: relative;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.lives:not(:first-child) {
+  margin-top: 1vh;
 }
 
 .lives > span {
@@ -151,7 +156,6 @@
   height: 100%;
   background-color: rgba(9, 9, 9, 0.8);
 }
-
 
 /* HAND AREA */
 .field--card_area__hand {

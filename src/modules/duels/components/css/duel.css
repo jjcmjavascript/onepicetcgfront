@@ -12,14 +12,14 @@
   height: 100vh;
   width: 100vw;
   grid-template-columns: 1fr 1fr 1fr;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 /* PREVIEW AND PHASE */
 .previewAndPhaseZone {
   min-height: 100vh;
   max-height: 100vh;
-  width: 20vw;
+  width: 30vw;
   border: 1px solid red;
 }
 

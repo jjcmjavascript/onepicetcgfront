@@ -9,7 +9,7 @@ import TrashModal from "./trashModal/trashModal";
 import LifeCardHalf from "./LifeCardHalf";
 import Store from "../../provider/duelProvider";
 
-function Board({ rotate }) {
+function Board({ }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardOne } = states;
   const [board, setBoard] = boardOne;
@@ -18,14 +18,12 @@ function Board({ rotate }) {
 
   return (
     <>
-      <div className={`field ${rotate ? "rotated" : ""}`}>
+      <div className={`field`}>
         <div>
-          <RevealCard />
-          <TrashModal />
-          <CharacterZone />
-          <LeaderZone />
-          <DonZone />
           <HandZone />
+          <DonZone />
+          <LeaderZone />
+          <CharacterZone />
         </div>
 
         <div className="lives">
