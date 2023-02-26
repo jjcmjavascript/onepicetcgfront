@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from "react";
-import Store from "../../provider/duelProvider";
+import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
 import Trash from "./trash";
@@ -10,7 +10,7 @@ import DeckOptionItem from "./deckOptionItem";
 import TrashOptions from "./deckOptions";
 import TrashOptionItem from "./deckOptionItem";
 
-import { shuffle } from "../../../../helpers";
+import { shuffle } from "../../../../../helpers";
 
 function LeaderZone({ children }) {
   const trashElementRef = useRef();
@@ -22,7 +22,6 @@ function LeaderZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [board, setBoardOneState] = states.boardOne;
   const [, setPreview] = states.preview;
-  const [hand, setHand] = states.hand;
   const [, setShowTrashModal] = states.showTrashModal;
 
   const onMouseOver = (card) => {
@@ -58,7 +57,7 @@ function LeaderZone({ children }) {
       };
     });
 
-    setHand([...hand, newCard]);
+    // setHand([...hand, newCard]);
   };
 
   const shuffleDeck = () => {

@@ -8,7 +8,7 @@ function CharacterArea({ className = "" }) {
 
   return (
     <article className={className}>
-      {boardOneState.deck.slice(0,5).map((card, index) => (
+      {boardOneState.characters.map((card, index) => (
         <BasicCard key={card.uuid} cardObject={card} id={card.uuid} />
       ))}
     </article>

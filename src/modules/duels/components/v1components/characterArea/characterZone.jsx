@@ -8,12 +8,11 @@ import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
 function CharactedZone({ children }) {
   const handOptionElementRef = useRef();
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne, hand } = states;
+  const { boardOne } = states;
 
   const [boardOneState, setBoardOneState] = boardOne;
   const [, setPreview] = states.preview;
   const [activeCard, setActiveCard] = useState(null);
-  const [currentHand, setCurrentHand] = hand;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -64,16 +63,13 @@ function CharactedZone({ children }) {
   };
 
   const returnCard = () => {
-    setCurrentHand((hand) => {
-      return [...hand, activeCard];
-    });
-
     setBoardOneState((board) => {
       return {
         ...board,
         characters: board.characters.filter(
           (card) => card.uuid != activeCard.uuid
         ),
+        hand: [...board.hand, activeCard],
       };
     });
 
@@ -92,7 +88,9 @@ function CharactedZone({ children }) {
     setBoardOneState((board) => {
       return {
         ...board,
-        characters: board.characters.filter(character => character.uuid != activeCard.uuid),
+        characters: board.characters.filter(
+          (character) => character.uuid != activeCard.uuid
+        ),
         deck: [...deck],
       };
     });

@@ -1,16 +1,15 @@
 import React, { useContext, useState, useRef } from "react";
 
-import Store from "../../provider/duelProvider";
+import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
-import CardOptions from "./cardOptions";
-import CardOptionItem from "./cardOptionItem";
+// import CardOptions from "./cardOptions";
+// import CardOptionItem from "./cardOptionItem";
 
 /**
  * 1 - When Options is open, the "card" is active
  */
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const [hand, setHand] = states.hand;
   const [, setPreview] = states.preview;
   const [boardOneState, setBoardOneState] = states.boardOne;
 
@@ -57,7 +56,7 @@ function HandZone({ children }) {
       };
     });
 
-    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+    // setHand(hand.filter((card) => card.uuid != activeCard.uuid));
 
     hideOptions();
   };
@@ -86,7 +85,7 @@ function HandZone({ children }) {
       };
     });
 
-    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+    // setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
   const putCardOnTopDeck = () => {
@@ -99,7 +98,7 @@ function HandZone({ children }) {
       };
     });
 
-    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+    // setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
   const putCardOnBottomDeck = () => {
@@ -112,13 +111,13 @@ function HandZone({ children }) {
       };
     });
 
-    setHand(hand.filter((card) => card.uuid != activeCard.uuid));
+    // setHand(hand.filter((card) => card.uuid != activeCard.uuid));
   };
 
   return (
     <>
       <div className="field--card_area__hand">
-        <CardOptions ref={handOptionElementRef}>
+        {/* <CardOptions ref={handOptionElementRef}>
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
           <CardOptionItem onClick={discardCard}>Descartar</CardOptionItem>
@@ -128,9 +127,9 @@ function HandZone({ children }) {
           <CardOptionItem onClick={putCardOnBottomDeck}>
             Colocar en Fondo
           </CardOptionItem>
-        </CardOptions>
+        </CardOptions> */}
 
-        {hand.map((card) => {
+        {boardOneState.hand.map((card) => {
           return (
             <FieldCardFull
               card={card}

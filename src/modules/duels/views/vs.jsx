@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Store from "../provider/duelProvider";
 
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
-import Store from "../provider/duelProvider";
-import VsPlayer from "./vsPlayer";
+import VsPlayer from "../components/vsPlayer";
 
 import {
   onDuelConnected,

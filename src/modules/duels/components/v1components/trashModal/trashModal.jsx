@@ -1,22 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import Store from "../../provider/duelProvider";
+import Store from "../../../provider/duelProvider";
 
 import TrashModalOptions from "./trashModalOptions";
 import TrashModalOptionItem from "./trashModalOptionItem";
 
-function TrashModal({ children }) {
+function TrashModal({}) {
+  const SCAPE_KEY = 27;
+
   const modalTrashRef = useRef();
-
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne, showTrashModal, preview, hand } = states;
 
-  const [currentHand, setHand] = hand;
+  const { boardOne, showTrashModal, preview } = states;
   const [showModal, setShowModal] = showTrashModal;
   const [boardOneState, setBoardOneState] = boardOne;
   const [, setPreview] = preview;
   const [activeCard, setActiveCard] = useState(null);
-
-  const SCAPE_KEY = 27;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -76,7 +74,7 @@ function TrashModal({ children }) {
       };
     });
 
-    setHand([...currentHand, activeCard]);
+    // setHand([...currentHand, activeCard]);
 
     hideOptions();
   };
@@ -86,7 +84,7 @@ function TrashModal({ children }) {
       return {
         ...prevState,
         trash: prevState.trash.filter((card) => card.uuid != activeCard.uuid),
-        characters: [...prevState.characters, activeCard]
+        characters: [...prevState.characters, activeCard],
       };
     });
 
