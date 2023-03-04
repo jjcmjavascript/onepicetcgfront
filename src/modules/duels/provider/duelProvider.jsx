@@ -31,6 +31,15 @@ function DuelProvider({ children }) {
     mode: useState("modeSelector"),
     decks: useState([]),
     selectedDeck: useState(""),
+    gameState: useState({
+      currentTurnNumber: 1,
+      currentTurnPlayerId: 0,
+      currentPhase: "mulligan",
+      playerAId: 0,
+      playerBId: 0,
+      //[playerBId] : {mulligan, turnPlays}
+      //[playerAId] : {}
+    }),
   };
 
   const hooks = {

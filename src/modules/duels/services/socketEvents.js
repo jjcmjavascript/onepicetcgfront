@@ -38,3 +38,9 @@ export const onGameBoardStateChange = (socket, callback) => {
     callback(payload);
   });
 };
+
+export const onGameStateChange = (socket, callback) => {
+  socket.on(constans.GAME_STATE, (payload) => {
+    callback(payload);
+  });
+}

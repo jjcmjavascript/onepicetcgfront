@@ -2,6 +2,7 @@ const DUEL_REMOVE_LIFE = 'duel:removeLife';
 const GAME_ROCK_PAPER_SCISSORS_CHOISE = 'game:rockPaperScissorsChoise';
 const GAME_DECK_SELECTED = 'game:deckSelected';
 const GAME_BOARD_STATE = 'game:boardState';
+const GAME_STATE = 'game:gameState';
 
 // LISTENERS
 const GAME_ROOM_JOIN = 'game:room_join';
@@ -18,4 +19,5 @@ export default {
   GAME_ROOM_CANCEL,
   GAME_DECK_SELECTED,
   GAME_BOARD_STATE,
+  GAME_STATE,
 };

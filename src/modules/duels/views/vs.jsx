@@ -13,6 +13,7 @@ import {
   onRockScissorPaperStart,
   emitDeckSelected,
   onGameBoardStateChange,
+  onGameStateChange,
 } from "../services/socketEvents";
 
 const views = {
@@ -28,10 +29,11 @@ function wrapper() {
 
   const { states, hooks } = useContext(Store.DuelContext);
 
-  const { selectedDeck: selectedDeckState, boardOne } = states;
+  const { selectedDeck: selectedDeckState, boardOne, gameState } = states;
   const { sockets: hookSocket } = hooks;
 
   const [, setBoardOneState] = boardOne;
+  const [game, setGameState] = gameState;
 
   const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
     hookSocket;
@@ -80,6 +82,11 @@ function wrapper() {
       setBoardOneState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
       });
+    });
+
+    onGameStateChange(duelSocket, (payload) => {
+      console.log("game state changed", payload);
+      setGameState(payload.game);
     });
   }
 

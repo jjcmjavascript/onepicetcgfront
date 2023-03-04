@@ -75,3 +75,34 @@
   padding: 2px;
   font-size: 0.7rem;
 }
+
+.phaseAlert {
+  position: absolute;
+  top: 40vh;
+  left: 45vw;
+  width: 40vw;
+  height: 10vh;
+  font-size: 1.5rem;
+  color: white;
+  -webkit-transform: skew(160deg);
+  -moz-transform: skew(160deg);
+  -ms-transform: skew(160deg);
+  -o-transform: skew(160deg);
+  transform: skew(160deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.phaseAlert--yourTurn {
+  box-shadow: 0 0 5px 3px rgb(39, 1, 39);
+  background-color: rgba(90, 1, 90, 0.1);
+}
+
+.phaseAlert--opponentTurn {
+  box-shadow: 0 0 5px 3px #5a0101;
+  background-color: #b71c1c57;
+}

@@ -12,8 +12,8 @@ import Store from "../../provider/duelProvider";
 function Board({ rotate }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardOne } = states;
-  const [board, setBoard] = boardOne;
 
+  const [board, setBoard] = boardOne;
   const { rooms, duelSocket } = hooks.sockets;
 
   return (
@@ -26,6 +26,7 @@ function Board({ rotate }) {
           <LeaderZone />
           <DonZone />
           <HandZone />
+          <button className="btn btn-success">Simpeo</button>
         </div>
 
         <div className="lives">
