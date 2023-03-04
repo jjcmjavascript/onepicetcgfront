@@ -1,20 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
+import Swal from "sweetalert2";
 
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
 import VsPlayer from "../components/vsPlayer";
 
-import {
-  onDuelConnected,
-  onDuelCanceled,
-  onRockScissorPaperResult,
-  onRockScissorPaperStart,
-  emitDeckSelected,
-  onGameBoardStateChange,
-  onGameStateChange,
-} from "../services/socketEvents";
+import constants from "../services/constants";
 
 const views = {
   duel: <VsPlayer />,
@@ -37,6 +30,7 @@ function wrapper() {
 
   const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
     hookSocket;
+
   const [selectedDeck] = selectedDeckState;
 
   useEffect(() => {
@@ -50,46 +44,64 @@ function wrapper() {
       duelSocket && duelSocket.close();
       duelSocket && duelSocket.disconnect();
     };
-  }, []);
-
-  useEffect(() => {
-    duelSocket && emitDeckSelected(duelSocket, { deckId: selectedDeck.id });
   }, [duelSocket]);
 
   if (duelSocket) {
-    onDuelConnected(duelSocket, (payload) => {
+    duelSocket.emit(constants.GAME_DECK_SELECTED, {
+      deckId: selectedDeck.id,
+    });
+
+    duelSocket.on(constants.GAME_ROOM_JOIN, (payload) => {
       joinRoom(SOCKET_DUEL_URL, payload.room);
     });
 
-    onRockScissorPaperStart(duelSocket, (payload) => {
+    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_START, (payload) => {
       setView("rockScissorPaper");
     });
 
-    onRockScissorPaperResult(duelSocket, (payload) => {
+    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_RESULT, (payload) => {
       if (payload.result) {
         setView("duel");
       }
     });
 
-    onDuelCanceled(duelSocket, (payload) => {
+    duelSocket.on(constants.DUEL_CANCELED, (payload) => {
       if (payload.players.includes(duelSocket.id)) {
         duelSocket.leave(duelRoom);
         history("/duels");
       }
     });
 
-    onGameBoardStateChange(duelSocket, (payload) => {
+    duelSocket.on(constants.GAME_BOARD_STATE, (payload) => {
       setBoardOneState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
       });
     });
 
-    onGameStateChange(duelSocket, (payload) => {
-      console.log("game state changed", payload);
+    duelSocket.on(constants.GAME_STATE, (payload) => {
       setGameState(payload.game);
     });
-  }
 
+    duelSocket.on(constants.GAME_PHASES_MULLIGAN, (payload) => {
+      Swal.fire({
+        title: "Reinicar Mano",
+        showCancelButton: true,
+        confirmButtonText: "Volver a Robar",
+      }).then((result) => {
+        duelSocket.emit(constants.GAME_MULLIGAN, {
+          room: duelRoom,
+          mulligan: result.isConfirmed,
+        });
+      });
+    });
+
+    duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
+      if (payload.playerId == duelSocket.id) {
+        setBoardOneState(payload.board);
+      }
+    });
+
+  }
   return <>{views[view]}</>;
 }
 

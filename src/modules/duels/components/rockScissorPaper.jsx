@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Store from "../provider/duelProvider";
 import { emitRockScissorsPaperChoice } from "../services/socketEvents";
 
@@ -9,7 +9,7 @@ import {
   FaRegHandPaper,
 } from "react-icons/fa";
 
-import { onRockScissorPaperResult } from "../services/socketEvents";
+import constants from "../services/constants";
 
 const RockScissorsPaperContainer = ({ children }) => {
   return <div className="rockScissorsPaperContainer--box">{children}</div>;
@@ -44,15 +44,18 @@ function RockScissorPaper() {
 
   const onClick = (choice) => {
     setChoice(choice);
-    emitRockScissorsPaperChoice(duelSocket, {
+
+    duelSocket.emit(constants.GAME_ROCK_PAPER_SCISSORS_CHOISE, {
       room: duelRoom,
       choice,
     });
   };
 
-  onRockScissorPaperResult(duelSocket, (data) => {
-    setChoice(null);
-  });
+  if (duelSocket) {
+    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_RESULT, () => {
+      setChoice(null);
+    });
+  }
 
   return (
     <>

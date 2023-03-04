@@ -9,6 +9,13 @@ const GAME_ROOM_JOIN = 'game:room_join';
 const GAME_ROCK_SCISSORS_PAPER_RESULT = 'game:rockScissorsPaperResult';
 const GAME_ROCK_SCISSORS_PAPER_START = 'game:initRockPaperScissors';
 const GAME_ROOM_CANCEL = 'game:cancel';
+const GAME_TURN_START = 'game:turnStart';
+const GAME_TURN_WAIT = 'game:turnWait';
+const GAME_TURN_END = 'game:turnEnd';
+const GAME_MULLIGAN = 'game:mulligan';
+const GAME_PHASES_MULLIGAN = 'game:phasesMulligan';
+const GAME_PHASES_REFRESH = 'game:phasesRefresh';
+const GAME_PHASES_DRAW = 'game:phasesRefresh';
 
 export default {
   DUEL_REMOVE_LIFE,
@@ -20,4 +27,11 @@ export default {
   GAME_DECK_SELECTED,
   GAME_BOARD_STATE,
   GAME_STATE,
+  GAME_TURN_START,
+  GAME_TURN_WAIT,
+  GAME_TURN_END,
+  GAME_MULLIGAN,
+  GAME_PHASES_MULLIGAN,
+  GAME_PHASES_REFRESH,
+  GAME_PHASES_DRAW,
 };

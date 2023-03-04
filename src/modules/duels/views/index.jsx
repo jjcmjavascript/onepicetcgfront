@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 
 import VsPlayer from "../components/vsPlayer";
 
+
 import "../components/css/duel.css";
 import "../components/css/boardV1.css";
 
@@ -22,7 +23,9 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      <VsPlayer></VsPlayer>
+      <DuelMode></DuelMode>
+      {/* <VsPlayer></VsPlayer> */}
+
     </Store.DuelProvider>
   );
 }
