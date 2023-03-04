@@ -1,9 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 
 import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
-import deckService from "../../decks/services/deckService";
-import { DON, LEADER } from "../../../helpers/cardTypes";
-import { shuffle, formatCardsForDeck } from "../../../helpers";
+import deckService from "../services/deckService";
+import useSocket from "../../../hooks/useSocket";
 
 const DuelContext = createContext();
 
@@ -18,6 +17,7 @@ const getBoardSchema = () => {
     dons: [],
     lives: [],
     deck: [],
+    hand: [],
   };
 };
 
@@ -26,53 +26,30 @@ function DuelProvider({ children }) {
     activeView: useState("deck"),
     boardOne: useState(getBoardSchema()),
     boardTwo: useState(getBoardSchema()),
-    hand: useState([]),
     preview: useState(null),
     showTrashModal: useState(false),
+    mode: useState("modeSelector"),
+    decks: useState([]),
+    selectedDeck: useState(""),
+    gameState: useState({
+      currentTurnNumber: 1,
+      currentTurnPlayerId: 0,
+      currentPhase: "mulligan",
+      playerAId: 0,
+      playerBId: 0,
+      //[playerBId] : {mulligan, turnPlays}
+      //[playerAId] : {}
+    }),
   };
 
   const hooks = {
     cardBasicEffects: useHandCardBasicEffect(),
-  };
-
-  const separeDeck = (deck) => {
-    const don = deck.find((card) => card.type_id === DON);
-    const leader = deck.find((card) => card.type_id === LEADER);
-    const dons = deck.filter((card) => card.type_id === DON);
-    const cards = deck.filter(
-      (card) => card.type_id !== DON && card.type_id !== LEADER
-    );
-
-    return {
-      don,
-      leader,
-      cards,
-      dons,
-    };
+    sockets: useSocket(),
   };
 
   useEffect(() => {
-    deckService.findDeck(2).then((deck) => {
-      if (deck) {
-        const [, setHand] = states.hand;
-        const [boardOne, setBoardOne] = states.boardOne;
-
-        const deckCards = formatCardsForDeck(deck)._cards;
-        const separatedCards = separeDeck(deckCards);
-        const suffledDeck = shuffle(separatedCards.cards);
-        const newHand = suffledDeck.splice(0, 5);
-        const lives = suffledDeck.splice(0, separatedCards.leader.lives);
-
-        setHand(newHand);
-        setBoardOne({
-          ...boardOne,
-          deck: suffledDeck,
-          don: separatedCards.don,
-          leader: separatedCards.leader,
-          dons: separatedCards.dons,
-          lives,
-        });
-      }
+    deckService.getDecks().then((decks) => {
+      states.decks[1](decks);
     });
   }, []);
 

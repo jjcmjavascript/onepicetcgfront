@@ -17,9 +17,9 @@ export const CardBody = ({ title, children }) => {
   );
 };
 
-export default ({ className, title, children }) => {
+export default ({ className, title, children , onClick}) => {
   return (
-    <div className={className || "card"}>
+    <div className={`card ${className}`} onClick={onClick}>
       <CardBody title={title}>{children}</CardBody>
     </div>
   );

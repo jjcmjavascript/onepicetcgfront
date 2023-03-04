@@ -1,0 +1,109 @@
+.rotated {
+  transform: rotate(180deg); /* Equal to rotateZ(45deg) */
+}
+
+.rotate270 {
+  transform: rotate(270deg); /* Equal to rotateZ(45deg) */
+}
+
+/* to here */
+.full-board {
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  grid-template-columns: 1fr 1fr 1fr;
+  overflow: hidden !important;
+}
+
+/* PREVIEW AND PHASE */
+.previewAndPhaseZone {
+  min-height: 100vh;
+  max-height: 100vh;
+  width: 30vw;
+  border: 1px solid red;
+}
+
+.previewAndPhaseZone {
+  display: grid;
+}
+
+.previewAndPhaseZone--phases {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+}
+
+.previewAndPhaseZone--phases > button {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  padding: 1em;
+  border: 2px solid rgb(39, 1, 39);
+  border-radius: 5px;
+  background-color: rgb(70, 1, 70);
+  color: white;
+  font-size: 0.8em;
+  cursor: pointer;
+  box-shadow: -5px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.previewAndPhaseZone--phases > button:hover {
+  background-color: rgb(90, 1, 90);
+}
+
+.previewAndPhaseZone--phases > button.active--phase {
+  box-shadow: 0 0 5px 3px rgb(39, 1, 39);
+}
+
+.previewAndPhaseZone--preview {
+  width: 20vw;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewAndPhaseZone--preview__img {
+  border: 1px solid white;
+  border-radius: 5px;
+  object-fit: fill;
+  height: 90%;
+}
+
+.text_preview {
+  height: 10vh;
+  padding: 2px;
+  font-size: 0.7rem;
+}
+
+.phaseAlert {
+  position: absolute;
+  top: 40vh;
+  left: 45vw;
+  width: 40vw;
+  height: 10vh;
+  font-size: 1.5rem;
+  color: white;
+  -webkit-transform: skew(160deg);
+  -moz-transform: skew(160deg);
+  -ms-transform: skew(160deg);
+  -o-transform: skew(160deg);
+  transform: skew(160deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  transition: 0.2s;
+}
+
+.phaseAlert--yourTurn {
+  box-shadow: 0 0 5px 3px rgb(39, 1, 39);
+  background-color: rgba(90, 1, 90, 0.1);
+}
+
+.phaseAlert--opponentTurn {
+  box-shadow: 0 0 5px 3px #5a0101;
+  background-color: #b71c1c57;
+}
