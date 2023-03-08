@@ -15,7 +15,9 @@ const GAME_TURN_END = 'game:turnEnd';
 const GAME_MULLIGAN = 'game:mulligan';
 const GAME_PHASES_MULLIGAN = 'game:phasesMulligan';
 const GAME_PHASES_REFRESH = 'game:phasesRefresh';
-const GAME_PHASES_DRAW = 'game:phasesRefresh';
+
+// RIVAL EVENTS
+const GAME_RIVAL_PHASES_REFRESH = 'game:rivalPhasesRefresh';
 
 export default {
   DUEL_REMOVE_LIFE,
@@ -33,5 +35,5 @@ export default {
   GAME_MULLIGAN,
   GAME_PHASES_MULLIGAN,
   GAME_PHASES_REFRESH,
-  GAME_PHASES_DRAW,
+  GAME_RIVAL_PHASES_REFRESH,
 };

@@ -15,6 +15,8 @@ const views = {
   waitingArea: <WatingArea />,
 };
 
+const ioEvents = (socket) => {};
+
 function wrapper() {
   const history = useNavigate();
 
@@ -40,6 +42,16 @@ function wrapper() {
       history("/duels");
     }
 
+    if (duelSocket) {
+      duelSocket.emit(constants.GAME_DECK_SELECTED, {
+        deckId: selectedDeck.id,
+      });
+
+      duelSocket.on(constants.GAME_ROOM_JOIN, (payload) => {
+        joinRoom(SOCKET_DUEL_URL, payload.room);
+      });
+    }
+
     return () => {
       duelSocket && duelSocket.close();
       duelSocket && duelSocket.disconnect();
@@ -47,14 +59,6 @@ function wrapper() {
   }, [duelSocket]);
 
   if (duelSocket) {
-    duelSocket.emit(constants.GAME_DECK_SELECTED, {
-      deckId: selectedDeck.id,
-    });
-
-    duelSocket.on(constants.GAME_ROOM_JOIN, (payload) => {
-      joinRoom(SOCKET_DUEL_URL, payload.room);
-    });
-
     duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_START, (payload) => {
       setView("rockScissorPaper");
     });
@@ -67,7 +71,7 @@ function wrapper() {
 
     duelSocket.on(constants.DUEL_CANCELED, (payload) => {
       if (payload.players.includes(duelSocket.id)) {
-        duelSocket.leave(duelRoom);
+        duelSocket.leave(hookSocket.duelRoom);
         history("/duels");
       }
     });
@@ -89,19 +93,25 @@ function wrapper() {
         confirmButtonText: "Volver a Robar",
       }).then((result) => {
         duelSocket.emit(constants.GAME_MULLIGAN, {
-          room: duelRoom,
+          room: payload.room,
           mulligan: result.isConfirmed,
         });
       });
     });
 
     duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
-      if (payload.playerId == duelSocket.id) {
-        setBoardOneState(payload.board);
-      }
+      setBoardOneState(payload.board);
     });
 
+    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+      console.log("refreshIn");
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
+      console.log("refreshOut");
+    });
   }
+
   return <>{views[view]}</>;
 }
 
