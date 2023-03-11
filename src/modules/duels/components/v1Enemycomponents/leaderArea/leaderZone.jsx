@@ -20,7 +20,7 @@ function LeaderZone({ children }) {
   const deckOptionElementRef = useRef();
 
   const { states, hooks } = useContext(Store.DuelContext);
-  const [board, setBoardOneState] = states.boardOne;
+  const [board, setBoardOneState] = states.boardTwo;
   const [, setPreview] = states.preview;
   const [, setShowTrashModal] = states.showTrashModal;
 
@@ -56,8 +56,6 @@ function LeaderZone({ children }) {
         deck: current.deck.filter((card) => card.uuid !== newCard.uuid),
       };
     });
-
-    // setHand([...hand, newCard]);
   };
 
   const shuffleDeck = () => {

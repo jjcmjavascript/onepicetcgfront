@@ -101,24 +101,32 @@ function wrapper() {
       setBoardOneState(payload.board);
     });
 
-    duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
-      setBoardOneState(payload.board);
-    });
-
     duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
       console.log("refreshOut");
     });
-    duelSocket &&
-      duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-        console.log("refreshIn");
 
-        duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
-          room: payload.room,
-        });
+    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+      console.log("refreshIn");
+
+      duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
+        room: payload.room,
       });
-  }
+    });
 
-  useCallback(() => {}, [duelSocket]);
+    duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
+      setBoardOneState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+
+      duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
+      console.log(constants.GAME_RIVAL_PHASES_DRAW);
+    });
+  }
 
   return <>{views[view]}</>;
 }

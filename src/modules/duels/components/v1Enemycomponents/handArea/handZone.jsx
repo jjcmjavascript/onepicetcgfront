@@ -11,7 +11,7 @@ import FieldCardFull from "../fieldCardFull";
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [, setPreview] = states.preview;
-  const [boardOneState, setBoardOneState] = states.boardOne;
+  const [boardOneState, setBoardOneState] = states.boardTwo;
 
   const handOptionElementRef = useRef();
   const [activeCard, setActiveCard] = useState(null);

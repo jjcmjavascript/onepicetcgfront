@@ -7,7 +7,7 @@ import PhaseAlert from "../components/phaseAlert";
 function VsPlayer() {
   return (
     <>
-      <PhaseAlert/>
+      <PhaseAlert />
       <div className="full-board bg-dark">
         <PreviewAndPhaseZone />
         <div>

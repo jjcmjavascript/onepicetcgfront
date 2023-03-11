@@ -4,15 +4,13 @@ import CharacterZone from "./characterArea/characterZone";
 import DonZone from "./donArea/donZone";
 import HandZone from "./handArea/handZone";
 import LeaderZone from "./leaderArea/leaderZone";
-import RevealCard from "./revealCard";
-import TrashModal from "./trashModal/trashModal";
 import LifeCardHalf from "./LifeCardHalf";
 import Store from "../../provider/duelProvider";
 
 function Board({ }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states;
-  const [board, setBoard] = boardOne;
+  const { boardTwo } = states;
+  const [board, setBoard] = boardTwo;
 
   const { rooms, duelSocket } = hooks.sockets;
 

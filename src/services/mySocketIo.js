@@ -17,7 +17,7 @@ export default (socketUrl, options = defaultOptions) => {
 
   return {
     on: (event, callback) => {
-      if (!onEventsList[event]) {
+      if (!onEventsList[event] && event && callback) {
         onEventsList[event] = true;
 
         socket.on(event, callback);
@@ -25,13 +25,16 @@ export default (socketUrl, options = defaultOptions) => {
       }
     },
     emit: (event, data) => {
-      if (!emitEventsList[event]) {
+      if (!emitEventsList[event] && event) {
         emitEventsList[event] = true;
 
         socket.emit(event, data);
 
-        console.log('Event Emited', event);
+        console.log('Event registered', event);
       }
+    },
+    close: () => {
+      socket.close();
     },
     disconnect: () => {
       socket.disconnect();

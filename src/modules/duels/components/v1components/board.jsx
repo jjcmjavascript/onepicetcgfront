@@ -26,7 +26,6 @@ function Board({ rotate }) {
           <LeaderZone />
           <DonZone />
           <HandZone />
-          <button className="btn btn-success">Simpeo</button>
         </div>
 
         <div className="lives">
