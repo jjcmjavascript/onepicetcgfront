@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
 import Swal from "sweetalert2";
@@ -14,8 +14,6 @@ const views = {
   rockScissorPaper: <RockScissorPaper />,
   waitingArea: <WatingArea />,
 };
-
-const ioEvents = (socket) => {};
 
 function wrapper() {
   const history = useNavigate();
@@ -103,14 +101,24 @@ function wrapper() {
       setBoardOneState(payload.board);
     });
 
-    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-      console.log("refreshIn");
+    duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
+      setBoardOneState(payload.board);
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
       console.log("refreshOut");
     });
+    duelSocket &&
+      duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+        console.log("refreshIn");
+
+        duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
+          room: payload.room,
+        });
+      });
   }
+
+  useCallback(() => {}, [duelSocket]);
 
   return <>{views[view]}</>;
 }
