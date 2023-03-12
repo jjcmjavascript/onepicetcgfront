@@ -19,18 +19,13 @@ export default (socketUrl, options = defaultOptions) => {
     on: (event, callback) => {
       if (!onEventsList[event] && event && callback) {
         onEventsList[event] = true;
-
         socket.on(event, callback);
-        console.log('Event registered', event);
       }
     },
     emit: (event, data) => {
       if (!emitEventsList[event] && event) {
         emitEventsList[event] = true;
-
         socket.emit(event, data);
-
-        console.log('Event registered', event);
       }
     },
     close: () => {

@@ -22,10 +22,16 @@ function wrapper() {
 
   const { states, hooks } = useContext(Store.DuelContext);
 
-  const { selectedDeck: selectedDeckState, boardOne, gameState } = states;
+  const {
+    selectedDeck: selectedDeckState,
+    boardOne,
+    boardTwo,
+    gameState,
+  } = states;
   const { sockets: hookSocket } = hooks;
 
   const [, setBoardOneState] = boardOne;
+  const [, setBoardTwoState] = boardTwo;
   const [game, setGameState] = gameState;
 
   const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
@@ -74,9 +80,13 @@ function wrapper() {
       }
     });
 
-    duelSocket.on(constants.GAME_BOARD_STATE, (payload) => {
+    duelSocket.on(constants.GAME_INITIAL_BOARD_STATE, (payload) => {
       setBoardOneState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
+      });
+
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.rivalBoard };
       });
     });
 
@@ -101,13 +111,17 @@ function wrapper() {
       setBoardOneState(payload.board);
     });
 
+    duelSocket.on(constants.GAME_RIVAL_MULLIGAN, (payload) => {
+      setBoardTwoState(payload.board);
+    });
+
     duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
-      console.log("refreshOut");
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
     });
 
     duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-      console.log("refreshIn");
-
       duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
         room: payload.room,
       });
@@ -124,7 +138,27 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
-      console.log(constants.GAME_RIVAL_PHASES_DRAW);
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
+      setBoardOneState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
     });
   }
 

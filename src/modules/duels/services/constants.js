@@ -1,6 +1,6 @@
 const GAME_ROCK_PAPER_SCISSORS_CHOISE = 'game:rockPaperScissorsChoise';
 const GAME_DECK_SELECTED = 'game:deckSelected';
-const GAME_BOARD_STATE = 'game:boardState';
+const GAME_INITIAL_BOARD_STATE = 'game:boardState';
 const GAME_STATE = 'game:gameState';
 
 // LISTENERS
@@ -21,10 +21,13 @@ const GAME_PHASES_REFRESH = 'game:phasesRefresh';
 const GAME_PHASES_REFRESH_END = 'game:phasesRefreshEnd';
 const GAME_PHASES_DRAW = 'game:phasesDraw';
 const GAME_PHASES_DRAW_END = 'game:phasesDrawEnd';
+const GAME_PHASES_DON = 'game:phasesDon';
 
 // RIVAL EVENTS
 const GAME_RIVAL_PHASES_REFRESH = 'game:rivalPhasesRefresh';
 const GAME_RIVAL_PHASES_DRAW = 'game:rivalPhasesDraw';
+const GAME_RIVAL_MULLIGAN = 'game:rivalMulligan';
+const GAME_RIVAL_PHASES_DON = 'game:rivalPhasesDon';
 
 export default {
   GAME_ROOM_JOIN,
@@ -33,7 +36,7 @@ export default {
   GAME_ROCK_SCISSORS_PAPER_START,
   GAME_ROOM_CANCEL,
   GAME_DECK_SELECTED,
-  GAME_BOARD_STATE,
+  GAME_INITIAL_BOARD_STATE,
   GAME_STATE,
   GAME_TURN_START,
   GAME_TURN_WAIT,
@@ -46,4 +49,7 @@ export default {
   GAME_PHASES_DRAW,
   GAME_PHASES_DRAW_END,
   GAME_RIVAL_PHASES_DRAW,
+  GAME_RIVAL_MULLIGAN,
+  GAME_PHASES_DON,
+  GAME_RIVAL_PHASES_DON,
 };

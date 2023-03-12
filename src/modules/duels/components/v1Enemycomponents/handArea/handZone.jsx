@@ -11,7 +11,7 @@ import FieldCardFull from "../fieldCardFull";
 function HandZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const [, setPreview] = states.preview;
-  const [boardOneState, setBoardOneState] = states.boardTwo;
+  const [boardTwoState, setBoardTwoState] = states.boardTwo;
 
   const handOptionElementRef = useRef();
   const [activeCard, setActiveCard] = useState(null);
@@ -49,7 +49,7 @@ function HandZone({ children }) {
   };
 
   const playCard = () => {
-    setBoardOneState((prevState) => {
+    setBoardTwoState((prevState) => {
       return {
         ...prevState,
         characters: [...prevState.characters, activeCard],
@@ -78,7 +78,7 @@ function HandZone({ children }) {
   const discardCard = () => {
     hideOptions();
 
-    setBoardOneState((prevState) => {
+    setBoardTwoState((prevState) => {
       return {
         ...prevState,
         trash: [...prevState.trash, activeCard],
@@ -91,7 +91,7 @@ function HandZone({ children }) {
   const putCardOnTopDeck = () => {
     hideOptions();
 
-    setBoardOneState((prevState) => {
+    setBoardTwoState((prevState) => {
       return {
         ...prevState,
         deck: [activeCard, ...prevState.deck],
@@ -104,7 +104,7 @@ function HandZone({ children }) {
   const putCardOnBottomDeck = () => {
     hideOptions();
 
-    setBoardOneState((prevState) => {
+    setBoardTwoState((prevState) => {
       return {
         ...prevState,
         deck: [...prevState.deck, activeCard],
@@ -129,7 +129,7 @@ function HandZone({ children }) {
           </CardOptionItem>
         </CardOptions> */}
 
-        {boardOneState.hand.map((card) => {
+        {boardTwoState.hand.map((card) => {
           return (
             <FieldCardFull
               card={card}
