@@ -153,12 +153,36 @@ function wrapper() {
       setBoardOneState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
       });
+
+      duelSocket.emit(constants.GAME_PHASES_DON_END, {
+        room: payload.room,
+      });
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
       setBoardTwoState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
       });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
+      console.log("GAME_PHASES_MAIN");
+
+      duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
+      console.log("GAME_RIVAL_PHASES_MAIN");
+    });
+
+    duelSocket.on(constants.GAME_PHASE_END, (payload) => {
+      console.log("GAME_PHASE_END");
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
+      console.log("GAME_RIVAL_PHASES_END");
     });
   }
 
