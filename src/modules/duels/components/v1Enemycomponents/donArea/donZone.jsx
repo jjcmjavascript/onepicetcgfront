@@ -8,9 +8,9 @@ import DonOptionItem from "./donOptionItem";
 
 function DonZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states;
-  const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
+
+  const [board, setBoard] = states.boardTwo;
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {

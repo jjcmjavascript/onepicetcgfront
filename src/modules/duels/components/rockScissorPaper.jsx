@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import Store from "../provider/duelProvider";
-import { emitRockScissorsPaperChoice } from "../services/socketEvents";
 
 import ContainerFluidDark from "../../../components/containerFluidDark";
 import {

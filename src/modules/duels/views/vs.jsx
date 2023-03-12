@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
 import Swal from "sweetalert2";
@@ -22,10 +22,16 @@ function wrapper() {
 
   const { states, hooks } = useContext(Store.DuelContext);
 
-  const { selectedDeck: selectedDeckState, boardOne, gameState } = states;
+  const {
+    selectedDeck: selectedDeckState,
+    boardOne,
+    boardTwo,
+    gameState,
+  } = states;
   const { sockets: hookSocket } = hooks;
 
   const [, setBoardOneState] = boardOne;
+  const [, setBoardTwoState] = boardTwo;
   const [game, setGameState] = gameState;
 
   const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
@@ -40,6 +46,16 @@ function wrapper() {
       history("/duels");
     }
 
+    if (duelSocket) {
+      duelSocket.emit(constants.GAME_DECK_SELECTED, {
+        deckId: selectedDeck.id,
+      });
+
+      duelSocket.on(constants.GAME_ROOM_JOIN, (payload) => {
+        joinRoom(SOCKET_DUEL_URL, payload.room);
+      });
+    }
+
     return () => {
       duelSocket && duelSocket.close();
       duelSocket && duelSocket.disconnect();
@@ -47,14 +63,6 @@ function wrapper() {
   }, [duelSocket]);
 
   if (duelSocket) {
-    duelSocket.emit(constants.GAME_DECK_SELECTED, {
-      deckId: selectedDeck.id,
-    });
-
-    duelSocket.on(constants.GAME_ROOM_JOIN, (payload) => {
-      joinRoom(SOCKET_DUEL_URL, payload.room);
-    });
-
     duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_START, (payload) => {
       setView("rockScissorPaper");
     });
@@ -67,14 +75,18 @@ function wrapper() {
 
     duelSocket.on(constants.DUEL_CANCELED, (payload) => {
       if (payload.players.includes(duelSocket.id)) {
-        duelSocket.leave(duelRoom);
+        duelSocket.leave(hookSocket.duelRoom);
         history("/duels");
       }
     });
 
-    duelSocket.on(constants.GAME_BOARD_STATE, (payload) => {
+    duelSocket.on(constants.GAME_INITIAL_BOARD_STATE, (payload) => {
       setBoardOneState((currentBoard) => {
         return { ...currentBoard, ...payload.board };
+      });
+
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.rivalBoard };
       });
     });
 
@@ -89,19 +101,91 @@ function wrapper() {
         confirmButtonText: "Volver a Robar",
       }).then((result) => {
         duelSocket.emit(constants.GAME_MULLIGAN, {
-          room: duelRoom,
+          room: payload.room,
           mulligan: result.isConfirmed,
         });
       });
     });
 
     duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
-      if (payload.playerId == duelSocket.id) {
-        setBoardOneState(payload.board);
-      }
+      setBoardOneState(payload.board);
     });
 
+    duelSocket.on(constants.GAME_RIVAL_MULLIGAN, (payload) => {
+      setBoardTwoState(payload.board);
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+      duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
+      setBoardOneState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+
+      duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
+      setBoardOneState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+
+      duelSocket.emit(constants.GAME_PHASES_DON_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
+
+    duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
+      console.log("GAME_PHASES_MAIN");
+
+      duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
+      console.log("GAME_RIVAL_PHASES_MAIN");
+    });
+
+    duelSocket.on(constants.GAME_PHASE_END, (payload) => {
+      console.log("GAME_PHASE_END");
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
+      console.log("GAME_RIVAL_PHASES_END");
+    });
   }
+
   return <>{views[view]}</>;
 }
 

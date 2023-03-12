@@ -8,9 +8,9 @@ import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
 function CharactedZone({ children }) {
   const handOptionElementRef = useRef();
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states;
+  const { boardTwo } = states;
 
-  const [boardOneState, setBoardOneState] = boardOne;
+  const [boardOneState, setBoardOneState] = boardTwo;
   const [, setPreview] = states.preview;
   const [activeCard, setActiveCard] = useState(null);
 
