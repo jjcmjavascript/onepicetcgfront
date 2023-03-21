@@ -23,11 +23,10 @@ const getDecks = async (filters = {}) => {
 };
 
 const saveDeck = async (deck) => {
-  console.log(deck);
   try {
     const options = { headers };
-    const response = axios.post(baseUrl, deck, options);
-    return response.data;
+    const response = await axios.post(baseUrl, deck, options);
+    return response.data.deck;
   } catch (err) {
     throw err;
   }
@@ -50,11 +49,11 @@ const findDeck = async (deckId) => {
   }
 };
 
-const updateDeck = (deck) => {
+const updateDeck = async (deck) => {
   try {
     const options = { headers };
-    const response = axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
-    return response.data;
+    const response = await axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+    return response.data.deck;
   } catch (err) {
     throw err;
   }

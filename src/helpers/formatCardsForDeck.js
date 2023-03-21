@@ -1,7 +1,7 @@
 import setUuid from './setUuid';
 import { DON, LEADER } from './cardTypes';
 
-function formatCardsForDeck(decks) {
+function formatCardsForDeck(decks, control = { withDons: true }) {
   if (Array.isArray(decks)) {
     return decks.map((deck) => formatCardsForDeck(deck));
   }
@@ -15,8 +15,10 @@ function formatCardsForDeck(decks) {
     }
   });
 
-  for (let i = 0; i < 9; i++) {
-    cards.push(don);
+  if (control.withDon) {
+    for (let i = 0; i < 9; i++) {
+      cards.push(don);
+    }
   }
 
   decks._cards = setUuid(cards);
