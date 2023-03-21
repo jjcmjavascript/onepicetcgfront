@@ -72,11 +72,11 @@ export default function useDecks() {
       const name = deck.name;
       const id = deck.id;
 
-      const deck = id
+      let formatedDeck = id
         ? await deckService.updateDeck({ cards, name, id })
         : await deckService.saveDeck({ cards, name });
 
-      deck = formatCardsForDeck(deck);
+      formatedDeck = formatCardsForDeck(formatedDeck);
 
       swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
 
