@@ -1,11 +1,10 @@
-import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import mySocketIo from '../services/mySocketIo';
 
 const appUrl = process.env.REACT_APP_BACKEND_URL_SOCKET;
 
 const SOCKET_GENERAL_URL = '/';
-const SOCKET_DUEL_URL = '/duel';
+const SOCKET_DUEL_URL = 'duel';
 
 export default function useSocket(options = null) {
   const [sockets, setSockets] = useState({
@@ -30,6 +29,8 @@ export default function useSocket(options = null) {
     if (sockets[SOCKET_DUEL_URL]) return sockets[SOCKET_DUEL_URL];
 
     const newSocket = mySocketIo(`${appUrl}${SOCKET_DUEL_URL}`, options);
+
+    console.log('initDuelSocket', newSocket, SOCKET_DUEL_URL, `${appUrl}${SOCKET_DUEL_URL}`);
 
     setSockets((prev) => ({ ...prev, [SOCKET_DUEL_URL]: newSocket }));
   };
