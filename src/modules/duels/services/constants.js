@@ -1,15 +1,15 @@
-const GAME_ROCK_PAPER_SCISSORS_CHOICE = 'game:rockPaperScissorsChoice';
-const GAME_TURN_SELECTION_INIT = 'game:turnSelectionInit';
 const GAME_INITIAL_BOARD_STATE = 'game:boardState';
 const GAME_DECK_SELECTED = 'game:deckSelected';
-const GAME_STATE = 'game:gameState';
+const GAME_TURN_SELECTION_INIT = 'game:turnSelectionInit';
 const GAME_TURN_SELECTION_END = 'game:turnSelectionEnd';
 const GAME_TURN_SELECTION_CHOICE = 'game:turnSelectionChoice';
+const GAME_STATE = 'game:gameState';
 
 // LISTENERS
+const GAME_ROOM_JOIN = 'game:room_join';
 const GAME_ROCK_SCISSORS_PAPER_RESULT = 'game:rockScissorsPaperResult';
 const GAME_ROCK_SCISSORS_PAPER_START = 'game:initRockPaperScissors';
-const GAME_ROOM_JOIN = 'game:room_join';
+const GAME_ROCK_PAPER_SCISSORS_CHOICE = 'game:rockPaperScissorsChoice';
 
 // no used
 const GAME_TURN_START = 'game:turnStart';
