@@ -3,7 +3,7 @@ FROM node:18-alpine3.16
 WORKDIR /app
 
 COPY package*.json ./
-##RUN npm ci 
+##RUN npm ci
 
 ## env needed for: node path error prevention
 ##ENV PATH=/usr/src/node_modules/.bin:$PATH
@@ -23,4 +23,4 @@ RUN npm config rm https-proxy
 
 EXPOSE 3000
 
-CMD [ "npm", "start"]
+CMD [ "npm", "run", "docker"]
