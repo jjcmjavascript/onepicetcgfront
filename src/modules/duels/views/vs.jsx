@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
 import VsPlayer from "../components/vsPlayer";
+import TurnSelector from "../components/turnSelector";
 
 import constants from "../services/constants";
 
@@ -13,12 +14,13 @@ const views = {
   duel: <VsPlayer />,
   rockScissorPaper: <RockScissorPaper />,
   waitingArea: <WatingArea />,
+  turnSelector: <TurnSelector />,
 };
 
 function wrapper() {
   const history = useNavigate();
 
-  const [view, setView] = useState("waitingArea");
+  const [view, setView] = useState("turnSelector");
 
   const { states, hooks } = useContext(Store.DuelContext);
 
@@ -143,11 +145,11 @@ function wrapper() {
       });
     });
 
-    duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
-    });
+    // duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
+    //   setBoardTwoState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
+    // });
 
     duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
       setBoardOneState((currentBoard) => {
@@ -166,7 +168,7 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
-      console.log("GAME_PHASES_MAIN");
+      console.log(constants.GAME_PHASES_MAIN);
 
       duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
         room: payload.room,
@@ -174,15 +176,33 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
-      console.log("GAME_RIVAL_PHASES_MAIN");
+      console.log(constants.GAME_RIVAL_PHASES_MAIN);
     });
 
     duelSocket.on(constants.GAME_PHASE_END, (payload) => {
-      console.log("GAME_PHASE_END");
+      console.log(constants.GAME_PHASE_END);
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
-      console.log("GAME_RIVAL_PHASES_END");
+      console.log(constants.GAME_RIVAL_PHASES_END);
+    });
+
+    duelSocket.on(constants.GAME_TURN_SELECTION_INIT, (payload) => {
+      console.log(constants.GAME_TURN_SELECTION_INIT);
+      if (payload.playerId) {
+        setView(
+          payload.playerId === duelSocket.id ? "turnSelector" : "waitingArea"
+        );
+      }
+    });
+
+    duelSocket.on(constants.GAME_TURN_SELECTION_END, (payload) => {
+      console.log(constants.GAME_TURN_SELECTION_END);
+      if (payload.playerId) {
+        setView(
+          payload.playerId === duelSocket.id ? "turnSelector" : "waitingArea"
+        );
+      }
     });
   }
 

@@ -16,6 +16,7 @@ export default (socketUrl, options = defaultOptions) => {
   const emitEventsList = {};
 
   return {
+    id : socket.id,
     on: (event, callback) => {
       if (!onEventsList[event] && event && callback) {
         onEventsList[event] = true;
