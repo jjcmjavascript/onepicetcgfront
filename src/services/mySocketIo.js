@@ -28,8 +28,8 @@ export default (socketUrl, options = defaultOptions) => {
     emit: (event, data) => {
       if (!emitEventsList[event] && event) {
         emitEventsList[event] = true;
-        socket.emit(event, data);
       }
+      socket.emit(event, data);
     },
     close: () => {
       socket.close();

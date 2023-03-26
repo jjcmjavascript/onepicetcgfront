@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
 import Swal from "sweetalert2";
@@ -22,13 +22,13 @@ function wrapper() {
   const { states, hooks } = useContext(Store.DuelContext);
   const [view, setView] = useState("waitingArea");
 
+  const { sockets: hookSocket } = hooks;
   const {
     selectedDeck: selectedDeckState,
     boardOne,
     boardTwo,
     gameState,
   } = states;
-  const { sockets: hookSocket } = hooks;
 
   const [, setBoardOneState] = boardOne;
   const [, setBoardTwoState] = boardTwo;
@@ -78,24 +78,8 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_TURN_SELECTION_END, (payload) => {
-      console.log(constants.GAME_TURN_SELECTION_END);
-      if (payload.playerId) {
-        setView(
-          payload.playerId === duelSocket.id ? "turnSelector" : "waitingArea"
-        );
-      }
-    });
-
-    duelSocket.on(constants.GAME_TURN_SELECTION_END, (payload) => {
       setView("duel");
     });
-
-    // duelSocket.on(constants.DUEL_CANCELED, (payload) => {
-    //   if (payload.players.includes(duelSocket.id)) {
-    //     duelSocket.leave(hookSocket.duelRoom);
-    //     history("/duels");
-    //   }
-    // });
 
     duelSocket.on(constants.GAME_INITIAL_BOARD_STATE, (payload) => {
       setBoardOneState((currentBoard) => {
@@ -159,12 +143,6 @@ function wrapper() {
         return { ...currentBoard, ...payload.board };
       });
     });
-
-    // duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
-    //   setBoardTwoState((currentBoard) => {
-    //     return { ...currentBoard, ...payload.board };
-    //   });
-    // });
 
     duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
       setBoardOneState((currentBoard) => {
