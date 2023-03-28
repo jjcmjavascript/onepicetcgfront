@@ -109,76 +109,80 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
+      console.log(constants.GAME_MULLIGAN, payload);
+
       setBoardOneState(payload.board);
     });
 
     duelSocket.on(constants.GAME_RIVAL_MULLIGAN, (payload) => {
+      console.log(constants.GAME_RIVAL_MULLIGAN, payload);
+
       setBoardTwoState(payload.board);
     });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
-    });
+    // duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
+    //   setBoardTwoState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-      duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
-        room: payload.room,
-      });
-    });
+    // duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+    //   duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
+    //     room: payload.room,
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+    // duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
+    //   setBoardOneState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
 
-      duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
-        room: payload.room,
-      });
-    });
+    //   duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
+    //     room: payload.room,
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
-    });
+    // duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
+    //   setBoardTwoState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+    // duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
+    //   setBoardOneState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
 
-      duelSocket.emit(constants.GAME_PHASES_DON_END, {
-        room: payload.room,
-      });
-    });
+    //   duelSocket.emit(constants.GAME_PHASES_DON_END, {
+    //     room: payload.room,
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
-    });
+    // duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
+    //   setBoardTwoState((currentBoard) => {
+    //     return { ...currentBoard, ...payload.board };
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
-      console.log(constants.GAME_PHASES_MAIN);
+    // duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
+    //   console.log(constants.GAME_PHASES_MAIN);
 
-      duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
-        room: payload.room,
-      });
-    });
+    //   duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
+    //     room: payload.room,
+    //   });
+    // });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
-      console.log(constants.GAME_RIVAL_PHASES_MAIN);
-    });
+    // duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
+    //   console.log(constants.GAME_RIVAL_PHASES_MAIN);
+    // });
 
-    duelSocket.on(constants.GAME_PHASE_END, (payload) => {
-      console.log(constants.GAME_PHASE_END);
-    });
+    // duelSocket.on(constants.GAME_PHASE_END, (payload) => {
+    //   console.log(constants.GAME_PHASE_END);
+    // });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
-      console.log(constants.GAME_RIVAL_PHASES_END);
-    });
+    // duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
+    //   console.log(constants.GAME_RIVAL_PHASES_END);
+    // });
   }
 
   return <>{views[view]}</>;
