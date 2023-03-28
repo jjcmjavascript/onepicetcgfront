@@ -14,7 +14,6 @@ function Board({ rotate }) {
   const { boardOne } = states;
 
   const [board, setBoard] = boardOne;
-  const { rooms, duelSocket } = hooks.sockets;
 
   return (
     <>

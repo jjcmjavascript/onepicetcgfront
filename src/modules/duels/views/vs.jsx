@@ -120,17 +120,19 @@ function wrapper() {
       setBoardTwoState(payload.board);
     });
 
-    // duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
-    //   setBoardTwoState((currentBoard) => {
-    //     return { ...currentBoard, ...payload.board };
-    //   });
-    // });
+    duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+      setBoardOneState(payload.board);
 
-    // duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-    //   duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
-    //     room: payload.room,
-    //   });
-    // });
+      duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
+        room: payload.room,
+      });
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
+      setBoardTwoState((currentBoard) => {
+        return { ...currentBoard, ...payload.board };
+      });
+    });
 
     // duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
     //   setBoardOneState((currentBoard) => {
