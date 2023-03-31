@@ -22,6 +22,8 @@
   },
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",
+    "start:legacy": "env-cmd -f .env react-scripts --openssl-legacy-provider start",
+    "docker": "env-cmd -f .env react-scripts --openssl-legacy-provider start",
     "build": "env-cmd -f .env react-scripts --openssl-legacy-provider start build",
     "test": "env-cmd -f .env react-scripts --openssl-legacy-provider start test"
   },

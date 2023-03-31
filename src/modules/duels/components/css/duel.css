@@ -1,9 +1,13 @@
 .rotated {
-  transform: rotate(180deg); /* Equal to rotateZ(45deg) */
+  transform: rotate(180deg);
 }
 
 .rotate270 {
-  transform: rotate(270deg); /* Equal to rotateZ(45deg) */
+  transform: rotate(270deg);
+}
+
+.rotate85 {
+  transform: rotate(85deg);
 }
 
 /* to here */

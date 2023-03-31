@@ -39,6 +39,13 @@
   grid-template-rows: 1fr 1fr;
 }
 
+.turnSelector--box {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
 .rockScissorsPaperContainer--box__item {
   height: 100%;
   display: grid;

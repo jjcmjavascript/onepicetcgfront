@@ -1,5 +1,4 @@
 version: '3.9'
-
 services:
   node:
     build:
@@ -9,8 +8,9 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
-    ports:  
+    ports:
       ##- ${REACT_APP_PORT}:3000
       - 3000:3000
     networks:
       - default
+    env_file: .env
