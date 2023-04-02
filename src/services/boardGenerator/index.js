@@ -3,18 +3,18 @@ import Card from './Card';
 
 class DeckGenerator {
   constructor() {
-    this.board = new Board();
+    this.board = new Board({});
   }
 
   generateDeck() {
     for (let i = 0; i < 51; i++) {
-      this.board.deck.push(new Card());
+      this.board.deck.push(Card.generateFakeCard());
     }
   }
 
-  generateDons(){
+  generateDons() {
     for (let i = 0; i < 10; i++) {
-      this.board.dons.push(new Card());
+      this.board.dons.push(Card.generateFakeCard());
     }
   }
 
@@ -32,7 +32,7 @@ class DeckGenerator {
     this.board.lives = this.board.deck.splice(0, 5);
   }
 
-  init(){
+  init() {
     this.generateDeck();
     this.generateDons();
     this.generateHand();

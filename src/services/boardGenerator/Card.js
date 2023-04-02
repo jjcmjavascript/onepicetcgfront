@@ -1,8 +1,9 @@
-const faker = require('@faker-js/faker');
+const { faker } = require('@faker-js/faker');
 
 class Card {
   constructor(cardObject) {
     this.id = cardObject.id;
+    this.uuid = cardObject.uuid;
     this.cost = cardObject.cost;
     this.name = cardObject.name;
     this.otherName = cardObject.otherName;
@@ -32,12 +33,13 @@ class Card {
     this.type = cardObject.type;
     this.pack = cardObject.pack;
     this.categories = cardObject.categories;
-    this.image = cardObject.image;
-    this.fullImage = cardObject.fullImage;
+    this._image = cardObject._image;
+    this._image_full = cardObject._image_full;
   }
   static generateFakeCard() {
     const fakeCard = {
       id: faker.datatype.uuid(),
+      uuid: faker.datatype.uuid(),
       cost: faker.datatype.number({ min: 0, max: 10 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
@@ -60,21 +62,25 @@ class Card {
       donRemove: faker.datatype.boolean(),
       donSet: faker.datatype.boolean(),
       trigger: faker.datatype.boolean(),
-      attackType: faker.random.arrayElement(['NORMAL', 'PENETRATE', 'DUAL']),
+      attackType: faker.helpers.arrayElement(['NORMAL', 'PENETRATE', 'DUAL']),
       euUsable: faker.datatype.boolean(),
       asiaUsable: faker.datatype.boolean(),
-      colors: faker.random.arrayElements(
+      colors: faker.helpers.arrayElements(
         ['RED', 'GREEN', 'BLUE', 'YELLOW'],
         faker.datatype.number({ min: 1, max: 4 })
       ),
-      type: faker.random.arrayElement(['MONSTER', 'SPELL', 'ITEM']),
+      type: faker.helpers.arrayElement(['MONSTER', 'SPELL', 'ITEM']),
       pack: faker.lorem.word(),
-      categories: faker.random.arrayElements(
+      categories: faker.helpers.arrayElements(
         ['DRAGON', 'NINJA', 'ZOMBIE', 'MACHINE'],
         faker.datatype.number({ min: 1, max: 4 })
       ),
-      image: faker.image.imageUrl(),
-      fullImage: faker.image.imageUrl(),
+      _image: {
+        route : 'https://cf.geekdo-images.com/lBPmfYGjJ-UQ5DZ_wKuBGA__imagepage/img/GNe5INGZDgiakJibSM0zNWLMxSQ=/fit-in/900x600/filters:no_upscale():strip_icc()/pic1737624.jpg' || faker.image.imageUrl(),
+      },
+      _image_full: {
+        route : 'https://cf.geekdo-images.com/lBPmfYGjJ-UQ5DZ_wKuBGA__imagepage/img/GNe5INGZDgiakJibSM0zNWLMxSQ=/fit-in/900x600/filters:no_upscale():strip_icc()/pic1737624.jpg' || faker.image.imageUrl(),
+      },
     };
 
     return new Card(fakeCard);

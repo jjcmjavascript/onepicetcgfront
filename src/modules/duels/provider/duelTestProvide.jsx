@@ -3,32 +3,18 @@ import React, { createContext, useState, useEffect } from "react";
 import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
-import duelTestProvide from "./duelTestProvide";
 
-const testMode = process.env.REACT_APP_TEST_BOARD;
+import BoardGenerator from "../../../services/boardGenerator";
 
+const board = (new BoardGenerator({})).init();
+const enemyBoard = (new BoardGenerator({})).init();
 const DuelContext = createContext();
-
-const getBoardSchema = () => {
-  return {
-    leader: null,
-    don: null,
-    stage: null,
-    characters: [],
-    costs: [],
-    trash: [],
-    dons: [],
-    lives: [],
-    deck: [],
-    hand: [],
-  };
-};
 
 function DuelProvider({ children }) {
   const states = {
     activeView: useState("deck"),
-    boardOne: useState(getBoardSchema()),
-    boardTwo: useState(getBoardSchema()),
+    boardOne: useState(board),
+    boardTwo: useState(enemyBoard),
     preview: useState(null),
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
@@ -36,7 +22,7 @@ function DuelProvider({ children }) {
     selectedDeck: useState(""),
     gameState: useState({
       currentTurnPlayerId: 0,
-      currentPhase: "",
+      currentPhase: '',
       turnNumber: 1,
       rockPaperScissorWinner: null,
     }),
@@ -59,5 +45,4 @@ function DuelProvider({ children }) {
     </DuelContext.Provider>
   );
 }
-
-export default testMode ? duelTestProvide : { DuelProvider, DuelContext };
+export default { DuelProvider, DuelContext };
