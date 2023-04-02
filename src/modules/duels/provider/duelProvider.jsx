@@ -1,49 +1,32 @@
 import React, { createContext, useState, useEffect } from "react";
 
-import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 import duelTestProvide from "./duelTestProvide";
+import GameState from "../../../models/GameState";
+import Board from "../../../models/Board";
 
 const testMode = process.env.REACT_APP_TEST_BOARD;
+const gameState = GameState.getDefault();
+const board = new Board({});
+const enemyBoard = new Board({});
 
 const DuelContext = createContext();
-
-const getBoardSchema = () => {
-  return {
-    leader: null,
-    don: null,
-    stage: null,
-    characters: [],
-    costs: [],
-    trash: [],
-    dons: [],
-    lives: [],
-    deck: [],
-    hand: [],
-  };
-};
 
 function DuelProvider({ children }) {
   const states = {
     activeView: useState("deck"),
-    boardOne: useState(getBoardSchema()),
-    boardTwo: useState(getBoardSchema()),
+    boardOne: useState(board),
+    boardTwo: useState(enemyBoard),
     preview: useState(null),
     showTrashModal: useState(false),
     mode: useState("modeSelector"),
     decks: useState([]),
     selectedDeck: useState(""),
-    gameState: useState({
-      currentTurnPlayerId: 0,
-      currentPhase: "",
-      turnNumber: 1,
-      rockPaperScissorWinner: null,
-    }),
+    gameState: useState(gameState),
   };
 
   const hooks = {
-    cardBasicEffects: useHandCardBasicEffect(),
     sockets: useSocket(),
   };
 

@@ -1,13 +1,14 @@
 import React, { createContext, useState, useEffect } from "react";
 
-import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
-
 import BoardGenerator from "../../../services/BoardGenerator";
+import GameState from "../../../models/GameState";
 
-const board = (new BoardGenerator({})).init();
-const enemyBoard = (new BoardGenerator({})).init();
+const board = new BoardGenerator({}).init();
+const enemyBoard = new BoardGenerator({}).init();
+const gameState = GameState.getDefault();
+
 const DuelContext = createContext();
 
 function DuelProvider({ children }) {
@@ -20,21 +21,23 @@ function DuelProvider({ children }) {
     mode: useState("modeSelector"),
     decks: useState([]),
     selectedDeck: useState(""),
-    gameState: useState({
-      currentTurnPlayerId: 0,
-      currentPhase: '',
-      turnNumber: 1,
-      rockPaperScissorWinner: null,
-      selectionMode: {
-        type: null,
-        active: false,
-      }
-    }),
+    gameState: useState(gameState),
   };
 
   const hooks = {
-    cardBasicEffects: useHandCardBasicEffect(),
     sockets: useSocket(),
+  };
+
+  const actions = {
+    setGameBlock(state) {
+      const [, setGameState] = states.gameState;
+      setGameState((currentGameState) => {
+        return {
+          ...currentGameState,
+          block: state,
+        };
+      });
+    },
   };
 
   useEffect(() => {
@@ -44,7 +47,7 @@ function DuelProvider({ children }) {
   }, []);
 
   return (
-    <DuelContext.Provider value={{ states, hooks }}>
+    <DuelContext.Provider value={{ states, hooks, actions }}>
       {children}
     </DuelContext.Provider>
   );
