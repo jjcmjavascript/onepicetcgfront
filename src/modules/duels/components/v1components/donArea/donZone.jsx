@@ -38,6 +38,7 @@ function DonZone({ children }) {
     const optionsElement = document.querySelector(".don--options");
 
     if (!activeCard || activeCard != card) {
+      console.log(card)
       setActiveCard(card);
       optionsElement.style.width = `${cardHtmlElement.clientWidth * 1.5}px`;
       optionsElement.style.left = `${cardHtmlElement.offsetLeft / 1.05}px`;
@@ -61,6 +62,7 @@ function DonZone({ children }) {
   };
 
   const toggleDonStatus = () => {
+    console.log(activeCard)
     const id = `id_${activeCard.uuid}`;
     const cardHtmlElement = document.getElementById(id);
 

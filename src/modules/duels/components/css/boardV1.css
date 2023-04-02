@@ -99,6 +99,7 @@
   object-fit: fill;
   box-shadow: 0px 0px 1px 2px rgb(255, 255, 255);
   border-radius: 2px;
+  background-color: blueviolet;
 }
 
 .bgBlack80 {
