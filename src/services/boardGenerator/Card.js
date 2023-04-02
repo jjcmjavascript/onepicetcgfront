@@ -38,8 +38,10 @@ class Card {
     this._image_full = cardObject._image_full;
   }
   static generateFakeCard() {
+    const options = ['monsterid', 'robohash', 'wavatar']
+    const choice = faker.helpers.arrayElement(options)
     const emailToMd5 = CryptoJS.MD5(faker.internet.email()).toString();
-    const imagen = `https://gravatar.com/avatar/${emailToMd5}?s=400&d=robohash&r=x`;
+    const imagen = `https://gravatar.com/avatar/${emailToMd5}?s=400&d=${choice}&r=x`;
 
     const fakeCard = {
       id: faker.datatype.uuid(),
