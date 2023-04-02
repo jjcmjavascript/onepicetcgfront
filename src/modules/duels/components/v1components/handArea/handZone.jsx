@@ -2,8 +2,8 @@ import React, { useContext, useState, useRef } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
-// import CardOptions from "./cardOptions";
-// import CardOptionItem from "./cardOptionItem";
+import CardOptions from "./cardOptions";
+import CardOptionItem from "./cardOptionItem";
 
 /**
  * 1 - When Options is open, the "card" is active
@@ -117,7 +117,7 @@ function HandZone({ children }) {
   return (
     <>
       <div className="field--card_area__hand">
-        {/* <CardOptions ref={handOptionElementRef}>
+        <CardOptions ref={handOptionElementRef}>
           <CardOptionItem onClick={playCard}>Jugar</CardOptionItem>
           <CardOptionItem onClick={revealCard}>Revelar</CardOptionItem>
           <CardOptionItem onClick={discardCard}>Descartar</CardOptionItem>
@@ -127,7 +127,7 @@ function HandZone({ children }) {
           <CardOptionItem onClick={putCardOnBottomDeck}>
             Colocar en Fondo
           </CardOptionItem>
-        </CardOptions> */}
+        </CardOptions>
 
         {boardOneState.hand.map((card) => {
           return (
