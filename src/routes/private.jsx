@@ -14,7 +14,10 @@ export default () => {
       <Route path="decks/create" element={<DeckCreate />} />
       <Route path="decks/edit/:id" element={<DeckCreate />} />
 
-      <Route path="duels" element={<DuelMode />} />
+      <Route path="duels" element={<DuelMode />}>
+        <Route path="mode" element={<DuelMode />} />
+        <Route path="vsplayer" element={<DuelMode />} />
+      </Route>
     </>
   );
 };

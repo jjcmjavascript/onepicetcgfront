@@ -6,7 +6,7 @@ const logedHeader = () => {
     <nav className="navbar navbar-dark bg-dark">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Home
+          Home {process.env.REACT_APP_TEST}
         </Link>
         <Link to="/decks" className="navbar-brand">
           Decks

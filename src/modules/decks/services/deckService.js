@@ -16,8 +16,7 @@ const getDecks = async (filters = {}) => {
   try {
     const options = { headers };
     const response = await axios.get(`${baseUrl}?${formatedFilters}`, options);
-    const decks = response.data;
-    return decks;
+    return response.data;
   } catch (err) {
     throw err;
   }
@@ -26,9 +25,8 @@ const getDecks = async (filters = {}) => {
 const saveDeck = async (deck) => {
   try {
     const options = { headers };
-    const response = axios.post(baseUrl, deck, options);
-    const deck = response.data;
-    return deck;
+    const response = await axios.post(baseUrl, deck, options);
+    return response.data.deck;
   } catch (err) {
     throw err;
   }
@@ -51,12 +49,11 @@ const findDeck = async (deckId) => {
   }
 };
 
-const updateDeck = (deck) => {
+const updateDeck = async (deck) => {
   try {
     const options = { headers };
-    const response = axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
-    const deck = response.data;
-    return deck;
+    const response = await axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+    return response.data.deck;
   } catch (err) {
     throw err;
   }
