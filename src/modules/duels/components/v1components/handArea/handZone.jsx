@@ -53,10 +53,9 @@ function HandZone({ children }) {
       return {
         ...prevState,
         characters: [...prevState.characters, activeCard],
+        hand : prevState.hand.filter((card) => card.uuid != activeCard.uuid)
       };
     });
-
-    // setHand(hand.filter((card) => card.uuid != activeCard.uuid));
 
     hideOptions();
   };

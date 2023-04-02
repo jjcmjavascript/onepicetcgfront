@@ -1,4 +1,5 @@
-const { faker } = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
+import CryptoJS from 'crypto-js';
 
 class Card {
   constructor(cardObject) {
@@ -37,6 +38,9 @@ class Card {
     this._image_full = cardObject._image_full;
   }
   static generateFakeCard() {
+    const emailToMd5 = CryptoJS.MD5(faker.internet.email()).toString();
+    const imagen = `https://gravatar.com/avatar/${emailToMd5}?s=400&d=robohash&r=x`;
+
     const fakeCard = {
       id: faker.datatype.uuid(),
       uuid: faker.datatype.uuid(),
@@ -76,10 +80,10 @@ class Card {
         faker.datatype.number({ min: 1, max: 4 })
       ),
       _image: {
-        route : 'https://cf.geekdo-images.com/lBPmfYGjJ-UQ5DZ_wKuBGA__imagepage/img/GNe5INGZDgiakJibSM0zNWLMxSQ=/fit-in/900x600/filters:no_upscale():strip_icc()/pic1737624.jpg' || faker.image.imageUrl(),
+        route: imagen,
       },
       _image_full: {
-        route : 'https://cf.geekdo-images.com/lBPmfYGjJ-UQ5DZ_wKuBGA__imagepage/img/GNe5INGZDgiakJibSM0zNWLMxSQ=/fit-in/900x600/filters:no_upscale():strip_icc()/pic1737624.jpg' || faker.image.imageUrl(),
+        route: imagen,
       },
     };
 
