@@ -102,6 +102,14 @@
   background-color: blueviolet;
 }
 
+.card_to_select {
+  box-shadow: 0px 0px 1px 2px #81c784;
+}
+
+.card_to_select__selected {
+  box-shadow: 0px 0px 1px px #1b5e20;
+}
+
 .bgBlack80 {
   background-color: rgba(0, 0, 0, 0.8);
 }

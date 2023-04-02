@@ -8,9 +8,11 @@ import DonOptionItem from "./donOptionItem";
 
 function DonZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
-  const { boardOne } = states;
+  const { boardOne, gameState } = states;
   const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
+  const [game, setGame] = gameState;
+  const block = game.selectionMode.active;
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {
@@ -32,13 +34,15 @@ function DonZone({ children }) {
   };
 
   const toggleOptions = (card) => {
+    if (block) return;
+
     hideOptions();
     const id = `id_${card.uuid}`;
     const cardHtmlElement = document.getElementById(id);
     const optionsElement = document.querySelector(".don--options");
 
     if (!activeCard || activeCard != card) {
-      console.log(card)
+      console.log(card);
       setActiveCard(card);
       optionsElement.style.width = `${cardHtmlElement.clientWidth * 1.5}px`;
       optionsElement.style.left = `${cardHtmlElement.offsetLeft / 1.05}px`;
@@ -50,6 +54,8 @@ function DonZone({ children }) {
   };
 
   const devolverDon = () => {
+    if (block) return;
+
     setBoard((currentBoard) => {
       return {
         ...currentBoard,
@@ -57,17 +63,33 @@ function DonZone({ children }) {
         costs: currentBoard.costs.filter((card) => card != activeCard),
       };
     });
+
     toggleDonStatus();
     hideOptions();
   };
 
   const toggleDonStatus = () => {
-    console.log(activeCard)
+    if (block) return;
+
     const id = `id_${activeCard.uuid}`;
     const cardHtmlElement = document.getElementById(id);
 
     cardHtmlElement.classList.toggle("don--card__used");
     hideOptions();
+  };
+
+  const plusToCard = () => {
+    setGame((currentGame) => {
+      return {
+        ...currentGame,
+        selectionMode: {
+          active: true,
+          type: "don",
+        },
+      };
+    });
+
+    const id = `id_${activeCard.uuid}`;
   };
 
   return (
@@ -82,6 +104,9 @@ function DonZone({ children }) {
         <DonOptions>
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
           <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
+          {activeCard && !activeCard.rested ? (
+            <DonOptionItem onClick={plusToCard}>+1000</DonOptionItem>
+          ) : null}
         </DonOptions>
 
         <div className="field--card_half"></div>

@@ -9,6 +9,7 @@ class Card {
     this.name = cardObject.name;
     this.otherName = cardObject.otherName;
     this.power = cardObject.power;
+    this.powerAdded = cardObject.powerAdded || [];
     this.isAlternative = cardObject.isAlternative;
     this.typeId = cardObject.typeId;
     this.packId = cardObject.packId;
@@ -37,9 +38,14 @@ class Card {
     this._image = cardObject._image;
     this._image_full = cardObject._image_full;
   }
+
+  get currentPower() {
+    return this.power + this.powerAdded.reduce((a, b) => a + b, 0);
+  }
+
   static generateFakeCard() {
-    const options = ['monsterid', 'robohash', 'wavatar']
-    const choice = faker.helpers.arrayElement(options)
+    const options = ['monsterid', 'robohash', 'wavatar'];
+    const choice = faker.helpers.arrayElement(options);
     const emailToMd5 = CryptoJS.MD5(faker.internet.email()).toString();
     const imagen = `https://gravatar.com/avatar/${emailToMd5}?s=400&d=${choice}&r=x`;
 
@@ -87,6 +93,7 @@ class Card {
       _image_full: {
         route: imagen,
       },
+      powerAdded: [],
     };
 
     return new Card(fakeCard);

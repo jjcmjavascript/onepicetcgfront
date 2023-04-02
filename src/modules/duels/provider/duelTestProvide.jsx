@@ -4,7 +4,7 @@ import useHandCardBasicEffect from "../hooks/useHandCardBasicEffect";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 
-import BoardGenerator from "../../../services/boardGenerator";
+import BoardGenerator from "../../../services/BoardGenerator";
 
 const board = (new BoardGenerator({})).init();
 const enemyBoard = (new BoardGenerator({})).init();
@@ -25,6 +25,10 @@ function DuelProvider({ children }) {
       currentPhase: '',
       turnNumber: 1,
       rockPaperScissorWinner: null,
+      selectionMode: {
+        type: null,
+        active: false,
+      }
     }),
   };
 

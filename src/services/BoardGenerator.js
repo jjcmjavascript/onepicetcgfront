@@ -1,5 +1,5 @@
-import Board from './Board';
-import Card from './Card';
+import Board from '../models/Board';
+import Card from '../models/Card';
 
 class DeckGenerator {
   constructor() {
