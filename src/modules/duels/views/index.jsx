@@ -6,10 +6,9 @@ import PreviewAndPhaseZone from "../components/previewAndPhaseZone";
 const DuelMode = () => {
   return (
     <Store.DuelProvider>
-      <div className="field--duelMode">
-        <PreviewAndPhaseZone />
-        <DuelZone />
-      </div>
+      {/* <DuelMode></DuelMode> */}
+      <VsPlayer></VsPlayer>
+
     </Store.DuelProvider>
   );
 };

@@ -28,6 +28,16 @@ function DuelProvider({ children }) {
     hand: useState([]),
     deck: useState([]),
     preview: useState(null),
+    showTrashModal: useState(false),
+    mode: useState("modeSelector"),
+    decks: useState([]),
+    selectedDeck: useState(""),
+    gameState: useState({
+      currentTurnPlayerId: 0,
+      currentPhase: '',
+      turnNumber: 1,
+      rockPaperScissorWinner: null,
+    }),
   };
 
   const hooks = {
