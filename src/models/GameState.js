@@ -5,6 +5,8 @@ class GameState {
     this.turnNumber = gameState.turnNumber;
     this.rockPaperScissorWinner = gameState.rockPaperScissorWinner;
     this.selectionMode = gameState.selectionMode;
+    this.locked = gameState.locked;
+    this.selectionMode = gameState.selectionMode;
   }
 
   static getDefault() {
@@ -13,10 +15,8 @@ class GameState {
       currentPhase: '',
       turnNumber: 1,
       rockPaperScissorWinner: null,
-      selectionMode: {
-        type: null,
-        active: false,
-      },
+      locked: false,
+      selectionMode: null,
     });
   }
 }

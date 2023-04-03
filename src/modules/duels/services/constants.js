@@ -30,6 +30,8 @@ const GAME_PHASES_MAIN = 'game:phasesMain';
 const GAME_PHASES_MAIN_END = 'game:phasesMainEnd';
 const GAME_PHASE_END = 'game:phaseEnd';
 
+const GAME_DON_PLUS = 'game:donPlus';
+
 // RIVAL EVENTS
 const GAME_RIVAL_PHASES_REFRESH = 'game:rivalPhasesRefresh';
 const GAME_RIVAL_PHASES_DRAW = 'game:rivalPhasesDraw';
@@ -37,6 +39,7 @@ const GAME_RIVAL_MULLIGAN = 'game:rivalMulligan';
 const GAME_RIVAL_PHASES_DON = 'game:rivalPhasesDon';
 const GAME_RIVAL_PHASES_MAIN = 'game:rivalPhasesMain';
 const GAME_RIVAL_PHASES_END = 'game:rivalPhasesEnd';
+const GAME_RIVAL_DON_PLUS = 'game:rivalDonPlus';
 
 export default {
   GAME_ROOM_JOIN,
@@ -70,4 +73,6 @@ export default {
   GAME_TURN_SELECTION_INIT,
   GAME_TURN_SELECTION_CHOICE,
   GAME_TURN_SELECTION_END,
+  GAME_DON_PLUS,
+  GAME_RIVAL_DON_PLUS,
 };

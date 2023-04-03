@@ -37,6 +37,9 @@ class Card {
     this.categories = cardObject.categories;
     this._image = cardObject._image;
     this._image_full = cardObject._image_full;
+    this.overCards = cardObject.overCards;
+    this.rested = cardObject.rested;
+    this.underCardId = cardObject.underCardId;
   }
 
   get currentPower() {
@@ -94,6 +97,9 @@ class Card {
         route: imagen,
       },
       powerAdded: [],
+      overCards: [],
+      rested: false,
+      underCardId: null,
     };
 
     return new Card(fakeCard);

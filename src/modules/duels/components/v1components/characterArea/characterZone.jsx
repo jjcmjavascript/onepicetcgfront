@@ -12,6 +12,7 @@ function CharactedZone({ children }) {
 
   const [boardOneState, setBoardOneState] = boardOne;
   const [, setPreview] = states.preview;
+  const [game] = states.gameState;
   const [activeCard, setActiveCard] = useState(null);
 
   const onMouseOver = (card) => {
@@ -126,6 +127,7 @@ function CharactedZone({ children }) {
         {boardOneState.characters.map((card) => {
           return (
             <FieldCardFull
+              className={card.className}
               id={`id_${card.uuid}`}
               key={card.uuid}
               card={card}

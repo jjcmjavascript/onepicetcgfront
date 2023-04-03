@@ -1,18 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Store from "../../../provider/duelProvider";
 
 import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
 import DonOptions from "./donOptions";
 import DonOptionItem from "./donOptionItem";
+import { effectRules } from "../../../../../helpers";
+import constants from "../../../services/constants";
 
 function DonZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
+  const { sockets: hookSocket } = hooks;
   const { boardOne, gameState } = states;
   const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
-  const [game, setGame] = gameState;
-  const block = game.selectionMode.active;
+  const [game, setGameState] = gameState;
+  const { duelSocket, duelRoom, initDuelSocket } = hookSocket;
+
+  useEffect(() => {
+    initDuelSocket();
+  });
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {
@@ -34,7 +41,7 @@ function DonZone({ children }) {
   };
 
   const toggleOptions = (card) => {
-    if (block) return;
+    if (game.locked) return;
 
     hideOptions();
     const id = `id_${card.uuid}`;
@@ -42,7 +49,6 @@ function DonZone({ children }) {
     const optionsElement = document.querySelector(".don--options");
 
     if (!activeCard || activeCard != card) {
-      console.log(card);
       setActiveCard(card);
       optionsElement.style.width = `${cardHtmlElement.clientWidth * 1.5}px`;
       optionsElement.style.left = `${cardHtmlElement.offsetLeft / 1.05}px`;
@@ -54,7 +60,7 @@ function DonZone({ children }) {
   };
 
   const devolverDon = () => {
-    if (block) return;
+    if (game.locked) return;
 
     setBoard((currentBoard) => {
       return {
@@ -69,27 +75,39 @@ function DonZone({ children }) {
   };
 
   const toggleDonStatus = () => {
-    if (block) return;
+    if (game.locked) return;
 
     const id = `id_${activeCard.uuid}`;
     const cardHtmlElement = document.getElementById(id);
 
     cardHtmlElement.classList.toggle("don--card__used");
+
+    setBoard((currentBoard) => {
+      return {
+        ...currentBoard,
+        costs: currentBoard.costs.map((card) => {
+          if (card.uuid === activeCard.uuid) {
+            return {
+              ...card,
+              rested: !card.rested,
+            };
+          }
+          return card;
+        }),
+      };
+    });
+
     hideOptions();
   };
 
   const plusToCard = () => {
-    setGame((currentGame) => {
-      return {
-        ...currentGame,
-        selectionMode: {
-          active: true,
-          type: "don",
-        },
-      };
-    });
+    if (game.locked) return;
 
-    const id = `id_${activeCard.uuid}`;
+    console.log(constants.GAME_DON_PLUS);
+    duelSocket.emit(constants.GAME_DON_PLUS, {
+      room: duelRoom,
+      cardId: activeCard.uuid,
+    });
   };
 
   return (
@@ -104,7 +122,7 @@ function DonZone({ children }) {
         <DonOptions>
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
           <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
-          {activeCard && !activeCard.rested ? (
+          {effectRules.canRestDon(activeCard) ? (
             <DonOptionItem onClick={plusToCard}>+1000</DonOptionItem>
           ) : null}
         </DonOptions>

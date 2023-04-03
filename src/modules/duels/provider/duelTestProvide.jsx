@@ -28,18 +28,6 @@ function DuelProvider({ children }) {
     sockets: useSocket(),
   };
 
-  const actions = {
-    setGameBlock(state) {
-      const [, setGameState] = states.gameState;
-      setGameState((currentGameState) => {
-        return {
-          ...currentGameState,
-          block: state,
-        };
-      });
-    },
-  };
-
   useEffect(() => {
     deckService.getDecks().then((decks) => {
       states.decks[1](decks);
@@ -47,7 +35,7 @@ function DuelProvider({ children }) {
   }, []);
 
   return (
-    <DuelContext.Provider value={{ states, hooks, actions }}>
+    <DuelContext.Provider value={{ states, hooks }}>
       {children}
     </DuelContext.Provider>
   );

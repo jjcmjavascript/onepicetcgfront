@@ -194,6 +194,14 @@ function wrapper() {
     // duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
     //   console.log(constants.GAME_RIVAL_PHASES_END);
     // });
+
+    duelSocket.on(constants.GAME_DON_PLUS, (payload) => {
+      console.log(constants.GAME_DON_PLUS);
+    });
+
+    duelSocket.on(constants.GAME_RIVAL_DON_PLUS, (payload) => {
+      console.log(constants.GAME_RIVAL_DON_PLUS);
+    });
   }
 
   return <>{views[view]}</>;
