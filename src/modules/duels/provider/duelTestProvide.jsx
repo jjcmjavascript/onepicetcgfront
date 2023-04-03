@@ -29,12 +29,10 @@ function DuelProvider({ children }) {
     sockets: useSocket(),
   };
 
+  const [game, setGameState] = states.gameState;
+  const [, setBoardOneState] = states.boardOne;
   const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
     hooks.sockets;
-
-  const [game, setGameState] = states.gameState;
-
-  const [, setBoardOneState] = states.boardOne;
 
   useEffect(() => {
     deckService.getDecks().then((decks) => {
@@ -54,9 +52,7 @@ function DuelProvider({ children }) {
         console.log(constants.GAME_FAKE_STATE_CREATED, payload);
 
         joinRoom(SOCKET_DUEL_URL, payload.room);
-
         setBoardOneState(payload.board);
-
         setGameState(payload.game);
       });
     }

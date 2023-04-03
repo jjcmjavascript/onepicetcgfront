@@ -44,4 +44,6 @@ function DuelProvider({ children }) {
   );
 }
 
-export default testMode ? duelTestProvide : { DuelProvider, DuelContext };
+export default testMode === "true"
+  ? duelTestProvide
+  : { DuelProvider, DuelContext };
