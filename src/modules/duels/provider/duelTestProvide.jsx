@@ -4,6 +4,7 @@ import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 import BoardGenerator from "../../../services/BoardGenerator";
 import GameState from "../../../models/GameState";
+import constants from "../services/constants";
 
 const board = new BoardGenerator({}).init();
 const enemyBoard = new BoardGenerator({}).init();
@@ -28,11 +29,28 @@ function DuelProvider({ children }) {
     sockets: useSocket(),
   };
 
+  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hooks.sockets;
+
   useEffect(() => {
     deckService.getDecks().then((decks) => {
       states.decks[1](decks);
     });
+
+    initDuelSocket();
   }, []);
+
+  useEffect(() => {
+    if (duelSocket) {
+      duelSocket.emit(constants.GAME_FAKE_STATE_CREATE, {
+        gameState,
+        playerBoard: board,
+      });
+
+      duelSocket.on(constants.GAME_FAKE_STATE_CREATED, (payload) => {
+        joinRoom(SOCKET_DUEL_URL, payload.room);
+      });
+    }
+  }, [duelSocket]);
 
   return (
     <DuelContext.Provider value={{ states, hooks }}>

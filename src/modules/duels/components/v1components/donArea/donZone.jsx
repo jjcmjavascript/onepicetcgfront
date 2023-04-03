@@ -102,8 +102,8 @@ function DonZone({ children }) {
 
   const plusToCard = () => {
     if (game.locked) return;
-
     console.log(constants.GAME_DON_PLUS);
+
     duelSocket.emit(constants.GAME_DON_PLUS, {
       room: duelRoom,
       cardId: activeCard.uuid,

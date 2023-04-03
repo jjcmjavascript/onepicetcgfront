@@ -1,3 +1,6 @@
+const GAME_FAKE_STATE_CREATE = 'game:fakeStateCreate';
+const GAME_FAKE_STATE_CREATED = 'game:fakeStateCreated';
+
 const GAME_INITIAL_BOARD_STATE = 'game:boardState';
 const GAME_DECK_SELECTED = 'game:deckSelected';
 const GAME_TURN_SELECTION_INIT = 'game:turnSelectionInit';
@@ -75,4 +78,7 @@ export default {
   GAME_TURN_SELECTION_END,
   GAME_DON_PLUS,
   GAME_RIVAL_DON_PLUS,
+
+  GAME_FAKE_STATE_CREATE,
+  GAME_FAKE_STATE_CREATED,
 };
