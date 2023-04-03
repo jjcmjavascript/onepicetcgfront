@@ -14,12 +14,7 @@ function DonZone({ children }) {
   const { boardOne, gameState } = states;
   const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
-  const [game, setGameState] = gameState;
-  const { duelSocket, duelRoom, initDuelSocket } = hookSocket;
-
-  useEffect(() => {
-    initDuelSocket();
-  });
+  const { duelSocket, duelRoom } = hookSocket;
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {
@@ -41,9 +36,10 @@ function DonZone({ children }) {
   };
 
   const toggleOptions = (card) => {
-    if (game.locked) return;
+    if (board.locked) return;
 
     hideOptions();
+
     const id = `id_${card.uuid}`;
     const cardHtmlElement = document.getElementById(id);
     const optionsElement = document.querySelector(".don--options");
@@ -60,7 +56,7 @@ function DonZone({ children }) {
   };
 
   const devolverDon = () => {
-    if (game.locked) return;
+    if (board.locked) return;
 
     setBoard((currentBoard) => {
       return {
@@ -75,7 +71,7 @@ function DonZone({ children }) {
   };
 
   const toggleDonStatus = () => {
-    if (game.locked) return;
+    if (board.locked) return;
 
     const id = `id_${activeCard.uuid}`;
     const cardHtmlElement = document.getElementById(id);
@@ -100,13 +96,13 @@ function DonZone({ children }) {
     hideOptions();
   };
 
-  const plusToCard = () => {
-    if (game.locked) return;
-    console.log(constants.GAME_DON_PLUS);
+  const sumDonAttackToCard = () => {
+    if (board.locked) return;
+    console.log(constants.GAME_DON_PLUS, activeCard);
 
     duelSocket.emit(constants.GAME_DON_PLUS, {
       room: duelRoom,
-      cardId: activeCard.uuid,
+      donUuid: activeCard.uuid,
     });
   };
 
@@ -123,7 +119,7 @@ function DonZone({ children }) {
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
           <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
           {effectRules.canRestDon(activeCard) ? (
-            <DonOptionItem onClick={plusToCard}>+1000</DonOptionItem>
+            <DonOptionItem onClick={sumDonAttackToCard}>+1000</DonOptionItem>
           ) : null}
         </DonOptions>
 

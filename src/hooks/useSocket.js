@@ -26,6 +26,7 @@ export default function useSocket(options = null) {
   };
 
   const initDuelSocket = () => {
+    console.log('initDuelSocket here');
     if (sockets[SOCKET_DUEL_URL]) return sockets[SOCKET_DUEL_URL];
 
     const newSocket = mySocketIo(`${appUrl}${SOCKET_DUEL_URL}`, options);

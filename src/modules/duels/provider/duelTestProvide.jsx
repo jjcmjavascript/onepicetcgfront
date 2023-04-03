@@ -29,32 +29,51 @@ function DuelProvider({ children }) {
     sockets: useSocket(),
   };
 
-  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hooks.sockets;
+  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
+    hooks.sockets;
+
+  const [game, setGameState] = states.gameState;
+
+  const [, setBoardOneState] = states.boardOne;
 
   useEffect(() => {
     deckService.getDecks().then((decks) => {
       states.decks[1](decks);
     });
-
-    initDuelSocket();
   }, []);
 
   useEffect(() => {
     if (duelSocket) {
-      duelSocket.emit(constants.GAME_FAKE_STATE_CREATE, {
-        gameState,
-        playerBoard: board,
+      duelSocket.on(constants.GAME_STATE, (payload) => {
+        console.log(constants.GAME_STATE);
+
+        setGameState(payload.game);
       });
 
       duelSocket.on(constants.GAME_FAKE_STATE_CREATED, (payload) => {
+        console.log(constants.GAME_FAKE_STATE_CREATED, payload);
+
         joinRoom(SOCKET_DUEL_URL, payload.room);
+
+        setBoardOneState(payload.board);
+
+        setGameState(payload.game);
       });
     }
   }, [duelSocket]);
 
+  const initState = () => {
+    duelSocket.emit(constants.GAME_FAKE_STATE_CREATE, {
+      gameState,
+      playerBoard: board,
+    });
+  };
+
   return (
     <DuelContext.Provider value={{ states, hooks }}>
       {children}
+      <button onClick={initDuelSocket}>Init Duel</button>
+      <button onClick={initState}>Init State</button>
     </DuelContext.Provider>
   );
 }

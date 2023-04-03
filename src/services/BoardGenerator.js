@@ -1,9 +1,9 @@
-import Board from '../models/Board';
+import Player from '../models/Player';
 import Card from '../models/Card';
 
 class DeckGenerator {
   constructor() {
-    this.board = new Board({});
+    this.board = new Player({});
   }
 
   generateDeck() {

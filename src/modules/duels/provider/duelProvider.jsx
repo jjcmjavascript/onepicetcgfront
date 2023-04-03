@@ -4,12 +4,13 @@ import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 import duelTestProvide from "./duelTestProvide";
 import GameState from "../../../models/GameState";
-import Board from "../../../models/Board";
+import Player from "../../../models/Player";
 
 const testMode = process.env.REACT_APP_TEST_BOARD;
 const gameState = GameState.getDefault();
-const board = new Board({});
-const enemyBoard = new Board({});
+
+const board = new Player({});
+const enemyBoard = new Player({});
 
 const DuelContext = createContext();
 
