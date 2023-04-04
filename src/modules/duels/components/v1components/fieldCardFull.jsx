@@ -9,9 +9,18 @@ function FieldCardFull({
   className = "",
 }) {
   const defaultClassName = `field--card_full`;
-  const newClassName = className
+  let newClassName = className
     ? `field--card_full ${className}`
     : defaultClassName;
+
+  if (card && card.toSelect) {
+    console.log("card.toSelect", card.toSelect);
+    newClassName = `${newClassName} card_to_select`;
+  }
+
+  if (card && card.selected) {
+    newClassName = `${newClassName} card_to_select__selected`;
+  }
 
   return (
     <>

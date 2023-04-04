@@ -25,8 +25,15 @@ export default function useSocket(options = null) {
     setSockets((prev) => ({ ...prev, [socketUrl]: newSocket }));
   };
 
+  const stopDuelSocket = () => {
+    if (!sockets[SOCKET_DUEL_URL]) return;
+
+    sockets[SOCKET_DUEL_URL].disconnect();
+
+    setSockets((prev) => ({ ...prev, [SOCKET_DUEL_URL]: null }));
+  };
+
   const initDuelSocket = () => {
-    console.log('initDuelSocket here');
     if (sockets[SOCKET_DUEL_URL]) return sockets[SOCKET_DUEL_URL];
 
     const newSocket = mySocketIo(`${appUrl}${SOCKET_DUEL_URL}`, options);
@@ -65,5 +72,6 @@ export default function useSocket(options = null) {
     SOCKET_GENERAL_URL,
     SOCKET_DUEL_URL,
     disconectSocket,
+    stopDuelSocket,
   };
 }

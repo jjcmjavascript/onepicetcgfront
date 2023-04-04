@@ -11,10 +11,11 @@ import constants from "../../../services/constants";
 function DonZone({ children }) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { sockets: hookSocket } = hooks;
-  const { boardOne, gameState } = states;
+  const { boardOne, gameState, effects } = states;
   const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
   const { duelSocket, duelRoom } = hookSocket;
+  const [effectsObject, setEffectsObject] = effects;
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {
@@ -104,7 +105,47 @@ function DonZone({ children }) {
       room: duelRoom,
       donUuid: activeCard.uuid,
     });
+
+    activateCharacterSelector();
   };
+
+  const activateCharacterSelector = () => {
+    setEffectsObject({
+      resolving: false,
+      who: "donZone",
+      pile: [
+        {
+          who: "donZone",
+          effect: "selectOneCard",
+        },
+      ],
+    });
+  };
+
+  const selectOneCard = async () => {
+    setBoard((currentBoard) => {
+      return {
+        ...currentBoard,
+        characters: currentBoard.characters.map((character) => {
+          return {
+            ...character,
+            toSelect: true,
+          };
+        }),
+      };
+    });
+  };
+
+  useEffect(() => {
+    if (effectsObject.who === "donZone") {
+      const pileElement = effectsObject.pile[effectsObject.pile.length - 1];
+
+      if (pileElement.effect == "selectOneCard" && !effectsObject.resolving) {
+        setEffectsObject((state) => ({ ...state, resolving: true }));
+        selectOneCard();
+      }
+    }
+  }, [effectsObject.who, effectsObject.resolving]);
 
   return (
     <>

@@ -6,8 +6,8 @@ import BoardGenerator from "../../../services/BoardGenerator";
 import GameState from "../../../models/GameState";
 import constants from "../services/constants";
 
-const board = new BoardGenerator({}).init();
-const enemyBoard = new BoardGenerator({}).init();
+const board = new BoardGenerator({}).generateBoard();
+const enemyBoard = new BoardGenerator({}).generateBoard();
 const gameState = GameState.getDefault();
 
 const DuelContext = createContext();
@@ -23,6 +23,11 @@ function DuelProvider({ children }) {
     decks: useState([]),
     selectedDeck: useState(""),
     gameState: useState(gameState),
+    effects: useState({
+      who: "",
+      resolving: false,
+      pending: [],
+    }),
   };
 
   const hooks = {
@@ -31,8 +36,13 @@ function DuelProvider({ children }) {
 
   const [game, setGameState] = states.gameState;
   const [, setBoardOneState] = states.boardOne;
-  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
-    hooks.sockets;
+  const {
+    duelSocket,
+    initDuelSocket,
+    stopDuelSocket,
+    joinRoom,
+    SOCKET_DUEL_URL,
+  } = hooks.sockets;
 
   useEffect(() => {
     deckService.getDecks().then((decks) => {
@@ -68,7 +78,8 @@ function DuelProvider({ children }) {
   return (
     <DuelContext.Provider value={{ states, hooks }}>
       {children}
-      <button onClick={initDuelSocket}>Init Duel</button>
+      <button onClick={initDuelSocket}>Start</button>
+      <button onClick={stopDuelSocket}>Stop</button>
       <button onClick={initState}>Init State</button>
     </DuelContext.Provider>
   );

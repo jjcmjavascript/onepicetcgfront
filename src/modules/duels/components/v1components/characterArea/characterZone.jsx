@@ -127,7 +127,6 @@ function CharactedZone({ children }) {
         {boardOneState.characters.map((card) => {
           return (
             <FieldCardFull
-              className={card.className}
               id={`id_${card.uuid}`}
               key={card.uuid}
               card={card}

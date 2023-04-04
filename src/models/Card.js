@@ -4,12 +4,10 @@ import CryptoJS from 'crypto-js';
 class Card {
   constructor(cardObject) {
     this.id = cardObject.id;
-    this.uuid = cardObject.uuid;
     this.cost = cardObject.cost;
     this.name = cardObject.name;
     this.otherName = cardObject.otherName;
     this.power = cardObject.power;
-    this.powerAdded = cardObject.powerAdded || [];
     this.isAlternative = cardObject.isAlternative;
     this.typeId = cardObject.typeId;
     this.packId = cardObject.packId;
@@ -37,9 +35,14 @@ class Card {
     this.categories = cardObject.categories;
     this._image = cardObject._image;
     this._image_full = cardObject._image_full;
+
+    this.uuid = cardObject.uuid;
+    this.powerAdded = cardObject.powerAdded || [];
     this.overCards = cardObject.overCards;
     this.rested = cardObject.rested;
     this.underCardId = cardObject.underCardId;
+    this.toSelect = cardObject.toSelect;
+    this.selected = cardObject.selected;
   }
 
   get currentPower() {
@@ -96,10 +99,13 @@ class Card {
       _image_full: {
         route: imagen,
       },
+
       powerAdded: [],
       overCards: [],
       rested: false,
       underCardId: null,
+      toSelect: false,
+      selected: false,
     };
 
     return new Card(fakeCard);
