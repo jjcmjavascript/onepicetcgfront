@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 function FieldCardFull({
   card,
@@ -37,4 +37,4 @@ function FieldCardFull({
   );
 }
 
-export default FieldCardFull;
+export default memo(FieldCardFull);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, memo } from "react";
 import Store from "../../../provider/duelProvider";
 
 import TrashModalOptions from "./trashModalOptions";
@@ -138,4 +138,4 @@ function TrashModal({}) {
   return <>{showModal && modal}</>;
 }
 
-export default TrashModal;
+export default memo(TrashModal);

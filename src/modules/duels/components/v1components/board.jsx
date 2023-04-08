@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 
 import CharacterZone from "./characterArea/characterZone";
 import DonZone from "./donArea/donZone";
@@ -37,4 +37,4 @@ function Board({ rotate }) {
   );
 }
 
-export default Board;
+export default memo(Board);

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, memo } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -53,7 +53,7 @@ function HandZone({ children }) {
       return {
         ...prevState,
         characters: [...prevState.characters, activeCard],
-        hand : prevState.hand.filter((card) => card.uuid != activeCard.uuid)
+        hand: prevState.hand.filter((card) => card.uuid != activeCard.uuid),
       };
     });
 
@@ -145,4 +145,4 @@ function HandZone({ children }) {
   );
 }
 
-export default HandZone;
+export default memo(HandZone);

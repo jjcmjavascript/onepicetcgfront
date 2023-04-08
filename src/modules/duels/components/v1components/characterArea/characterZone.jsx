@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, memo } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -141,4 +141,4 @@ function CharactedZone({ children }) {
   );
 }
 
-export default CharactedZone;
+export default memo(CharactedZone);

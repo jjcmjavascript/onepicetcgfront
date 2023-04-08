@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, memo } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
@@ -145,4 +145,4 @@ function LeaderZone({ children }) {
   );
 }
 
-export default LeaderZone;
+export default memo(LeaderZone);
