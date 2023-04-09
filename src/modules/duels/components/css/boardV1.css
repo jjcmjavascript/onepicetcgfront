@@ -76,6 +76,17 @@
   display: inline-block;
 }
 
+.field--card__effectLists {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  z-index: 2;
+  font-size: 0.8rem;
+  color: black;
+  font-weight: bold;
+  text-shadow: 0px 0px 1px white;
+}
+
 .field--card_full_used::after {
   content: "";
   position: absolute;
@@ -270,5 +281,3 @@
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.8);
 }
-
-

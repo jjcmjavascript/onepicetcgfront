@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import FieldCardEffectList from "../FieldCardEffectList";
 
 function FieldCardFull({
   card,
@@ -14,7 +15,6 @@ function FieldCardFull({
     : defaultClassName;
 
   if (card && card.toSelect) {
-    console.log("card.toSelect", card.toSelect);
     newClassName = `${newClassName} card_to_select`;
   }
 
@@ -31,7 +31,10 @@ function FieldCardFull({
         onMouseOut={onMouseOut}
         onClick={onClick}
       >
-        {card && <img src={card._image.route} className="field--card__image" />}
+        <FieldCardEffectList card={card} />
+
+        {card &&
+          <img src={card._image.route} className="field--card__image" />}
       </div>
     </>
   );

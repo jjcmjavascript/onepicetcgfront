@@ -16,7 +16,6 @@ const DuelContext = createContext();
 
 function DuelProvider({ children }) {
   const states = {
-    activeView: useState("deck"),
     boardOne: useState(board),
     boardTwo: useState(enemyBoard),
     preview: useState(null),

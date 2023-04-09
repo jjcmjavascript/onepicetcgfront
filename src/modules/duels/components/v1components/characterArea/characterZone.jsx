@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, memo } from "react";
+import React, { useContext, useState, useRef, memo, useEffect } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -7,13 +7,15 @@ import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
 
 function CharactedZone({ children }) {
   const handOptionElementRef = useRef();
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states, hooks, actions } = useContext(Store.DuelContext);
   const { boardOne } = states;
 
   const [boardOneState, setBoardOneState] = boardOne;
   const [, setPreview] = states.preview;
   const [game] = states.gameState;
   const [activeCard, setActiveCard] = useState(null);
+  const [effectPile] = states.effectPile;
+  const [closeMenus] = states.closeMenus;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -99,29 +101,49 @@ function CharactedZone({ children }) {
     hideOptions();
   };
 
+  useEffect(() => {
+    if (closeMenus) {
+      hideOptions();
+    }
+  }, [closeMenus]);
+
   return (
     <>
       <div className="field--card_area">
         <CardOptionsCharacterArea ref={handOptionElementRef}>
-          <CardOptionCharacterAreaItem>Atacar</CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={restCard}>
-            Rest
-          </CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={returnCard}>
-            Devolver
-          </CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={discardCard}>
-            Descartar
-          </CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={() => putCardOnDeck("top")}>
-            Colocar en Tope
-          </CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={() => putCardOnDeck("bottom")}>
-            Colocar en Fondo
-          </CardOptionCharacterAreaItem>
-          <CardOptionCharacterAreaItem onClick={hideOptions}>
-            Cerrar
-          </CardOptionCharacterAreaItem>
+          {effectPile.restriction === "character:all" ? (
+            <>
+              <CardOptionCharacterAreaItem
+                onClick={() => actions.plusAttakFromDon(activeCard)}
+              >
+                Seleccionar
+              </CardOptionCharacterAreaItem>
+            </>
+          ) : (
+            <>
+              <CardOptionCharacterAreaItem>Atacar</CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem onClick={restCard}>
+                Rest
+              </CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem onClick={returnCard}>
+                Devolver
+              </CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem onClick={discardCard}>
+                Descartar
+              </CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem onClick={() => putCardOnDeck("top")}>
+                Colocar en Tope
+              </CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem
+                onClick={() => putCardOnDeck("bottom")}
+              >
+                Colocar en Fondo
+              </CardOptionCharacterAreaItem>
+              <CardOptionCharacterAreaItem onClick={hideOptions}>
+                Cerrar
+              </CardOptionCharacterAreaItem>
+            </>
+          )}
         </CardOptionsCharacterArea>
 
         {boardOneState.characters.map((card) => {

@@ -5,17 +5,17 @@ import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
 import DonOptions from "./donOptions";
 import DonOptionItem from "./donOptionItem";
-import { effectRules } from "../../../../../helpers";
 import constants from "../../../services/constants";
 
-function DonZone({ children }) {
-  const { states, hooks } = useContext(Store.DuelContext);
+function DonZone() {
+  const { states, hooks, actions } = useContext(Store.DuelContext);
   const { sockets: hookSocket } = hooks;
-  const { boardOne, gameState, effects } = states;
+  const { boardOne, gameState, effects, activeCards, activeMenu } = states;
   const [board, setBoard] = boardOne;
   const [activeCard, setActiveCard] = useState(null);
   const { duelSocket, duelRoom } = hookSocket;
-  const [effectsObject, setEffectsObject] = effects;
+  const [activeMenuName, setActiveMenuName] = activeMenu;
+  const [closeMenus] = states.closeMenus;
 
   const putDonFromDeckToDonArea = () => {
     setBoard((currentBoard) => {
@@ -99,53 +99,21 @@ function DonZone({ children }) {
 
   const sumDonAttackToCard = () => {
     if (board.locked) return;
-    console.log(constants.GAME_DON_PLUS, activeCard);
+    console.log(constants.GAME_DON_PLUS);
 
     duelSocket.emit(constants.GAME_DON_PLUS, {
       room: duelRoom,
       donUuid: activeCard.uuid,
     });
 
-    activateCharacterSelector();
-  };
-
-  const activateCharacterSelector = () => {
-    setEffectsObject({
-      resolving: false,
-      who: "donZone",
-      pile: [
-        {
-          who: "donZone",
-          effect: "selectOneCard",
-        },
-      ],
-    });
-  };
-
-  const selectOneCard = async () => {
-    setBoard((currentBoard) => {
-      return {
-        ...currentBoard,
-        characters: currentBoard.characters.map((character) => {
-          return {
-            ...character,
-            toSelect: true,
-          };
-        }),
-      };
-    });
+    actions.activeSelectoToAddAttackFromDon(activeCard);
   };
 
   useEffect(() => {
-    if (effectsObject.who === "donZone") {
-      const pileElement = effectsObject.pile[effectsObject.pile.length - 1];
-
-      if (pileElement.effect == "selectOneCard" && !effectsObject.resolving) {
-        setEffectsObject((state) => ({ ...state, resolving: true }));
-        selectOneCard();
-      }
+    if (closeMenus) {
+      hideOptions();
     }
-  }, [effectsObject.who, effectsObject.resolving]);
+  }, [closeMenus]);
 
   return (
     <>
@@ -159,7 +127,7 @@ function DonZone({ children }) {
         <DonOptions>
           <DonOptionItem onClick={devolverDon}>Devolver</DonOptionItem>
           <DonOptionItem onClick={toggleDonStatus}>Rest</DonOptionItem>
-          {effectRules.canRestDon(activeCard) ? (
+          {actions.donCanBeRested(activeCard) ? (
             <DonOptionItem onClick={sumDonAttackToCard}>+1000</DonOptionItem>
           ) : null}
         </DonOptions>

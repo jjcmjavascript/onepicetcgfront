@@ -58,10 +58,10 @@ class Card {
     const fakeCard = {
       id: faker.datatype.uuid(),
       uuid: faker.datatype.uuid(),
-      cost: faker.datatype.number({ min: 0, max: 10 }),
+      cost: faker.datatype.number({ min: 1, max: 10 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
-      power: faker.datatype.number({ min: 0, max: 10000 }),
+      power: faker.helpers.arrayElement(Array(10).fill(0).map((_, i) => (i + 1) * 1000)),
       isAlternative: faker.datatype.boolean(),
       typeId: faker.datatype.uuid(),
       packId: faker.datatype.uuid(),
