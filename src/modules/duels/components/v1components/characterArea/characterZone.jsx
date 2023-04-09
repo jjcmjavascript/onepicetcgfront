@@ -40,10 +40,11 @@ function CharactedZone({ children }) {
     }
   };
 
-  const hideOptions = (card) => {
+  const hideOptions = () => {
     const optionsElement = handOptionElementRef.current;
     optionsElement.classList.add("hideFull");
     setActiveCard(null);
+    console.log(optionsElement, optionsElement.classList);
   };
 
   const restCard = () => {

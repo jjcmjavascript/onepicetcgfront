@@ -68,8 +68,6 @@ function DuelProvider({ children }) {
       this.activateCharacterSelectorAll();
     },
     activateCharacterSelectorAll() {
-      setCloseMenus(true);
-
       setBoardOneState((currentBoard) => {
         return {
           ...currentBoard,
@@ -95,6 +93,10 @@ function DuelProvider({ children }) {
       });
     },
     deactivateCharacterSelectorAll() {
+      setTimeout(() => {
+        setCloseMenus(false);
+      }, 100);
+
       setEffectPile({
         resolving: false,
         who: "",
@@ -120,10 +122,10 @@ function DuelProvider({ children }) {
           }),
         };
       });
-
-      setCloseMenus(false);
     },
     plusAttakFromDon(character) {
+      setCloseMenus(true);
+
       setBoardOneState((currentBoard) => {
         return {
           ...currentBoard,

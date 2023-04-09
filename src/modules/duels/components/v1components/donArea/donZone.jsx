@@ -111,6 +111,7 @@ function DonZone() {
 
   useEffect(() => {
     if (closeMenus) {
+      console.log("closeMenus", closeMenus);
       hideOptions();
     }
   }, [closeMenus]);
