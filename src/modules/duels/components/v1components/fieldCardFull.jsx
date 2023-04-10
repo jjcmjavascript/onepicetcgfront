@@ -1,14 +1,10 @@
-import React, { memo } from "react";
+import React, { memo, forwardRef } from "react";
 import FieldCardEffectList from "../FieldCardEffectList";
 
-function FieldCardFull({
-  card,
-  onMouseOver,
-  onMouseOut,
-  id,
-  onClick,
-  className = "",
-}) {
+function FieldCardFull(
+  { card, onMouseOver, onMouseOut, id, onClick, className = "" },
+  ref
+) {
   const defaultClassName = `field--card_full`;
   let newClassName = className
     ? `field--card_full ${className}`
@@ -25,6 +21,7 @@ function FieldCardFull({
   return (
     <>
       <div
+        ref={ref}
         id={id}
         className={newClassName}
         onMouseOver={onMouseOver}
@@ -33,11 +30,10 @@ function FieldCardFull({
       >
         <FieldCardEffectList card={card} />
 
-        {card &&
-          <img src={card._image.route} className="field--card__image" />}
+        {card && <img src={card._image.route} className="field--card__image" />}
       </div>
     </>
   );
 }
 
-export default memo(FieldCardFull);
+export default memo(forwardRef(FieldCardFull));

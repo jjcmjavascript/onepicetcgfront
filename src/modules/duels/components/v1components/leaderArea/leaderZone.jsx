@@ -10,6 +10,9 @@ import DeckOptionItem from "./deckOptionItem";
 import TrashOptions from "./deckOptions";
 import TrashOptionItem from "./deckOptionItem";
 
+import LeaderOptions from "./deckOptions";
+import LeaderOptionItem from "./deckOptionItem";
+
 import { shuffle } from "../../../../../helpers";
 
 function LeaderZone({ children }) {
@@ -18,6 +21,9 @@ function LeaderZone({ children }) {
 
   const deckElementRef = useRef();
   const deckOptionElementRef = useRef();
+
+  const leaderElementRef = useRef();
+  const leaderOptionElementRef = useRef();
 
   const { states, hooks } = useContext(Store.DuelContext);
   const [board, setBoardOneState] = states.boardOne;
@@ -101,6 +107,20 @@ function LeaderZone({ children }) {
     toggleTrashOptions();
   };
 
+  const toggleLeaderOptions = () => {
+    const optionsElement = leaderOptionElementRef.current;
+    const leaderElement = leaderElementRef.current;
+
+    if (optionsElement.classList.contains("hide")) {
+      optionsElement.style.width = `${leaderElement.clientWidth * 1.5}px`;
+      optionsElement.style.left = `${leaderElement.offsetLeft / 1.05}px`;
+      optionsElement.classList.remove("hide");
+    } else {
+      optionsElement.style.width = `0px`;
+      optionsElement.style.left = `0px`;
+      optionsElement.classList.add("hide");
+    }
+  };
   return (
     <>
       <div className="field--card_area">
@@ -114,8 +134,15 @@ function LeaderZone({ children }) {
           <TrashOptionItem onClick={showTrash}>Mostrar</TrashOptionItem>
         </TrashOptions>
 
+        <LeaderOptions ref={leaderOptionElementRef}>
+          <LeaderOptionItem>Atacar</LeaderOptionItem>
+          <LeaderOptionItem>Activar</LeaderOptionItem>
+        </LeaderOptions>
+
         <FieldCardFull
+          ref={leaderElementRef}
           card={board.leader}
+          onClick={toggleLeaderOptions}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
         />

@@ -61,7 +61,11 @@ class Card {
       cost: faker.datatype.number({ min: 1, max: 10 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
-      power: faker.helpers.arrayElement(Array(10).fill(0).map((_, i) => (i + 1) * 1000)),
+      power: faker.helpers.arrayElement(
+        Array(10)
+          .fill(0)
+          .map((_, i) => (i + 1) * 1000)
+      ),
       isAlternative: faker.datatype.boolean(),
       typeId: faker.datatype.uuid(),
       packId: faker.datatype.uuid(),
@@ -99,13 +103,21 @@ class Card {
       _image_full: {
         route: imagen,
       },
-
       powerAdded: [],
       overCards: [],
       rested: false,
       underCardId: null,
       toSelect: false,
       selected: false,
+      effects: [
+        {
+          name: 'zoroEffect',
+          conditions: {
+            phase: 'main',
+            cost: 1,
+          },
+        },
+      ],
     };
 
     return new Card(fakeCard);

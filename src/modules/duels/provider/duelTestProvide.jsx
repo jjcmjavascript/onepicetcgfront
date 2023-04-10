@@ -2,20 +2,28 @@ import React, { createContext, useState, useEffect } from "react";
 
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
+
 import BoardGenerator from "../../../services/BoardGenerator";
 import * as effectRules from "../../../services/effectRules";
 import GameState from "../../../models/GameState";
+import Player from "../../../models/Player";
 import constants from "../services/constants";
+import { pause } from "../../../helpers";
 
-const board = new BoardGenerator({}).generateBoard();
+const boardOne = new BoardGenerator({}).generateBoard();
 const enemyBoard = new BoardGenerator({}).generateBoard();
 const gameState = GameState.getDefault();
-
 const DuelContext = createContext();
+const activeCards = {
+  don: null,
+  character: null,
+  hand: null,
+  trash: null,
+};
 
 function DuelProvider({ children }) {
   const states = {
-    boardOne: useState(board),
+    boardOne: useState(boardOne),
     boardTwo: useState(enemyBoard),
     preview: useState(null),
     showTrashModal: useState(false),
@@ -29,18 +37,13 @@ function DuelProvider({ children }) {
       resolving: false,
       pending: [],
     }),
-    activeCards: useState({
-      don: null,
-      character: null,
-      hand: null,
-      trash: null,
-    }),
+    activeCards: useState(activeCards),
     activeMenu: useState(null),
     closeMenus: useState(false),
   };
 
   const [game, setGameState] = states.gameState;
-  const [boardOne, setBoardOneState] = states.boardOne;
+  const [board, setBoard] = states.boardOne;
   const [effectPile, setEffectPile] = states.effectPile;
   const [activeCards, setActiveCards] = states.activeCards;
   const [, setActiveMenuName] = states.activeMenu;
@@ -54,10 +57,10 @@ function DuelProvider({ children }) {
     setActiveMenuName(name) {
       setActiveMenuName(name);
     },
-    donCanBeRested(don) {
-      return effectRules.donCanBeRested(don, boardOne.characters);
-    },
-    activeSelectoToAddAttackFromDon(don) {
+
+    activeSelectToAddAttackFromDon(don) {
+      setCloseMenus(true);
+
       setActiveCards((currentActiveCards) => {
         return {
           ...currentActiveCards,
@@ -67,85 +70,132 @@ function DuelProvider({ children }) {
 
       this.activateCharacterSelectorAll();
     },
+
     activateCharacterSelectorAll() {
-      setBoardOneState((currentBoard) => {
+      setNewGameState({
+        mode: "select:character",
+      });
+
+      setNewBoard(({ board }) => {
+        const characters = board.characters.map((character) => {
+          character.toSelect = true;
+          return character;
+        });
+
         return {
-          ...currentBoard,
-          characters: currentBoard.characters.map((character) => {
-            return {
-              ...character,
-              toSelect: true,
-            };
-          }),
-        };
-      });
-
-      setEffectPile({
-        resolving: true,
-        who: "donZone",
-        restriction: "character:all",
-        pile: [
-          {
-            who: "donZone",
-            effect: "select:1:from:characters",
-          },
-        ],
-      });
-    },
-    deactivateCharacterSelectorAll() {
-      setTimeout(() => {
-        setCloseMenus(false);
-      }, 100);
-
-      setEffectPile({
-        resolving: false,
-        who: "",
-        restriction: "",
-        pile: [],
-      });
-
-      setActiveCards({
-        don: null,
-        character: null,
-        hand: null,
-        trash: null,
-      });
-
-      setBoardOneState((currentBoard) => {
-        return {
-          ...currentBoard,
-          characters: currentBoard.characters.map((character) => {
-            return {
-              ...character,
-              toSelect: false,
-            };
-          }),
+          characters,
         };
       });
     },
-    plusAttakFromDon(character) {
+
+    async deactivateCharacterSelectorAll() {
+      await pause.sleep(100);
+      setCloseMenus(false);
+
+      setActiveCards({ ...activeCards });
+
+      setNewGameState({
+        mode: "",
+      });
+
+      setNewBoard(({ board }) => {
+        const characters = board.characters.map((character) => {
+          character.toSelect = false;
+          return character;
+        });
+
+        return {
+          characters,
+        };
+      });
+    },
+
+    async plusAttakFromDon(character) {
+      setCloseMenus(false);
+      await pause.sleep(100);
       setCloseMenus(true);
 
-      setBoardOneState((currentBoard) => {
+      setNewBoard(({ board }) => {
+        const costs = board.costs.filter(
+          (cost) => cost.uuid != activeCards.don.uuid
+        );
+
+        const characters = board.characters.map((currentCharacter) => {
+          if (currentCharacter.uuid === character.uuid) {
+            currentCharacter.powerAdded =
+              currentCharacter.powerAdded.concat(1000);
+            currentCharacter.overCards = currentCharacter.overCards.concat(
+              activeCards.don
+            );
+          }
+
+          return currentCharacter;
+        });
+
         return {
-          ...currentBoard,
-          costs: currentBoard.costs.filter((cost) => {
-            return cost.uuid != activeCards.don.uuid;
-          }),
-          characters: currentBoard.characters.map((currentCharacter) => {
-            if (currentCharacter.uuid == character.uuid) {
-              return {
-                ...currentCharacter,
-                powerAdded: [...currentCharacter.powerAdded, 1000],
-                overCards: [...currentCharacter.overCards, activeCards.don],
-              };
-            }
-            return character;
-          }),
+          costs,
+          characters,
         };
       });
 
       this.deactivateCharacterSelectorAll();
+    },
+
+    restedMultipleDons(quantity = 1) {
+      const avaibleDons = board.costs.filter((item) => !item.rested);
+      const newRested = avaibleDons.slice(0, quantity).map((don) => {
+        return {
+          ...don,
+          rested: true,
+        };
+      });
+
+      setBoard((currentBoard) => {
+        return {
+          ...currentBoard,
+          costs: currentBoard.costs.map((cost) => {
+            const newDon = newRested.find((don) => don.uuid == cost.uuid);
+            if (newDon) return newDon;
+
+            return cost;
+          }),
+        };
+      });
+    },
+
+    addAttactToAllCharacters(attack = 1000) {
+      setBoard((currentBoard) => {
+        return {
+          ...currentBoard,
+          characters: currentBoard.characters.map((currentCharacter) => {
+            return {
+              ...currentCharacter,
+              powerAdded: [...currentCharacter.powerAdded, attack],
+            };
+          }),
+        };
+      });
+    },
+  };
+
+  const conditions = {
+    costs(don) {
+      return effectRules.costs({ board, don });
+    },
+    attack(card) {
+      return effectRules.attack({ board, card, game });
+    },
+    addAtkFromDon(don) {
+      return effectRules.addAtkFromDon({ board, game, don });
+    },
+    rest(card) {
+      return effectRules.rest({ board, card });
+    },
+    donSelect(card) {
+      return effectRules.donSelect({ game, card });
+    },
+    characterSelect(card) {
+      return effectRules.characterSelect({ game, card });
     },
   };
 
@@ -182,14 +232,37 @@ function DuelProvider({ children }) {
         console.log(constants.GAME_FAKE_STATE_CREATED, payload);
 
         joinRoom(SOCKET_DUEL_URL, payload.room);
-        setBoardOneState(payload.board);
-        setGameState(payload.game);
+        setNewBoard(payload.board);
+        setNewGameState(payload.game);
       });
     }
   }, [duelSocket]);
 
+  const setNewBoard = (data) => {
+    setBoard((state) => {
+      if (typeof data === "function") {
+        data = data({ board: state });
+      }
+
+      return new Player({
+        ...state,
+        ...data,
+      });
+    });
+  };
+
+  const setNewGameState = (game) => {
+    setGameState(
+      (state) =>
+        new GameState({
+          ...state,
+          ...game,
+        })
+    );
+  };
+
   return (
-    <DuelContext.Provider value={{ states, hooks, actions }}>
+    <DuelContext.Provider value={{ states, hooks, actions, conditions }}>
       {children}
       <button onClick={initDuelSocket}>Start</button>
       <button onClick={stopDuelSocket}>Stop</button>

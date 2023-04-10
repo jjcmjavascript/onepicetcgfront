@@ -5,9 +5,9 @@ import FieldCardFull from "../fieldCardFull";
 import CardOptionsCharacterArea from "./cardOptionsCharacterArea";
 import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
 
-function CharactedZone({ children }) {
+function CharactedZone() {
   const handOptionElementRef = useRef();
-  const { states, hooks, actions } = useContext(Store.DuelContext);
+  const { states, hooks, actions, conditions } = useContext(Store.DuelContext);
   const { boardOne } = states;
 
   const [boardOneState, setBoardOneState] = boardOne;
@@ -17,15 +17,31 @@ function CharactedZone({ children }) {
   const [effectPile] = states.effectPile;
   const [closeMenus] = states.closeMenus;
 
+  const menuOptionItems = useRef([]);
+
   const onMouseOver = (card) => {
     setPreview(card);
   };
 
-  const onMouseOut = (card) => {
+  const onMouseOut = () => {
     setPreview(null);
   };
 
+  const hideOptions = () => {
+    const optionsElement = handOptionElementRef.current;
+    optionsElement.classList.add("hideFull");
+    setActiveCard(null);
+  };
+
   const toggleOptions = (card) => {
+    prepareMenuOptions(card);
+
+    if (
+      boardOneState.locked ||
+      (closeMenus && !game.mode.includes("select:character"))
+    )
+      return;
+
     const cardHtmlElement = document.querySelector(`#id_${card.uuid}`);
     const optionsElement = handOptionElementRef.current;
 
@@ -40,66 +56,24 @@ function CharactedZone({ children }) {
     }
   };
 
-  const hideOptions = () => {
-    const optionsElement = handOptionElementRef.current;
-    optionsElement.classList.add("hideFull");
-    setActiveCard(null);
-    console.log(optionsElement, optionsElement.classList);
-  };
+  const prepareMenuOptions = (card) => {
+    menuOptionItems.current = [];
 
-  const restCard = () => {
-    const cardHtmlElement = document.querySelector(`#id_${activeCard.uuid}`);
-    cardHtmlElement.classList.toggle("field--card_full_used");
-  };
+    if (conditions.attack(card)) {
+      menuOptionItems.current.push(
+        <CardOptionCharacterAreaItem>Atacar</CardOptionCharacterAreaItem>
+      );
+    }
 
-  const discardCard = () => {
-    setBoardOneState((board) => {
-      return {
-        ...board,
-        trash: [...board.trash, activeCard],
-        characters: board.characters.filter(
-          (card) => card.uuid != activeCard.uuid
-        ),
-      };
-    });
-
-    hideOptions();
-  };
-
-  const returnCard = () => {
-    setBoardOneState((board) => {
-      return {
-        ...board,
-        characters: board.characters.filter(
-          (card) => card.uuid != activeCard.uuid
-        ),
-        hand: [...board.hand, activeCard],
-      };
-    });
-
-    hideOptions();
-  };
-
-  const putCardOnDeck = (position = "top") => {
-    const methods = {
-      top: "unshift",
-      bottom: "push",
-    };
-
-    const deck = [...boardOneState.deck];
-    deck[methods[position]](activeCard);
-
-    setBoardOneState((board) => {
-      return {
-        ...board,
-        characters: board.characters.filter(
-          (character) => character.uuid != activeCard.uuid
-        ),
-        deck: [...deck],
-      };
-    });
-
-    hideOptions();
+    if (conditions.characterSelect(card)) {
+      menuOptionItems.current.push(
+        <CardOptionCharacterAreaItem
+          onClick={() => actions.plusAttakFromDon(card)}
+        >
+          Seleccionar
+        </CardOptionCharacterAreaItem>
+      );
+    }
   };
 
   useEffect(() => {
@@ -112,39 +86,14 @@ function CharactedZone({ children }) {
     <>
       <div className="field--card_area">
         <CardOptionsCharacterArea ref={handOptionElementRef}>
-          {effectPile.restriction === "character:all" ? (
-            <>
-              <CardOptionCharacterAreaItem
-                onClick={() => actions.plusAttakFromDon(activeCard)}
-              >
-                Seleccionar
-              </CardOptionCharacterAreaItem>
-            </>
-          ) : (
-            <>
-              <CardOptionCharacterAreaItem>Atacar</CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem onClick={restCard}>
-                Rest
-              </CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem onClick={returnCard}>
-                Devolver
-              </CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem onClick={discardCard}>
-                Descartar
-              </CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem onClick={() => putCardOnDeck("top")}>
-                Colocar en Tope
-              </CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem
-                onClick={() => putCardOnDeck("bottom")}
-              >
-                Colocar en Fondo
-              </CardOptionCharacterAreaItem>
-              <CardOptionCharacterAreaItem onClick={hideOptions}>
-                Cerrar
-              </CardOptionCharacterAreaItem>
-            </>
-          )}
+          <>
+            {menuOptionItems.current.map((item, index) => (
+              <span key={index}> {item}</span>
+            ))}
+            <CardOptionCharacterAreaItem onClick={hideOptions}>
+              Cerrar
+            </CardOptionCharacterAreaItem>
+          </>
         </CardOptionsCharacterArea>
 
         {boardOneState.characters.map((card) => {
