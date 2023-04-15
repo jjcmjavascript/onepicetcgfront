@@ -14,11 +14,12 @@ const boardOne = new BoardGenerator({}).generateBoard();
 const enemyBoard = new BoardGenerator({}).generateBoard();
 const gameState = GameState.getDefault();
 const DuelContext = createContext();
-const activeCards = {
+const activeCardSchema = {
   don: null,
   character: null,
   hand: null,
   trash: null,
+  zone: null,
 };
 
 function DuelProvider({ children }) {
@@ -31,20 +32,13 @@ function DuelProvider({ children }) {
     decks: useState([]),
     selectedDeck: useState(""),
     gameState: useState(gameState),
-    effectPile: useState({
-      who: "",
-      restriction: "",
-      resolving: false,
-      pending: [],
-    }),
-    activeCards: useState(activeCards),
+    activeCards: useState(activeCardSchema),
     activeMenu: useState(null),
     closeMenus: useState(false),
   };
 
   const [game, setGameState] = states.gameState;
   const [board, setBoard] = states.boardOne;
-  const [effectPile, setEffectPile] = states.effectPile;
   const [activeCards, setActiveCards] = states.activeCards;
   const [, setActiveMenuName] = states.activeMenu;
   const [, setCloseMenus] = states.closeMenus;
@@ -54,28 +48,51 @@ function DuelProvider({ children }) {
   };
 
   const actions = {
-    setActiveMenuName(name) {
-      setActiveMenuName(name);
+    // events initializers
+    finishTurn() {},
+    initSumAttackFromDonEvent(card) {
+      console.log(constants.GAME_DON_PLUS, card);
+
+      // duelSocket.emit(constants.GAME_DON_PLUS, {
+      //   room: duelRoom,
+      //   donUuid: card.uuid,
+      // });
+
+      setNewGameState({
+        mode: "select:character:leader",
+      });
+      this.activateCharacterSelectorAll();
+      this.activateLeaderSelector();
     },
 
-    activeSelectToAddAttackFromDon(don) {
-      setCloseMenus(true);
+    // setters
+    mergeActiveCard(card, type) {
+      if (["select:character:leader"].includes(game.mode)) {
+        setActiveCards((state) => ({
+          ...activeCardSchema,
+          don: state.don,
+          [type]: card,
+        }));
+      } else {
+        setActiveCards({
+          ...activeCardSchema,
+          [type]: card,
+        });
+      }
+    },
 
-      setActiveCards((currentActiveCards) => {
+    activateLeaderSelector() {
+      setNewBoard(({ board }) => {
         return {
-          ...currentActiveCards,
-          don,
+          leader: {
+            ...board.leader,
+            toSelect: true,
+          },
         };
       });
-
-      this.activateCharacterSelectorAll();
     },
 
     activateCharacterSelectorAll() {
-      setNewGameState({
-        mode: "select:character",
-      });
-
       setNewBoard(({ board }) => {
         const characters = board.characters.map((character) => {
           character.toSelect = true;
@@ -88,11 +105,8 @@ function DuelProvider({ children }) {
       });
     },
 
-    async deactivateCharacterSelectorAll() {
-      await pause.sleep(100);
-      setCloseMenus(false);
-
-      setActiveCards({ ...activeCards });
+    deactivateCharacterSelectorAll() {
+      setActiveCards({ ...activeCardSchema });
 
       setNewGameState({
         mode: "",
@@ -110,31 +124,32 @@ function DuelProvider({ children }) {
       });
     },
 
-    async plusAttakFromDon(character) {
-      setCloseMenus(false);
-      await pause.sleep(100);
-      setCloseMenus(true);
+    plusAttakFromDon() {
+      const { character, leader, don } = activeCards;
 
       setNewBoard(({ board }) => {
-        const costs = board.costs.filter(
-          (cost) => cost.uuid != activeCards.don.uuid
-        );
+        let newCharacters = board.characters;
+        let newLeader = { ...board.leader };
+        const costs = board.costs.filter((cost) => cost.uuid != don.uuid);
 
-        const characters = board.characters.map((currentCharacter) => {
-          if (currentCharacter.uuid === character.uuid) {
-            currentCharacter.powerAdded =
-              currentCharacter.powerAdded.concat(1000);
-            currentCharacter.overCards = currentCharacter.overCards.concat(
-              activeCards.don
-            );
-          }
+        if (leader) {
+          newLeader.powerAdded = newLeader.powerAdded.concat(1000);
+          newLeader.overCards = newLeader.overCards.concat(don);
+        } else if (character) {
+          newCharacters = board.characters.map((item) => {
+            if (item.uuid === item.uuid) {
+              item.powerAdded = item.powerAdded.concat(1000);
+              item.overCards = item.overCards.concat(don);
+            }
 
-          return currentCharacter;
-        });
+            return item;
+          });
+        }
 
         return {
+          characters: newCharacters,
+          leader: newLeader,
           costs,
-          characters,
         };
       });
 
@@ -179,20 +194,28 @@ function DuelProvider({ children }) {
   };
 
   const conditions = {
-    costs(don) {
+    costs() {
+      const don = activeCards.don;
       return effectRules.costs({ board, don });
     },
-    attack(card) {
+    attack() {
+      const card = activeCards.character;
       return effectRules.attack({ board, card, game });
     },
-    addAtkFromDon(don) {
-      return effectRules.addAtkFromDon({ board, game, don });
+    canAddAtkFromDon() {
+      const don = activeCards.don;
+      return effectRules.canAddAtkFromDon({ game, don });
     },
-    rest(card) {
+    canShowSelectToAddAtkFromDon() {
+      return effectRules.canShowSelectToAddAtkFromDon({
+        activeCards,
+        game,
+        board,
+      });
+    },
+    rest() {
+      const card = activeCards.don || activeCards.character;
       return effectRules.rest({ board, card });
-    },
-    donSelect(card) {
-      return effectRules.donSelect({ game, card });
     },
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });

@@ -1,5 +1,6 @@
 import React from "react";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
+import DuelMenu from "../components/duelMenu/duelMenu";
 import Board from "../components/v1components/board";
 import EnemyBoard from "../components/v1Enemycomponents/board";
 import PhaseAlert from "../components/phaseAlert";
@@ -14,6 +15,8 @@ function VsPlayer() {
           <EnemyBoard />
           <Board />
         </div>
+        <DuelMenu />
+
       </div>
     </>
   );

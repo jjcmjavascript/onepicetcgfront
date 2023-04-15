@@ -10,7 +10,7 @@ function FieldCardFull({ card, onMouseOver, onMouseOut, id, onClick }) {
         onMouseOut={onMouseOut}
         onClick={onClick}
       >
-        {card && <img src={card._image.route} className="field--card__image rotated" />}
+        {card && <img src={card._image.route} className="field--card__image" />}
       </div>
     </>
   );

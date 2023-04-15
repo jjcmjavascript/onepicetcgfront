@@ -46,7 +46,7 @@
   display: grid;
   min-height: 50vh;
   max-height: 50vh;
-  width: 70vw;
+  width: 60vw;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -64,6 +64,7 @@
   max-height: 11.25vh;
   white-space: nowrap;
   position: relative;
+  padding: 3px;
 }
 
 .field--card_full {
@@ -72,7 +73,7 @@
   cursor: pointer;
   border-radius: 5px;
   transition: 0.2s;
-  padding: 4px;
+  padding: 3px;
   display: inline-block;
 }
 
@@ -114,11 +115,11 @@
 }
 
 .card_to_select {
-  box-shadow: 0px 0px 1px 2px #81c784;
+  box-shadow: 0px 0px 1px 2px #00e676;
 }
 
 .card_to_select__selected {
-  box-shadow: 0px 0px 1px px #1b5e20;
+  box-shadow: 0px 0px 1px px #00c853;
 }
 
 .bgBlack80 {

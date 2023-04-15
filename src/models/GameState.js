@@ -14,7 +14,7 @@ class GameState {
       turnNumber: 1,
       rockPaperScissorWinner: null,
       currentPhase: 'main',
-      mode: 'select:don;phase:main;quantity:all',
+      mode: '',
       plays: {
         1: [],
       },

@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function PhaseZone() {
-  const { states, hooks } = useContext(Store.DuelContext);
-  const [gameState, setGameState] = states.gameState;
+  const { states } = useContext(Store.DuelContext);
+  const [gameState] = states.gameState;
 
   const phases = [
     { short: "refresh", name: "Refresh Phase" },

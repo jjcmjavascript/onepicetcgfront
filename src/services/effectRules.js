@@ -18,12 +18,14 @@ export const costs = ({ board, quantity }) => {
   return costs.filter((cost) => !cost.rested).length >= quantity;
 };
 
-export const addAtkFromDon = ({ don, board, game }) => {
+export const canAddAtkFromDon = ({ don, game }) => {
+  return don && !don.rested && phase({ game, phase: 'main' }) && !game.mode;
+};
+
+export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
   return (
-    don &&
-    !don.rested &&
-    board.characters.length > 0 &&
-    phase({ game, phase: 'main' })
+    (activeCards.leader || activeCards.character) &&
+    game.mode === 'select:character:leader'
   );
 };
 
@@ -39,10 +41,6 @@ export const oncePerTurn = ({ board, game, effectName }) => {
 
 export const rest = ({ card }) => {
   return card && !card.rested;
-};
-
-export const donSelect = ({ game, card }) => {
-  return rest({ card }) && game.mode === 'select:don;phase:main;quantity:all';
 };
 
 export const characterSelect = ({ game, card }) => {

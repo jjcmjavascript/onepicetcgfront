@@ -12,9 +12,9 @@ export default function LeftSide({ className }) {
   const [filters, setFilters] = states.filters;
 
   const getMorePagesOnScroll = (event) => {
-    var scrollY = event.target.scrollHeight - event.target.scrollTop;
-    var height = event.target.offsetHeight;
-    var offset = height - scrollY;
+    let scrollY = event.target.scrollHeight - event.target.scrollTop;
+    let height = event.target.offsetHeight;
+    let offset = height - scrollY;
 
     if (offset === 0 || offset === 1) {
       if (filters.page + 1 <= paginate.nextPage) {

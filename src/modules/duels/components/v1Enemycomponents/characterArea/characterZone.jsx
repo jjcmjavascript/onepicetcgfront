@@ -100,7 +100,10 @@ function CharactedZone({ children }) {
 
   return (
     <>
-      <div className="field--card_area rotated">
+      <div
+        className="field--card_area rotated"
+        style={{ justifyContent: "end" }}
+      >
         <CardOptionsCharacterArea ref={handOptionElementRef}>
           <CardOptionCharacterAreaItem>Atacar</CardOptionCharacterAreaItem>
           <CardOptionCharacterAreaItem onClick={restCard}>
