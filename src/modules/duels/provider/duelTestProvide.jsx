@@ -3,45 +3,53 @@ import React, { createContext, useState, useEffect } from "react";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 
-import BoardGenerator from "../../../services/BoardGenerator";
 import * as effectRules from "../../../services/effectRules";
+
+import BoardGenerator from "../../../services/BoardGenerator";
 import GameState from "../../../models/GameState";
 import Player from "../../../models/Player";
 import constants from "../services/constants";
-import { pause } from "../../../helpers";
+import ActiveCard from "../../../models/ActiveCard";
 
-const boardOne = new BoardGenerator({}).generateBoard();
-const enemyBoard = new BoardGenerator({}).generateBoard();
-const gameState = GameState.getDefault();
+const State = GameState.getDefault();
+const Board = new BoardGenerator({}).generateBoard();
+const EnemyBoard = new BoardGenerator({}).generateBoard();
+const ActiveCardSchema = ActiveCard.getDefault();
+
 const DuelContext = createContext();
-const activeCardSchema = {
-  don: null,
-  character: null,
-  hand: null,
-  trash: null,
-  zone: null,
-  leader: null,
-};
 
 function DuelProvider({ children }) {
+  const boardOne = useState(Board);
+  const boardTwo = useState(EnemyBoard);
+  const gameState = useState(State);
+  const activeCard = useState(ActiveCardSchema);
+  const sockets = useSocket();
+
+  const [game, setGameState] = gameState;
+  const [board, setBoard] = boardOne;
+  const [activeCards, setActiveCards] = activeCard;
+
+  const {
+    duelSocket,
+    initDuelSocket,
+    stopDuelSocket,
+    joinRoom,
+    SOCKET_DUEL_URL,
+  } = sockets;
+
   const states = {
-    boardOne: useState(boardOne),
-    boardTwo: useState(enemyBoard),
+    boardOne,
+    boardTwo,
+    gameState,
+    activeCards: activeCard,
     preview: useState(null),
     showTrashModal: useState(false),
-    mode: useState("modeSelector"),
     decks: useState([]),
     selectedDeck: useState(""),
-    gameState: useState(gameState),
-    activeCards: useState(activeCardSchema),
   };
 
-  const [game, setGameState] = states.gameState;
-  const [board, setBoard] = states.boardOne;
-  const [activeCards, setActiveCards] = states.activeCards;
-
   const hooks = {
-    sockets: useSocket(),
+    sockets,
   };
 
   const actions = {
@@ -49,27 +57,29 @@ function DuelProvider({ children }) {
     finishTurn() {},
 
     initSumAttackFromDonEvent() {
-      const card = activeCards.don;
-      console.log(constants.GAME_DON_PLUS, card);
-
+      console.log(constants.GAME_DON_PLUS);
       // duelSocket.emit(constants.GAME_DON_PLUS, {
       //   room: duelRoom,
       //   donUuid: card.uuid,
       // });
 
-      setNewGameState({
-        mode: "select:character:leader",
-      });
+      setGameState((state) =>
+        state.merge({
+          mode: "select:character:leader",
+        })
+      );
       this.activateCharacterSelectorAll();
       this.activateLeaderSelector();
     },
 
     endSumAttackFromDonEvent() {
-      setActiveCards({ ...activeCardSchema });
+      setActiveCards((state) => state.getDefault());
 
-      setNewGameState({
-        mode: "",
-      });
+      setGameState((state) =>
+        state.merge({
+          mode: "",
+        })
+      );
 
       this.desactivateCharacterSelectorAll();
       this.desactivateLeaderSelector();
@@ -83,96 +93,99 @@ function DuelProvider({ children }) {
 
     // setters
     mergeActiveCard(card, type) {
-      console.log("mergeActiveCard", activeCards);
-
       if (["select:character:leader"].includes(game.mode)) {
-        setActiveCards((state) => ({
-          ...activeCardSchema,
-          don: state.don,
-          [type]: card,
-        }));
+        setActiveCards((state) =>
+          state.merge({
+            [type]: card,
+          })
+        );
       } else {
-        setActiveCards({
-          ...activeCardSchema,
-          [type]: card,
-        });
+        setActiveCards((state) =>
+          state.set({
+            [type]: card,
+          })
+        );
       }
     },
 
     activateLeaderSelector() {
-      setNewBoard(({ board }) => {
-        return {
+      setBoard((state) =>
+        state.merge({
           leader: {
-            ...board.leader,
+            ...state.leader,
             toSelect: true,
           },
-        };
-      });
+        })
+      );
     },
 
     activateCharacterSelectorAll() {
-      setNewBoard(({ board }) => {
-        const characters = board.characters.map((character) => {
-          character.toSelect = true;
-          return character;
-        });
-
-        return {
-          characters,
-        };
-      });
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            return { ...character, toSelect: true };
+          }),
+        })
+      );
     },
 
     desactivateCharacterSelectorAll() {
-      setNewBoard(({ board }) => {
-        return {
-          characters: board.characters.map((character) => {
-            character.toSelect = false;
-            return character;
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            return { ...character, toSelect: false };
           }),
-        };
-      });
+        })
+      );
     },
 
     desactivateLeaderSelector() {
-      setNewBoard(({ board }) => {
-        return {
+      setBoard((state) =>
+        state.merge({
           leader: {
-            ...board.leader,
+            ...state.leader,
             toSelect: false,
           },
-        };
-      });
+        })
+      );
     },
 
     plusAttakFromDon() {
       const { character, leader, don } = activeCards;
+      console.log(activeCards);
 
-      setNewBoard(({ board }) => {
-        let newCharacters = board.characters;
-        let newLeader = { ...board.leader };
-        const costs = board.costs.filter((cost) => cost.uuid != don.uuid);
+      setBoard((state) =>
+        state.merge({
+          costs: state.costs.filter((cost) => cost.uuid != don.uuid),
+          leader: {
+            ...state.leader,
+            powerAdded: leader
+              ? [...state.leader.powerAdded, 1000]
+              : state.leader.powerAdded,
+            overCards: leader
+              ? [...state.leader.overCards, don]
+              : state.leader.overCards,
+          },
 
-        if (leader) {
-          newLeader.powerAdded = newLeader.powerAdded.concat(1000);
-          newLeader.overCards = newLeader.overCards.concat(don);
-        } else if (character) {
-          newCharacters = board.characters.map((item) => {
-            if (item.uuid === item.uuid) {
-              item.powerAdded = item.powerAdded.concat(1000);
-              item.overCards = item.overCards.concat(don);
-            }
+          characters: character
+            ? state.characters.map((item) => {
+                let powerAdded = item.powerAdded;
+                let overCards = item.overCards;
 
-            return item;
-          });
-        }
+                if (item.uuid == character.uuid) {
+                  powerAdded = [...item.powerAdded, 1000];
+                  overCards = [...item.overCards, don];
+                }
 
-        return {
-          characters: newCharacters,
-          leader: newLeader,
-          costs,
-        };
-      });
+                return {
+                  ...item,
+                  powerAdded,
+                  overCards,
+                };
+              })
+            : state.characters,
+        })
+      );
 
       this.endSumAttackFromDonEvent();
     },
@@ -192,36 +205,28 @@ function DuelProvider({ children }) {
     },
 
     playCard(card) {
-      setNewBoard(({ board }) => {
-        return {
-          hand: board.hand.filter((handCard) => handCard.uuid !== card.uuid),
-          characters: [...board.characters, card],
-        };
-      });
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.filter((handCard) => handCard.uuid !== card.uuid),
+          characters: [...state.characters, card],
+        })
+      );
 
       this.restedMultipleDons(card.cost);
     },
 
     restedMultipleDons(quantity = 1) {
-      const avaibleDons = board.costs.filter((item) => !item.rested);
-      const newRested = avaibleDons.slice(0, quantity).map((don) => {
-        return {
-          ...don,
-          rested: true,
-        };
-      });
-
-      setBoard((currentBoard) => {
-        return {
-          ...currentBoard,
-          costs: currentBoard.costs.map((cost) => {
-            const newDon = newRested.find((don) => don.uuid == cost.uuid);
-            if (newDon) return newDon;
-
-            return cost;
+      setBoard((state) =>
+        state.merge({
+          costs: state.costs.map((cost) => {
+            quantity--;
+            return {
+              ...cost,
+              rested: quantity >= 0 ? true : cost.rested,
+            };
           }),
-        };
-      });
+        })
+      );
     },
   };
 
@@ -264,14 +269,6 @@ function DuelProvider({ children }) {
     },
   };
 
-  const {
-    duelSocket,
-    initDuelSocket,
-    stopDuelSocket,
-    joinRoom,
-    SOCKET_DUEL_URL,
-  } = hooks.sockets;
-
   const initState = () => {
     duelSocket.emit(constants.GAME_FAKE_STATE_CREATE, {
       gameState,
@@ -297,34 +294,13 @@ function DuelProvider({ children }) {
         console.log(constants.GAME_FAKE_STATE_CREATED, payload);
 
         joinRoom(SOCKET_DUEL_URL, payload.room);
-        setNewBoard(payload.board);
-        setNewGameState(payload.game);
+
+        setBoard((state) => state.merge(payload.board));
+
+        setGameState((state) => state.merge(payload.game));
       });
     }
   }, [duelSocket]);
-
-  const setNewBoard = (data) => {
-    setBoard((state) => {
-      if (typeof data === "function") {
-        data = data({ board: state });
-      }
-
-      return new Player({
-        ...state,
-        ...data,
-      });
-    });
-  };
-
-  const setNewGameState = (game) => {
-    setGameState(
-      (state) =>
-        new GameState({
-          ...state,
-          ...game,
-        })
-    );
-  };
 
   return (
     <DuelContext.Provider value={{ states, hooks, actions, conditions }}>

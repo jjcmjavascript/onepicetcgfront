@@ -19,5 +19,27 @@ class Player {
     this.deck = player.deck || [];
     this.hand = player.hand || [];
   }
+
+  static getDefault() {
+    return new Player({});
+  }
+
+  getDefault() {
+    return Player.getDefault();
+  }
+
+  set(player) {
+    return new Player({
+      ...Player.getDefault(),
+      ...player,
+    });
+  }
+
+  merge(player) {
+    return new Player({
+      ...this,
+      ...player,
+    });
+  }
 }
 export default Player;

@@ -28,7 +28,7 @@ function FieldCardFull(
         onMouseOut={onMouseOut}
         onClick={onClick}
       >
-        <FieldCardEffectList card={card} />
+        {card && <FieldCardEffectList card={card} />}
 
         {card && <img src={card._image.route} className="field--card__image" />}
       </div>

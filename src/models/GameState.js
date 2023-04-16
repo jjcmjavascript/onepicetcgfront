@@ -21,8 +21,26 @@ class GameState {
     });
   }
 
+  getDefault() {
+    return GameState.getDefault();
+  }
+
   get currentPlays() {
     return this.plays[this.turnNumber] || [];
+  }
+
+  set(gameState) {
+    return new GameState({
+      ...GameState.getDefault(),
+      ...gameState,
+    });
+  }
+
+  merge(gameState) {
+    return new GameState({
+      ...this,
+      ...gameState,
+    });
   }
 }
 
