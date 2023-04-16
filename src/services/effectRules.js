@@ -1,15 +1,17 @@
+const playAttack = 'play:attack';
+const phaseMain = 'game:phase:main';
+const gameModeSelectCharacter = 'game:mode:select:character';
+const gameModeSelectCharacterLeader = 'game:mode:select:character:leader';
+
 export const attack = ({ board, game, card }) => {
   const currentTurnPlays = game.currentPlays;
   const canPhase = phase({ board, game, phase: 'main' });
-
-  return (
-    canPhase &&
-    game.mode === '' &&
-    !currentTurnPlays.find(
-      (play) =>
-        play.card && play.card.uuid === card.uuid && play.type === 'attack'
-    )
+  const play = currentTurnPlays.find(
+    (play) =>
+      play.card && play.card.uuid === card.uuid && play.type === 'attack'
   );
+
+  return canPhase && game.mode === '' && !play;
 };
 
 export const costs = ({ board, quantity }) => {
@@ -31,7 +33,7 @@ export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
 
 export const phase = ({ game, phase }) => game.currentPhase === phase;
 
-export const oncePerTurn = ({ board, game, effectName }) => {
+export const oncePerTurn = ({ game, effectName }) => {
   const currentTurnPlays = game.currentPlays;
 
   return !currentTurnPlays.find((play) => {
@@ -46,3 +48,13 @@ export const rest = ({ card }) => {
 export const characterSelect = ({ game, card }) => {
   return rest({ card }) && game.mode === 'select:character';
 };
+
+export const canPlayCard = ({ card, board, game }) => {
+  const canPhase = phase({ game, phase: 'main' });
+  const canCost = card && costs({ board, quantity: card.cost });
+  const canPlay = !game.mode && canPhase && canCost;
+
+  return canPlay;
+};
+
+export const canActiveEffect = () => {};

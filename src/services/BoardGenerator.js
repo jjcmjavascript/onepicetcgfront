@@ -49,7 +49,7 @@ class DeckGenerator {
   }
 
   generateCosts() {
-    this.board.costs = this.board.dons.splice(0, 2);
+    this.board.costs = this.board.dons.splice(0, 9);
 
     return this;
   }

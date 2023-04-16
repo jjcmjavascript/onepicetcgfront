@@ -20,6 +20,7 @@ const activeCardSchema = {
   hand: null,
   trash: null,
   zone: null,
+  leader: null,
 };
 
 function DuelProvider({ children }) {
@@ -33,15 +34,11 @@ function DuelProvider({ children }) {
     selectedDeck: useState(""),
     gameState: useState(gameState),
     activeCards: useState(activeCardSchema),
-    activeMenu: useState(null),
-    closeMenus: useState(false),
   };
 
   const [game, setGameState] = states.gameState;
   const [board, setBoard] = states.boardOne;
   const [activeCards, setActiveCards] = states.activeCards;
-  const [, setActiveMenuName] = states.activeMenu;
-  const [, setCloseMenus] = states.closeMenus;
 
   const hooks = {
     sockets: useSocket(),
@@ -50,7 +47,9 @@ function DuelProvider({ children }) {
   const actions = {
     // events initializers
     finishTurn() {},
-    initSumAttackFromDonEvent(card) {
+
+    initSumAttackFromDonEvent() {
+      const card = activeCards.don;
       console.log(constants.GAME_DON_PLUS, card);
 
       // duelSocket.emit(constants.GAME_DON_PLUS, {
@@ -65,8 +64,27 @@ function DuelProvider({ children }) {
       this.activateLeaderSelector();
     },
 
+    endSumAttackFromDonEvent() {
+      setActiveCards({ ...activeCardSchema });
+
+      setNewGameState({
+        mode: "",
+      });
+
+      this.desactivateCharacterSelectorAll();
+      this.desactivateLeaderSelector();
+    },
+
+    initPlayCard() {
+      const card = activeCards.hand;
+
+      this.playCard(card);
+    },
+
     // setters
     mergeActiveCard(card, type) {
+      console.log("mergeActiveCard", activeCards);
+
       if (["select:character:leader"].includes(game.mode)) {
         setActiveCards((state) => ({
           ...activeCardSchema,
@@ -105,21 +123,24 @@ function DuelProvider({ children }) {
       });
     },
 
-    deactivateCharacterSelectorAll() {
-      setActiveCards({ ...activeCardSchema });
-
-      setNewGameState({
-        mode: "",
-      });
-
+    desactivateCharacterSelectorAll() {
       setNewBoard(({ board }) => {
-        const characters = board.characters.map((character) => {
-          character.toSelect = false;
-          return character;
-        });
-
         return {
-          characters,
+          characters: board.characters.map((character) => {
+            character.toSelect = false;
+            return character;
+          }),
+        };
+      });
+    },
+
+    desactivateLeaderSelector() {
+      setNewBoard(({ board }) => {
+        return {
+          leader: {
+            ...board.leader,
+            toSelect: false,
+          },
         };
       });
     },
@@ -153,7 +174,32 @@ function DuelProvider({ children }) {
         };
       });
 
-      this.deactivateCharacterSelectorAll();
+      this.endSumAttackFromDonEvent();
+    },
+
+    addAttactToAllCharacters(attack = 1000) {
+      setBoard((currentBoard) => {
+        return {
+          ...currentBoard,
+          characters: currentBoard.characters.map((currentCharacter) => {
+            return {
+              ...currentCharacter,
+              powerAdded: [...currentCharacter.powerAdded, attack],
+            };
+          }),
+        };
+      });
+    },
+
+    playCard(card) {
+      setNewBoard(({ board }) => {
+        return {
+          hand: board.hand.filter((handCard) => handCard.uuid !== card.uuid),
+          characters: [...board.characters, card],
+        };
+      });
+
+      this.restedMultipleDons(card.cost);
     },
 
     restedMultipleDons(quantity = 1) {
@@ -173,20 +219,6 @@ function DuelProvider({ children }) {
             if (newDon) return newDon;
 
             return cost;
-          }),
-        };
-      });
-    },
-
-    addAttactToAllCharacters(attack = 1000) {
-      setBoard((currentBoard) => {
-        return {
-          ...currentBoard,
-          characters: currentBoard.characters.map((currentCharacter) => {
-            return {
-              ...currentCharacter,
-              powerAdded: [...currentCharacter.powerAdded, attack],
-            };
           }),
         };
       });
@@ -219,6 +251,16 @@ function DuelProvider({ children }) {
     },
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });
+    },
+    canActiveEffect() {
+      return effectRules.canActiveEffect({ activeCards, game, board });
+    },
+    canPlayCard() {
+      return effectRules.canPlayCard({
+        card: activeCards.hand,
+        game,
+        board,
+      });
     },
   };
 

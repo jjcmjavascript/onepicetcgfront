@@ -14,21 +14,29 @@ function duelMenu() {
     ),
   ];
 
-  if (conditions.canAddAtkFromDon(activeCards.don)) {
+  if (conditions.canAddAtkFromDon()) {
     menuOptionItems.push((key) => (
-      <button
-        key={key}
-        onClick={() => actions.initSumAttackFromDonEvent(activeCards.don)}
-      >
+      <button key={key} onClick={() => actions.initSumAttackFromDonEvent()}>
         +1000
       </button>
     ));
   }
 
-  if (conditions.canShowSelectToAddAtkFromDon(activeCards)) {
+  if (conditions.canShowSelectToAddAtkFromDon()) {
     menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.plusAttakFromDon(activeCards)}>
+      <button key={key} onClick={() => actions.plusAttakFromDon()}>
         {(activeCards.leader || activeCards.character || {}).name} : +1000
+      </button>
+    ));
+  }
+
+  if (conditions.canActiveEffect(activeCards)) {
+  }
+
+  if (conditions.canPlayCard()) {
+    menuOptionItems.push((key) => (
+      <button key={key} onClick={() => actions.initPlayCard()}>
+        Jugar
       </button>
     ));
   }

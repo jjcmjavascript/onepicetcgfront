@@ -58,7 +58,7 @@ class Card {
     const fakeCard = {
       id: faker.datatype.uuid(),
       uuid: faker.datatype.uuid(),
-      cost: faker.datatype.number({ min: 1, max: 10 }),
+      cost: faker.datatype.number({ min: 1, max: 1 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
       power: faker.helpers.arrayElement(
@@ -89,13 +89,26 @@ class Card {
       asiaUsable: faker.datatype.boolean(),
       colors: faker.helpers.arrayElements(
         ['RED', 'GREEN', 'BLUE', 'YELLOW'],
-        faker.datatype.number({ min: 1, max: 4 })
+        faker.datatype.number({ min: 1, max: 2 })
       ),
-      type: faker.helpers.arrayElement(['MONSTER', 'SPELL', 'ITEM']),
+      type: faker.helpers.arrayElement([
+        {
+          id: 3,
+          name: 'Character',
+        },
+        {
+          id: 5,
+          name: 'Stage',
+        },
+        {
+          id: 4,
+          name: 'Event',
+        },
+      ]),
       pack: faker.lorem.word(),
       categories: faker.helpers.arrayElements(
         ['DRAGON', 'NINJA', 'ZOMBIE', 'MACHINE'],
-        faker.datatype.number({ min: 1, max: 4 })
+        faker.datatype.number({ min: 1, max: 2 })
       ),
       _image: {
         route: imagen,

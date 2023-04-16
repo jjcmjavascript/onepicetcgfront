@@ -4,26 +4,10 @@ import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
 import Trash from "./trash";
 
-import DeckOptions from "./deckOptions";
-import DeckOptionItem from "./deckOptionItem";
-
-import TrashOptions from "./deckOptions";
-import TrashOptionItem from "./deckOptionItem";
-
-import LeaderOptions from "./deckOptions";
-import LeaderOptionItem from "./deckOptionItem";
-
-import { shuffle } from "../../../../../helpers";
-
 function LeaderZone({ children }) {
   const trashElementRef = useRef();
-  const trashOptionElementRef = useRef();
-
   const deckElementRef = useRef();
-  const deckOptionElementRef = useRef();
-
   const leaderElementRef = useRef();
-  const leaderOptionElementRef = useRef();
 
   const { states, actions } = useContext(Store.DuelContext);
   const [board] = states.boardOne;
@@ -44,7 +28,7 @@ function LeaderZone({ children }) {
         <FieldCardFull
           ref={leaderElementRef}
           card={board.leader}
-          onClick={() => actions.mergeActiveCard(board.leader, "leader")}
+          onClick={()=> actions.mergeActiveCard(board.leader, "leader")}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
         />

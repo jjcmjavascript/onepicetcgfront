@@ -1,6 +1,7 @@
 import React, { useContext, memo } from "react";
 import Store from "../../../provider/duelProvider";
 
+import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
 
 function DonZone() {
@@ -10,15 +11,17 @@ function DonZone() {
   return (
     <>
       <div className="field--card_area">
-        {board.costs.map((card) => {
-          const id = `id_${card.uuid}`;
+        <DonCard card={board.don} quantity={board.dons.length} />
 
+        <div className="field--card_half"></div>
+
+        {board.costs.map((card) => {
           return (
             <DonCardHalf
               card={card}
-              key={id}
+              key={card.uuid}
               onClick={() => actions.mergeActiveCard(card, "don")}
-              id={id}
+              id={card.uuid}
             />
           );
         })}
