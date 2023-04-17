@@ -47,6 +47,9 @@ function DuelProvider({ children }) {
   };
 
   const actions = {
+    isMyTurn() {
+      return game.currentTurnPlayerId === board.id;
+    },
     // events initializers
     finishTurn() {},
 

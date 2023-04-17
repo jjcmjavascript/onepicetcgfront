@@ -6,6 +6,8 @@ class GameState {
     this.turnNumber = gameState.turnNumber;
     this.rockPaperScissorWinner = gameState.rockPaperScissorWinner;
     this.mode = gameState.mode;
+    this.pendingEffects = gameState.pendingEffects || [];
+    this.continuesEffects = gameState.continuesEffects || [];
   }
 
   static getDefault() {
@@ -15,6 +17,8 @@ class GameState {
       rockPaperScissorWinner: null,
       currentPhase: 'main',
       mode: '',
+      pendingEffects: [],
+      continuesEffects: [],
       plays: {
         1: [],
       },

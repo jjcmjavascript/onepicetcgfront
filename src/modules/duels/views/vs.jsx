@@ -82,18 +82,15 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_INITIAL_BOARD_STATE, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      console.log(constants.GAME_INITIAL_BOARD_STATE);
+      setBoardOneState((state) => state.set(payload.board));
 
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.rivalBoard };
-      });
+      setBoardTwoState((state) => state.set(payload.rivalBoard));
     });
 
     duelSocket.on(constants.GAME_STATE, (payload) => {
-      console.log(constants.GAME_STATE);
-      setGameState(payload.game);
+      console.log(constants.GAME_STATE, payload);
+      setGameState((state) => state.set(payload.game));
     });
 
     duelSocket.on(constants.GAME_PHASES_MULLIGAN, (payload) => {
@@ -112,19 +109,19 @@ function wrapper() {
     duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
       console.log(constants.GAME_MULLIGAN);
 
-      setBoardOneState(payload.board);
+      setBoardOneState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_RIVAL_MULLIGAN, (payload) => {
       console.log(constants.GAME_RIVAL_MULLIGAN);
 
-      setBoardTwoState(payload.board);
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
-      console.log(constants.GAME_PHASES_REFRESH);
+      console.log(constants.GAME_PHASES_REFRESH, payload);
 
-      setBoardOneState(payload.board);
+      setBoardOneState((state) => state.set(payload.board));
 
       duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
         room: payload.room,
@@ -134,17 +131,13 @@ function wrapper() {
     duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
       console.log(constants.GAME_RIVAL_PHASES_REFRESH);
 
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
       console.log(constants.GAME_PHASES_DRAW);
 
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardOneState((state) => state.set(payload.board));
 
       duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
         room: payload.room,
@@ -154,17 +147,13 @@ function wrapper() {
     duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
       console.log(constants.GAME_RIVAL_PHASES_DRAW);
 
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
       console.log(constants.GAME_PHASES_DON);
 
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardOneState((state) => state.set(payload.board));
 
       duelSocket.emit(constants.GAME_PHASES_DON_END, {
         room: payload.room,
@@ -174,9 +163,7 @@ function wrapper() {
     duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
       console.log(constants.GAME_RIVAL_PHASES_DON);
 
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
@@ -186,14 +173,6 @@ function wrapper() {
     duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
       console.log(constants.GAME_RIVAL_PHASES_MAIN);
     });
-
-    // duelSocket.on(constants.GAME_PHASE_END, (payload) => {
-    //   console.log(constants.GAME_PHASE_END);
-    // });
-
-    // duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
-    //   console.log(constants.GAME_RIVAL_PHASES_END);
-    // });
 
     duelSocket.on(constants.GAME_DON_PLUS, (payload) => {
       console.log(constants.GAME_DON_PLUS);

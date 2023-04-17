@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function PhaseZone() {
-  const { states } = useContext(Store.DuelContext);
+  const { states, actions } = useContext(Store.DuelContext);
   const [gameState] = states.gameState;
 
   const phases = [
@@ -14,7 +14,16 @@ function PhaseZone() {
   ];
 
   const getClass = (phase, gameState) => {
-    return phase.short === gameState.currentPhase ? "active--phase" : "";
+    let defaultClass = "";
+    if (phase.short === gameState.currentPhase) {
+      defaultClass = defaultClass.concat(" active--phase");
+    }
+
+    if(!actions.isMyTurn()) {
+      defaultClass = defaultClass.concat(" bg-primary");
+    }
+
+    return defaultClass;
   };
 
   return (
