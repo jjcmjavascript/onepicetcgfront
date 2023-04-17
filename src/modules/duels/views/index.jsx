@@ -22,8 +22,8 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      {/* <DuelMode></DuelMode> */}
-      <VsPlayer></VsPlayer>
+      <DuelMode></DuelMode>
+      {/* <VsPlayer></VsPlayer> */}
 
     </Store.DuelProvider>
   );
