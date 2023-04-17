@@ -5,7 +5,7 @@ function FieldCardFull({ card, onMouseOver, onMouseOut, id, onClick }) {
     <>
       <div
         id={id}
-        className="field--card_full"
+        className="field--card_full rotated"
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
         onClick={onClick}

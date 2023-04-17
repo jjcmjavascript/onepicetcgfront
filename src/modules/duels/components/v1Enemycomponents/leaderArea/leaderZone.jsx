@@ -129,7 +129,7 @@ function LeaderZone({ children }) {
           onClick={toggleDeckOptions}
         />
 
-        <div className="field--card_half"></div>
+        <div className="field--card_half rotated"></div>
 
         <Trash
           ref={trashElementRef}

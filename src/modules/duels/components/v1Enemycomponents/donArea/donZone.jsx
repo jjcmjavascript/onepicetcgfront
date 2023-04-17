@@ -13,7 +13,7 @@ function DonZone({ children }) {
       <div className="field--card_area">
         <DonCard card={board.don} quantity={board.dons.length} />
 
-        <div className="field--card_half"></div>
+        <div className="field--card_half rotated"></div>
 
         {board.costs.map((card) => {
           const id = `id_${card.uuid}`;
