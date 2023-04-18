@@ -12,10 +12,10 @@ import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
 const State = GameState.getDefault();
-const Board = new BoardGenerator({}).generateBoard().merge({
+const Board = new BoardGenerator({}).generateDeckStructure().merge({
   id: 0,
 });
-const EnemyBoard = new BoardGenerator({}).generateBoard();
+const EnemyBoard = new BoardGenerator({}).generateDeckStructure();
 const ActiveCardSchema = ActiveCard.getDefault();
 
 const DuelContext = createContext();
@@ -55,6 +55,10 @@ function DuelProvider({ children }) {
     sockets,
   };
 
+  const exampleEffect = {};
+
+  const resolver = () => {};
+
   const actions = {
     isMyTurn() {
       return game.currentTurnPlayerId === board.id;
@@ -65,6 +69,7 @@ function DuelProvider({ children }) {
         room: duelRoom,
       });
     },
+
     // events initializers
     initSumAttackFromDonEvent() {
       setGameState((state) =>
@@ -95,7 +100,28 @@ function DuelProvider({ children }) {
       this.playCard(card);
     },
 
-    // setters
+    initReplaceCharacter() {
+      setGameState((state) =>
+        state.merge({
+          mode: "select:character:type",
+        })
+      );
+      this.activateCharacterSelectorAll();
+    },
+
+    cancelar() {
+      setGameState((state) =>
+        state.merge({
+          mode: "",
+        })
+      );
+
+      setActiveCards((state) => state.getDefault());
+
+      this.desactivateCharacterSelectorAll();
+      this.desactivateLeaderSelector();
+    },
+
     mergeActiveCard(card, type) {
       if (["select:character:leader"].includes(game.mode)) {
         setActiveCards((state) =>
@@ -156,7 +182,6 @@ function DuelProvider({ children }) {
 
     plusAttakFromDon() {
       const { character, leader, don } = activeCards;
-      console.log(activeCards);
 
       setBoard((state) =>
         state.merge({
@@ -216,6 +241,8 @@ function DuelProvider({ children }) {
         })
       );
 
+      setActiveCards((state) => state.getDefault());
+
       this.restedMultipleDons(card.cost);
     },
 
@@ -272,8 +299,15 @@ function DuelProvider({ children }) {
     canActiveEffect() {
       return effectRules.canActiveEffect({ activeCards, game, board });
     },
-    canPlayCard() {
-      return effectRules.canPlayCard({
+    canReplaceCharacter() {
+      return effectRules.canReplaceCharacter({
+        card: activeCards.hand,
+        game,
+        board,
+      });
+    },
+    canPlayCardCharacter() {
+      return effectRules.canPlayCardCharacter({
         card: activeCards.hand,
         game,
         board,

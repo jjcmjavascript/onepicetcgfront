@@ -215,6 +215,8 @@ function DuelProvider({ children }) {
         })
       );
 
+      setActiveCards((state) => state.getDefault());
+
       this.restedMultipleDons(card.cost);
     },
 

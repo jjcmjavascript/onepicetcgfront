@@ -5,6 +5,7 @@ function CardPreview() {
   const { states, hooks } = useContext(Store.DuelContext);
   const [preview] = states.preview;
 
+  console.log(preview && preview.type);
   return (
     <>
       <div className="previewAndPhaseZone--preview">
@@ -15,7 +16,9 @@ function CardPreview() {
           />
         )}
       </div>
-      <span className="text_preview text-light">{preview && preview.card_text}</span>
+      <span className="text_preview text-light">
+        {preview && preview.card_text}
+      </span>
     </>
   );
 }

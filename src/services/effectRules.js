@@ -57,4 +57,20 @@ export const canPlayCard = ({ card, board, game }) => {
   return canPlay;
 };
 
+export const canPlayCardCharacter = ({ card, board, game }) => {
+  return (
+    canPlayCard({ card, board, game }) &&
+    card.type === 'Character' &&
+    board.characters.length < 5
+  );
+};
+
+export const canReplaceCharacter = ({ card, board, game }) => {
+  return (
+    canPlayCard({ card, board, game }) &&
+    card.type === 'Character' &&
+    board.characters.length === 5
+  );
+};
+
 export const canActiveEffect = () => {};

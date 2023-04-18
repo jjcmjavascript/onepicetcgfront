@@ -65,6 +65,33 @@ class DeckGenerator {
 
     return this.board;
   }
+
+  generateDeckStructure() {
+    const deck = Card.generateFakeDeck({
+      character: 36,
+      leader: 1,
+      stage: 4,
+      event: 10,
+      dons: 10,
+    });
+
+    const characters = deck.filter((card) => card.type === 'Character');
+    const leaders = deck.filter((card) => card.type === 'Leader');
+    const stages = deck.filter((card) => card.type === 'Stage');
+    const events = deck.filter((card) => card.type === 'Event');
+    const dons = deck.filter((card) => card.type === 'Don');
+
+    this.board.leader = leaders[0];
+    this.board.don = dons[0];
+    this.board.dons = dons;
+    this.board.costs = dons.splice(0, 7);
+    this.board.characters = characters.splice(0, 1);
+    this.board.deck = [...characters, ...stages, ...events]
+    this.board.lives = this.board.deck.splice(0, this.board.leader.lives);
+    this.board.hand = this.board.deck.splice(0, 5);
+
+    return this.board;
+  }
 }
 
 export default DeckGenerator;

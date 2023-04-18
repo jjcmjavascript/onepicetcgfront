@@ -4,43 +4,59 @@ import Store from "../../provider/duelProvider";
 function duelMenu() {
   const { states, actions, conditions } = useContext(Store.DuelContext);
 
+  const [boardOne] = states.boardOne;
   const [activeCards] = states.activeCards;
 
   const menuOptionItems = [];
 
-  if (actions.isMyTurn()) {
+  if (!boardOne.locked) {
+    if (conditions.canAddAtkFromDon()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.initSumAttackFromDonEvent()}>
+          +1000
+        </button>
+      ));
+    }
+
+    if (conditions.canShowSelectToAddAtkFromDon()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.plusAttakFromDon()}>
+          {(activeCards.leader || activeCards.character || {}).name} : +1000
+        </button>
+      ));
+    }
+
+    if (conditions.canActiveEffect(activeCards)) {
+    }
+
+    if (conditions.canPlayCardCharacter()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.initPlayCard()}>
+          Jugar
+        </button>
+      ));
+    }
+
+    if (conditions.canReplaceCharacter()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.initReplaceCharacter()}>
+          Jugar (remplazar)
+        </button>
+      ));
+    }
+
     menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.finishTurn()}>
-        Terminar Turno
+      <button key={key} onClick={() => actions.cancelar()}>
+        Cancelar
       </button>
     ));
-  }
-
-  if (conditions.canAddAtkFromDon()) {
-    menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.initSumAttackFromDonEvent()}>
-        +1000
-      </button>
-    ));
-  }
-
-  if (conditions.canShowSelectToAddAtkFromDon()) {
-    menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.plusAttakFromDon()}>
-        {(activeCards.leader || activeCards.character || {}).name} : +1000
-      </button>
-    ));
-  }
-
-  if (conditions.canActiveEffect(activeCards)) {
-  }
-
-  if (conditions.canPlayCard()) {
-    menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.initPlayCard()}>
-        Jugar
-      </button>
-    ));
+    if (actions.isMyTurn()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.finishTurn()}>
+          Terminar Turno
+        </button>
+      ));
+    }
   }
 
   return (

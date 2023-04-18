@@ -92,18 +92,11 @@ class Card {
         faker.datatype.number({ min: 1, max: 2 })
       ),
       type: faker.helpers.arrayElement([
-        {
-          id: 3,
-          name: 'Character',
-        },
-        {
-          id: 5,
-          name: 'Stage',
-        },
-        {
-          id: 4,
-          name: 'Event',
-        },
+        'Event',
+        'Character',
+        'Stage',
+        'Leader',
+        'Don',
       ]),
       pack: faker.lorem.word(),
       categories: faker.helpers.arrayElements(
@@ -125,6 +118,7 @@ class Card {
       effects: [
         {
           name: 'zoroEffect',
+          trigger: 'onPlay',
           conditions: {
             phase: 'main',
             cost: 1,
@@ -134,6 +128,42 @@ class Card {
     };
 
     return new Card(fakeCard);
+  }
+
+  static generateFakeDeck({ character, leader, stage, event, dons }) {
+    let deck = [];
+
+    for (let i = 0; i < character; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Character';
+      deck.push(card);
+    }
+
+    for (let i = 0; i < leader; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Leader';
+      deck.push(card);
+    }
+
+    for (let i = 0; i < stage; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Stage';
+      deck.push(card);
+    }
+
+    for (let i = 0; i < event; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Event';
+      deck.push(card);
+    }
+
+    for (let i = 0; i < dons; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Don';
+      deck.push(card);
+    }
+
+    return deck;
   }
 }
 
