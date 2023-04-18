@@ -6,13 +6,15 @@ function duelMenu() {
 
   const [activeCards] = states.activeCards;
 
-  const menuOptionItems = [
-    (key) => (
-      <button key={key} onClick={actions.finishTurn}>
+  const menuOptionItems = [];
+
+  if (actions.isMyTurn()) {
+    menuOptionItems.push((key) => (
+      <button key={key} onClick={() => actions.finishTurn()}>
         Terminar Turno
       </button>
-    ),
-  ];
+    ));
+  }
 
   if (conditions.canAddAtkFromDon()) {
     menuOptionItems.push((key) => (

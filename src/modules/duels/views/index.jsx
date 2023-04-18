@@ -9,6 +9,8 @@ import VsPlayer from "../components/vsPlayer";
 import "../components/css/duel.css";
 import "../components/css/boardV1.css";
 
+const testMode = process.env.REACT_APP_TEST_BOARD;
+
 const views = {
   "/duels": <Mode />,
   "/duels/vsplayer": <Vs />,
@@ -22,9 +24,7 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      <DuelMode></DuelMode>
-      {/* <VsPlayer></VsPlayer> */}
-
+      {testMode ? <VsPlayer /> : <DuelMode />}
     </Store.DuelProvider>
   );
 }

@@ -34,6 +34,7 @@ function DuelProvider({ children }) {
     initDuelSocket,
     stopDuelSocket,
     joinRoom,
+    duelRoom,
     SOCKET_DUEL_URL,
   } = sockets;
 
@@ -56,9 +57,13 @@ function DuelProvider({ children }) {
     isMyTurn() {
       return game.currentTurnPlayerId === board.id;
     },
-    // events initializers
-    finishTurn() {},
 
+    finishTurn() {
+      duelSocket.emit(constants.GAME_TURN_END, {
+        room: duelRoom,
+      });
+    },
+    // events initializers
     initSumAttackFromDonEvent() {
       console.log(constants.GAME_DON_PLUS);
       // duelSocket.emit(constants.GAME_DON_PLUS, {

@@ -30,6 +30,7 @@ function DuelProvider({ children }) {
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
   const [activeCards, setActiveCards] = activeCard;
+  const { duelSocket, duelRoom } = sockets;
 
   const states = {
     boardOne,
@@ -50,9 +51,14 @@ function DuelProvider({ children }) {
     isMyTurn() {
       return game.currentTurnPlayerId === board.id;
     },
-    // events initializers
-    finishTurn() {},
 
+    finishTurn() {
+      duelSocket.emit(constants.GAME_TURN_END, {
+        room: duelRoom,
+      });
+    },
+
+    // events initializers
     initSumAttackFromDonEvent() {
       console.log(constants.GAME_DON_PLUS);
       // duelSocket.emit(constants.GAME_DON_PLUS, {
@@ -285,7 +291,6 @@ function DuelProvider({ children }) {
     </DuelContext.Provider>
   );
 }
+const duelProvider = { DuelProvider, DuelContext };
 
-export default testMode !== "true"
-  ? duelTestProvide
-  : { DuelProvider, DuelContext };
+export default Boolean(testMode) === true ? duelTestProvide : duelProvider;
