@@ -12,7 +12,9 @@ import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
 const State = GameState.getDefault();
-const Board = new BoardGenerator({}).generateBoard();
+const Board = new BoardGenerator({}).generateBoard().merge({
+  id: 0,
+});
 const EnemyBoard = new BoardGenerator({}).generateBoard();
 const ActiveCardSchema = ActiveCard.getDefault();
 
@@ -224,17 +226,25 @@ function DuelProvider({ children }) {
     },
 
     restedMultipleDons(quantity = 1) {
-      setBoard((state) =>
-        state.merge({
-          costs: state.costs.map((cost) => {
-            quantity--;
+      setBoard((state) => {
+        let costs = state.costs;
+
+        if (quantity > 0) {
+          costs = state.costs.map((cost) => {
+            const canRested = !cost.rested && quantity > 0;
+            canRested && quantity--;
+
             return {
               ...cost,
-              rested: quantity >= 0 ? true : cost.rested,
+              rested: canRested ? true : cost.rested,
             };
-          }),
-        })
-      );
+          });
+        }
+
+        return state.merge({
+          costs,
+        });
+      });
     },
   };
 

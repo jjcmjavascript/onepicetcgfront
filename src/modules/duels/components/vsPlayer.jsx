@@ -16,7 +16,6 @@ function VsPlayer() {
           <Board />
         </div>
         <DuelMenu />
-
       </div>
     </>
   );
