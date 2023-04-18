@@ -67,12 +67,6 @@ function DuelProvider({ children }) {
     },
     // events initializers
     initSumAttackFromDonEvent() {
-      console.log(constants.GAME_DON_PLUS);
-      // duelSocket.emit(constants.GAME_DON_PLUS, {
-      //   room: duelRoom,
-      //   donUuid: card.uuid,
-      // });
-
       setGameState((state) =>
         state.merge({
           mode: "select:character:leader",
