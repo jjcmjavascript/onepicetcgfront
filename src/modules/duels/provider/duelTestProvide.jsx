@@ -7,7 +7,6 @@ import * as effectRules from "../../../services/effectRules";
 
 import BoardGenerator from "../../../services/BoardGenerator";
 import GameState from "../../../models/GameState";
-import Player from "../../../models/Player";
 import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
@@ -30,6 +29,11 @@ function DuelProvider({ children }) {
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
   const [activeCards, setActiveCards] = activeCard;
+
+  const modesToMerge = [
+    "select:character:to:replace",
+    "select:character:leader",
+  ];
 
   const {
     duelSocket,
@@ -70,28 +74,19 @@ function DuelProvider({ children }) {
       });
     },
 
-    // events initializers
+    /******************************************/
+    /******** SOCKET EFFECTS *****************/
+    /****************************************/
     initSumAttackFromDonEvent() {
       setGameState((state) =>
         state.merge({
           mode: "select:character:leader",
         })
       );
+
+      this.lockAllExcept(["character", "leader"]);
       this.activateCharacterSelectorAll();
       this.activateLeaderSelector();
-    },
-
-    endSumAttackFromDonEvent() {
-      setActiveCards((state) => state.getDefault());
-
-      setGameState((state) =>
-        state.merge({
-          mode: "",
-        })
-      );
-
-      this.desactivateCharacterSelectorAll();
-      this.desactivateLeaderSelector();
     },
 
     initPlayCard() {
@@ -103,27 +98,43 @@ function DuelProvider({ children }) {
     initReplaceCharacter() {
       setGameState((state) =>
         state.merge({
-          mode: "select:character:type",
+          mode: "[effect:replace][select:character]",
         })
       );
       this.activateCharacterSelectorAll();
     },
 
-    cancelar() {
-      setGameState((state) =>
-        state.merge({
-          mode: "",
-        })
-      );
+    /******************************************/
+    /******** EFFECTS ***********************/
+    /****************************************/
+    cancel() {
+      this.cleanGameMode();
+      this.cleanActiveCards();
+      this.cleanCharacterSelectorAll();
+      this.cleanLeaderSelector();
+    },
 
-      setActiveCards((state) => state.getDefault());
+    cleanAll() {
+      this.cleanGameMode();
+      this.cleanActiveCards();
+      this.cleanCharacterSelectorAll();
+      this.cleanLeaderSelector();
+      this.unlockAll();
+    },
 
-      this.desactivateCharacterSelectorAll();
-      this.desactivateLeaderSelector();
+    lockAllExcept(names) {
+      setBoard((state) => state.lockAllExcept(names));
+    },
+
+    unlockAll() {
+      setBoard((state) => state.unlockAll());
     },
 
     mergeActiveCard(card, type) {
-      if (["select:character:leader"].includes(game.mode)) {
+      console.log("mergeActiveCard", board.lockeds, type);
+      if (board.lockeds[type]) return;
+
+      if (modesToMerge.includes(game.mode)) {
         setActiveCards((state) =>
           state.merge({
             [type]: card,
@@ -155,27 +166,6 @@ function DuelProvider({ children }) {
           characters: state.characters.map((character) => {
             return { ...character, toSelect: true };
           }),
-        })
-      );
-    },
-
-    desactivateCharacterSelectorAll() {
-      setBoard((state) =>
-        state.merge({
-          characters: state.characters.map((character) => {
-            return { ...character, toSelect: false };
-          }),
-        })
-      );
-    },
-
-    desactivateLeaderSelector() {
-      setBoard((state) =>
-        state.merge({
-          leader: {
-            ...state.leader,
-            toSelect: false,
-          },
         })
       );
     },
@@ -241,9 +231,7 @@ function DuelProvider({ children }) {
         })
       );
 
-      setActiveCards((state) => state.getDefault());
-
-      this.restedMultipleDons(card.cost);
+      this.cleanAll();
     },
 
     restedMultipleDons(quantity = 1) {
@@ -266,6 +254,52 @@ function DuelProvider({ children }) {
           costs,
         });
       });
+    },
+
+    replaceCharacter() {
+      const { character, hand } = activeCards;
+    },
+    /******************************************/
+    /******** END EFFECTS *********************/
+    /******************************************/
+    endSumAttackFromDonEvent() {
+      this.cleanAll();
+    },
+
+    /******************************************/
+    /******** CLEANERS ***********************/
+    /****************************************/
+    cleanCharacterSelectorAll() {
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            return { ...character, toSelect: false };
+          }),
+        })
+      );
+    },
+
+    cleanLeaderSelector() {
+      setBoard((state) =>
+        state.merge({
+          leader: {
+            ...state.leader,
+            toSelect: false,
+          },
+        })
+      );
+    },
+
+    cleanActiveCards() {
+      setActiveCards((state) => state.getDefault());
+    },
+
+    cleanGameMode() {
+      setGameState((state) =>
+        state.merge({
+          mode: "",
+        })
+      );
     },
   };
 
@@ -308,6 +342,13 @@ function DuelProvider({ children }) {
     },
     canPlayCardCharacter() {
       return effectRules.canPlayCardCharacter({
+        card: activeCards.hand,
+        game,
+        board,
+      });
+    },
+    canReplaceCharacterForPlay() {
+      return effectRules.canReplaceCharacterForPlay({
         card: activeCards.hand,
         game,
         board,

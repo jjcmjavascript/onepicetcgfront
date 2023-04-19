@@ -6,6 +6,7 @@ class ActiveCard {
     this.trash = object.trash;
     this.zone = object.zone;
     this.leader = object.leader;
+    this.live = object.live;
   }
 
   static getDefault() {
@@ -16,6 +17,7 @@ class ActiveCard {
       trash: null,
       zone: null,
       leader: null,
+      live: null,
     });
   }
 

@@ -85,7 +85,7 @@ class DeckGenerator {
     this.board.don = dons[0];
     this.board.dons = dons;
     this.board.costs = dons.splice(0, 7);
-    this.board.characters = characters.splice(0, 1);
+    this.board.characters = characters.splice(0, 5);
     this.board.deck = [...characters, ...stages, ...events]
     this.board.lives = this.board.deck.splice(0, this.board.leader.lives);
     this.board.hand = this.board.deck.splice(0, 5);

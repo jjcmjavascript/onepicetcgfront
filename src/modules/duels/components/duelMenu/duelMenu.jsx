@@ -6,10 +6,10 @@ function duelMenu() {
 
   const [boardOne] = states.boardOne;
   const [activeCards] = states.activeCards;
-
+  const isMyTurn = actions.isMyTurn();
   const menuOptionItems = [];
 
-  if (!boardOne.locked) {
+  if (!boardOne.locked && isMyTurn) {
     if (conditions.canAddAtkFromDon()) {
       menuOptionItems.push((key) => (
         <button key={key} onClick={() => actions.initSumAttackFromDonEvent()}>
@@ -32,7 +32,7 @@ function duelMenu() {
     if (conditions.canPlayCardCharacter()) {
       menuOptionItems.push((key) => (
         <button key={key} onClick={() => actions.initPlayCard()}>
-          Jugar
+          Jugar: {activeCards.hand.name}
         </button>
       ));
     }
@@ -40,24 +40,31 @@ function duelMenu() {
     if (conditions.canReplaceCharacter()) {
       menuOptionItems.push((key) => (
         <button key={key} onClick={() => actions.initReplaceCharacter()}>
-          Jugar (remplazar)
+          Jugar: {activeCards.hand.name}
+        </button>
+      ));
+    }
+
+    if (conditions.canReplaceCharacterForPlay()) {
+      menuOptionItems.push((key) => (
+        <button key={key} onClick={() => actions.replaceCharacter()}>
+          Reemplazar
         </button>
       ));
     }
 
     menuOptionItems.push((key) => (
-      <button key={key} onClick={() => actions.cancelar()}>
-        Cancelar
+      <button key={key} onClick={() => actions.finishTurn()}>
+        Terminar Turno
       </button>
     ));
-    if (actions.isMyTurn()) {
-      menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.finishTurn()}>
-          Terminar Turno
-        </button>
-      ));
-    }
   }
+
+  menuOptionItems.push((key) => (
+    <button key={key} onClick={() => actions.cancel()}>
+      Cancelar
+    </button>
+  ));
 
   return (
     <>

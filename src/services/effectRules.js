@@ -1,7 +1,22 @@
-const playAttack = 'play:attack';
-const phaseMain = 'game:phase:main';
-const gameModeSelectCharacter = 'game:mode:select:character';
-const gameModeSelectCharacterLeader = 'game:mode:select:character:leader';
+export const isCharacter = ({ card }) => {
+  return card && card.type === 'Character';
+};
+
+export const isLeader = ({ card }) => {
+  return card && card.type === 'Leader';
+};
+
+export const isStage = ({ card }) => {
+  return card && card.type === 'Stage';
+};
+
+export const isEvent = ({ card }) => {
+  return card && card.type === 'Event';
+};
+
+export const isDon = ({ card }) => {
+  return card && card.type === 'Don';
+};
 
 export const attack = ({ board, game, card }) => {
   const currentTurnPlays = game.currentPlays;
@@ -70,6 +85,14 @@ export const canReplaceCharacter = ({ card, board, game }) => {
     canPlayCard({ card, board, game }) &&
     card.type === 'Character' &&
     board.characters.length === 5
+  );
+};
+
+export const canReplaceCharacterForPlay = ({ card, board, game }) => {
+  return (
+    isCharacter({ card }) &&
+    board.characters.length === 5 &&
+    game.mode === 'select:character:to:replace'
   );
 };
 
