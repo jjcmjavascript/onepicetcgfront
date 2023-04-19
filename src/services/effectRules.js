@@ -88,9 +88,10 @@ export const canReplaceCharacter = ({ card, board, game }) => {
   );
 };
 
-export const canReplaceCharacterForPlay = ({ card, board, game }) => {
+export const canReplaceCharacterForPlay = ({ activeCards, board, game }) => {
   return (
-    isCharacter({ card }) &&
+    isCharacter({ card : activeCards.hand }) &&
+    activeCards.character &&
     board.characters.length === 5 &&
     game.mode === 'select:character:to:replace'
   );

@@ -98,9 +98,12 @@ function DuelProvider({ children }) {
     initReplaceCharacter() {
       setGameState((state) =>
         state.merge({
-          mode: "[effect:replace][select:character]",
+          mode: "select:character:to:replace",
         })
       );
+
+      this.lockAllExcept(["character"]);
+
       this.activateCharacterSelectorAll();
     },
 
@@ -112,6 +115,7 @@ function DuelProvider({ children }) {
       this.cleanActiveCards();
       this.cleanCharacterSelectorAll();
       this.cleanLeaderSelector();
+      this.unlockAll();
     },
 
     cleanAll() {
@@ -131,7 +135,6 @@ function DuelProvider({ children }) {
     },
 
     mergeActiveCard(card, type) {
-      console.log("mergeActiveCard", board.lockeds, type);
       if (board.lockeds[type]) return;
 
       if (modesToMerge.includes(game.mode)) {
@@ -258,6 +261,20 @@ function DuelProvider({ children }) {
 
     replaceCharacter() {
       const { character, hand } = activeCards;
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.filter((handCard) => handCard.uuid !== hand.uuid),
+          characters: state.characters.map((currentCharacter) => {
+            return currentCharacter.uuid == character.uuid
+              ? hand
+              : currentCharacter;
+          }),
+          trash: [...state.trash, character],
+        })
+      );
+
+      this.cleanAll();
     },
     /******************************************/
     /******** END EFFECTS *********************/
@@ -349,7 +366,7 @@ function DuelProvider({ children }) {
     },
     canReplaceCharacterForPlay() {
       return effectRules.canReplaceCharacterForPlay({
-        card: activeCards.hand,
+        activeCards,
         game,
         board,
       });
