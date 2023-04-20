@@ -10,14 +10,24 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import './css/index.css';
 
+Object.prototype.size = function () {
+  return Object.keys(this).length;
+};
+Object.prototype.first = function () {
+  return this[Object.keys(this)[0]];
+};
+Object.prototype.last = function () {
+  return this[Object.keys(this)[this.size() - 1]];
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 /*  eslint-disable */
 root.render(
   // <React.StrictMode>
-    <GlobalProvider>
-      <App />
-    </GlobalProvider>
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>
   // </React.StrictMode>
 );
 /*  eslint-enable */

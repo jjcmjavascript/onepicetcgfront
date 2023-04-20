@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
@@ -19,6 +19,12 @@ const ActiveCardSchema = ActiveCard.getDefault();
 
 const DuelContext = createContext();
 
+function* resolver(effects) {
+  for (let i = 0; i < effects.length; i++) {
+    yield effects[i]();
+  }
+}
+
 function DuelProvider({ children }) {
   const boardOne = useState(Board);
   const boardTwo = useState(EnemyBoard);
@@ -29,6 +35,8 @@ function DuelProvider({ children }) {
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
   const [activeCards, setActiveCards] = activeCard;
+
+  const activeGenerator = useRef(null);
 
   const modesToMerge = [
     "select:character:to:replace",
@@ -59,10 +67,6 @@ function DuelProvider({ children }) {
     sockets,
   };
 
-  const exampleEffect = {};
-
-  const resolver = () => {};
-
   const actions = {
     isMyTurn() {
       return game.currentTurnPlayerId === board.id;
@@ -77,6 +81,29 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** SOCKET EFFECTS *****************/
     /****************************************/
+    next() {
+      if (activeGenerator.current) {
+        setTimeout(() => {
+          activeGenerator.current.next();
+        }, 100);
+      }
+    },
+
+    resolve(name) {
+      const card =
+        activeCards.don || activeCards.leader || activeCards.character;
+
+      const effect = card.effects[name];
+      const chaing = effect.chaing;
+      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+        return () => this[chaingPart.name].call(this, ...chaingPart.params);
+      });
+
+      activeGenerator.current = resolver(arrayMethods);
+
+      this.next();
+    },
+
     initSumAttackFromDonEvent() {
       setGameState((state) =>
         state.merge({
@@ -124,6 +151,7 @@ function DuelProvider({ children }) {
       this.cleanCharacterSelectorAll();
       this.cleanLeaderSelector();
       this.unlockAll();
+      activeGenerator.current = null;
     },
 
     lockAllExcept(names) {
@@ -209,21 +237,39 @@ function DuelProvider({ children }) {
         })
       );
 
-      this.endSumAttackFromDonEvent();
+      this.next();
+    },
+
+    addAttactToCharacter(card, attack = 1000) {
+      let newCard = { ...card };
+      newCard.powerAdded = [...newCard.powerAdded, attack];
+
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            if (character.uuid == card.uuid) {
+              return newCard;
+            }
+            return character;
+          }),
+        })
+      );
+
+      this.next();
     },
 
     addAttactToAllCharacters(attack = 1000) {
-      setBoard((currentBoard) => {
-        return {
-          ...currentBoard,
-          characters: currentBoard.characters.map((currentCharacter) => {
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
             return {
-              ...currentCharacter,
-              powerAdded: [...currentCharacter.powerAdded, attack],
+              ...character,
+              powerAdded: [...character.powerAdded, attack],
             };
           }),
-        };
-      });
+        })
+      );
+      this.next();
     },
 
     playCard(card) {
@@ -257,6 +303,8 @@ function DuelProvider({ children }) {
           costs,
         });
       });
+
+      this.next();
     },
 
     replaceCharacter() {

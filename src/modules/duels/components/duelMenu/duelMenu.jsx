@@ -12,7 +12,7 @@ function duelMenu() {
   if (!boardOne.locked && isMyTurn) {
     if (conditions.canAddAtkFromDon()) {
       menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.initSumAttackFromDonEvent()}>
+        <button key={key} onClick={() => actions.resolve("addAttackFromDon")}>
           +1000
         </button>
       ));
@@ -63,6 +63,12 @@ function duelMenu() {
   menuOptionItems.push((key) => (
     <button key={key} onClick={() => actions.cancel()}>
       Cancelar
+    </button>
+  ));
+
+  menuOptionItems.push((key) => (
+    <button key={key} onClick={() => actions.resolve("addAttackFromLeader")}>
+      Test Ataque pa todos
     </button>
   ));
 
