@@ -82,6 +82,7 @@ function DuelProvider({ children }) {
     /******** SOCKET EFFECTS *****************/
     /****************************************/
     next() {
+      console.log("next");
       if (activeGenerator.current) {
         setTimeout(() => {
           activeGenerator.current.next();
@@ -96,7 +97,7 @@ function DuelProvider({ children }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
-        return () => this[chaingPart.name].call(this, ...chaingPart.params);
+        return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
       activeGenerator.current = resolver(arrayMethods);
@@ -104,17 +105,27 @@ function DuelProvider({ children }) {
       this.next();
     },
 
-    initSumAttackFromDonEvent() {
+    setMode(mode) {
       setGameState((state) =>
         state.merge({
-          mode: "select:character:leader",
+          mode,
         })
       );
 
-      this.lockAllExcept(["character", "leader"]);
-      this.activateCharacterSelectorAll();
-      this.activateLeaderSelector();
+      this.next();
     },
+
+    // initSumAttackFromDonEvent() {
+    //   setGameState((state) =>
+    //     state.merge({
+    //       mode: "select:character:leader",
+    //     })
+    //   );
+
+    //   this.lockAllExcept(["character", "leader"]);
+    //   this.activateCharacterSelectorAll();
+    //   this.activateLeaderSelector();
+    // },
 
     initPlayCard() {
       const card = activeCards.hand;
@@ -156,10 +167,14 @@ function DuelProvider({ children }) {
 
     lockAllExcept(names) {
       setBoard((state) => state.lockAllExcept(names));
+
+      this.next();
     },
 
     unlockAll() {
       setBoard((state) => state.unlockAll());
+
+      this.next();
     },
 
     mergeActiveCard(card, type) {
@@ -189,6 +204,8 @@ function DuelProvider({ children }) {
           },
         })
       );
+
+      this.next();
     },
 
     activateCharacterSelectorAll() {
@@ -199,9 +216,16 @@ function DuelProvider({ children }) {
           }),
         })
       );
+
+      this.next();
     },
 
-    plusAttakFromDon() {
+    addAttack(a, b) {
+      console.log(a, b);
+      // const { character, leader } = activeCards;
+    },
+
+    addAttackFromDon() {
       const { character, leader, don } = activeCards;
 
       setBoard((state) =>
@@ -327,9 +351,9 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** END EFFECTS *********************/
     /******************************************/
-    endSumAttackFromDonEvent() {
-      this.cleanAll();
-    },
+    // endSumAttackFromDonEvent() {
+    //   this.cleanAll();
+    // },
 
     /******************************************/
     /******** CLEANERS ***********************/

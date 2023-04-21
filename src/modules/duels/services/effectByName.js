@@ -23,29 +23,41 @@ const defaultEffect = {
 function getEffect(name) {
   const effectsHash = {
     don: {
-      effects: {
+      addAttackFromDon: {
         trigger: 'onActive',
-        addAttackFromDon: {
-          chaing: {
-            initSumAttackFromDonEvent: {
-              name: 'initSumAttackFromDonEvent',
-              params: [],
+        chaing: {
+          setMode: {
+            name: 'setMode',
+            params: ['select:character:leader'],
+          },
+          lockAllExcept: {
+            name: 'lockAllExcept',
+            params: ['character', 'leader'],
+          },
+          activateCharacterSelectorAll: {
+            name: 'activateCharacterSelectorAll',
+            params: [],
+          },
+          activateLeaderSelector: {
+            name: 'activateLeaderSelector',
+            params: [],
+          },
+          addAttack: {
+            ...effects.addAttack(1000),
+            others: {
+              targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
             },
-            addAttack: () => {
-              return {
-                ...effects.addAttack(1000),
-                targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
-              };
-            },
-            endSumAttackFromDonEvent: {
-              name: 'endSumAttackFromDonEvent',
-              params: [],
-            },
+          },
+          cleanAll: {
+            name: 'cleanAll',
+            params: [],
           },
         },
       },
     },
   };
 
-  return effectsHash[name] || defaultEffect();
+  return effectsHash[name];
 }
+
+export default Object.seal(getEffect);

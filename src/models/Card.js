@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import CryptoJS from 'crypto-js';
+import getEffectsByName from '../modules/duels/services/effectByName';
 
 class Card {
   constructor(cardObject) {
@@ -160,6 +161,7 @@ class Card {
     for (let i = 0; i < dons; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Don';
+      card.effects = getEffectsByName('don');
       deck.push(card);
     }
 

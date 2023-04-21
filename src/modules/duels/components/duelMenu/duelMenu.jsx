@@ -66,11 +66,11 @@ function duelMenu() {
     </button>
   ));
 
-  menuOptionItems.push((key) => (
-    <button key={key} onClick={() => actions.resolve("addAttackFromLeader")}>
-      Test Ataque pa todos
-    </button>
-  ));
+  // menuOptionItems.push((key) => (
+  //   <button key={key} onClick={() => actions.resolve("addAttackFromLeader")}>
+  //     Test Ataque pa todos
+  //   </button>
+  // ));
 
   return (
     <>

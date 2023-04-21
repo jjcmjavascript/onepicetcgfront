@@ -1,28 +1,28 @@
-const addAttactToAllCharacters = (quantity) => {
+const addAttactToAllCharacters = (amount) => {
   return {
     name: 'addAttactToAllCharacters',
-    params: [quantity],
+    params: { amount },
   };
 };
 
 const restMultipleDons = (quantity) => {
   return {
     name: 'restedMultipleDons',
-    params: [quantity],
+    params: { quantity },
   };
 };
 
-const addAttack = (quantity) => {
+const addAttack = (amount) => {
   return {
-    name: 'addAttackToLeader',
-    params: [quantity],
+    name: 'addAttack',
+    params: { amount },
   };
 };
 
 const restDon = () => {
   return {
     name: 'restDon',
-    params: [],
+    params: {},
   };
 };
 
