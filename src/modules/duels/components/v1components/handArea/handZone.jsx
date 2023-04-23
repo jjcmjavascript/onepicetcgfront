@@ -1,23 +1,21 @@
-import React, { useContext, useState, useRef, memo } from "react";
-
+import React, { useContext,  memo } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
-import CardOptions from "./cardOptions";
-import CardOptionItem from "./cardOptionItem";
 
 /**
  * 1 - When Options is open, the "card" is active
  */
-function HandZone({ children }) {
+function HandZone() {
   const { states, actions } = useContext(Store.DuelContext);
   const [, setPreview] = states.preview;
   const [board] = states.boardOne;
+  const [activeCards] = states.activeCards;
 
   const onMouseOver = (card) => {
     setPreview(card);
   };
 
-  const onMouseOut = (card) => {
+  const onMouseOut = () => {
     setPreview(null);
   };
 
@@ -30,9 +28,12 @@ function HandZone({ children }) {
               card={card}
               key={card.uuid}
               id={`id_${card.uuid}`}
-              onClick={(_) => actions.mergeActiveCard(card, "hand")}
-              onMouseOver={(_) => onMouseOver(card)}
-              onMouseOut={(_) => onMouseOut(card)}
+              onClick={() => actions.mergeActiveCard(card, "hand")}
+              onMouseOver={() => onMouseOver(card)}
+              onMouseOut={() => onMouseOut(card)}
+              className={`${
+                activeCards.hand === card ? "innerShadow" : ""
+              }`}
             />
           );
         })}

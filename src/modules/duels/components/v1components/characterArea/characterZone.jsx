@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, memo, useEffect } from "react";
+import React, { useContext, memo } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -9,6 +9,7 @@ function CharactedZone() {
 
   const [boardOneState] = boardOne;
   const [, setPreview] = states.preview;
+  const [activeCards] = states.activeCards;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -27,9 +28,12 @@ function CharactedZone() {
               id={`id_${card.uuid}`}
               key={card.uuid}
               card={card}
-              onMouseOut={(_) => onMouseOut(card)}
-              onMouseOver={(_) => onMouseOver(card)}
+              onMouseOut={() => onMouseOut(card)}
+              onMouseOver={() => onMouseOver(card)}
               onClick={() => actions.mergeActiveCard(card, "character")}
+              className={`${
+                activeCards.character === card ? "innerShadow" : ""
+              }`}
             />
           );
         })}

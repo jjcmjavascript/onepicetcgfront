@@ -14,10 +14,6 @@ function FieldCardFull(
     newClassName = `${newClassName} card_to_select`;
   }
 
-  if (card && card.selected) {
-    newClassName = `${newClassName} card_to_select__selected`;
-  }
-
   return (
     <>
       <div
