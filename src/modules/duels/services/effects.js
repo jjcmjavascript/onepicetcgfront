@@ -1,4 +1,18 @@
 class Effects {
+  setMode(params) {
+    return {
+      name: 'setMode',
+      params: { mode: '', ...params },
+    };
+  }
+
+  lockAllExcept(params) {
+    return {
+      name: 'lockAllExcept',
+      params: { ...params },
+    };
+  }
+
   addAttackToAllCharacters(params) {
     return {
       name: 'addAttactToAllCharacters',
@@ -23,7 +37,42 @@ class Effects {
   restDon(params) {
     return {
       name: 'restDon',
-      params: { quantity: 1 },
+      params: { quantity: 1, ...params },
+    };
+  }
+
+  activateLeaderSelector(params) {
+    return {
+      name: 'activateLeaderSelector',
+      params: { ...params },
+    };
+  }
+
+  activateCharacterSelectorAll(params) {
+    return {
+      name: 'activateCharacterSelectorAll',
+      params: { ...params },
+    };
+  }
+
+  awaitSelection(params) {
+    return {
+      name: 'awaitSelection',
+      params: { ...params },
+    };
+  }
+
+  cleanAll(params) {
+    return {
+      name: 'cleanAll',
+      params: { ...params },
+    };
+  }
+
+  setDonUnderCard(params) {
+    return {
+      name: 'setDonUnderCard',
+      params: { ...params },
     };
   }
 }

@@ -16,43 +16,24 @@ const TARGET_TYPES = Object.seal({
   OPPONENT_DON: 'opponentDon',
 });
 
-const defaultEffect = {
-  effects: {},
-};
-
 function getEffect(name) {
   const effectsHash = {
     don: {
       addAttackFromDon: {
         trigger: 'onActive',
         chaing: {
-          setMode: {
-            name: 'setMode',
-            params: { mode: 'select:character:leader' },
-          },
-          lockAllExcept: {
-            name: 'lockAllExcept',
-            params: {
-              exeptions: ['character', 'leader'],
-            },
-          },
-          activateCharacterSelectorAll: {
-            name: 'activateCharacterSelectorAll',
-          },
-          activateLeaderSelector: {
-            name: 'activateLeaderSelector',
-          },
-          awaitSelection: {
-            name: 'awaitSelection',
-          },
-          addAttack: {
-            ...effects('addAttack', {
-              targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
-            }),
-          },
-          cleanAll: {
-            name: 'cleanAll',
-          },
+          setMode: effects('setMode', { mode: 'select:character:leader' }),
+          lockAllExcept: effects('lockAllExcept', {
+            exeptions: ['character', 'leader'],
+          }),
+          activateLeaderSelector: effects('activateLeaderSelector'),
+          activateCharacterSelectorAll: effects('activateCharacterSelectorAll'),
+          awaitSelection: effects('awaitSelection'),
+          addAttack: effects('addAttack', {
+            targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
+          }),
+          setDonUnderCard: effects('setDonUnderCard'),
+          cleanAll: effects('cleanAll'),
         },
       },
     },

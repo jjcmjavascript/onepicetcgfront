@@ -29,7 +29,7 @@ function* generator(effects) {
 
 async function iterator(generator) {
   for (let value of generator) {
-    await pause.sleep(100);
+    await pause.sleep(50);
     const result = await value();
     console.log("next", result);
   }
@@ -39,8 +39,9 @@ function DuelProvider({ children }) {
   const boardOne = useState(Board);
   const boardTwo = useState(EnemyBoard);
   const gameState = useState(State);
-  const activeCard = useRef(ActiveCardSchema);
   const sockets = useSocket();
+
+  const activeCard = useRef(ActiveCardSchema);
   const activesCards = useState(ActiveCardSchema);
 
   const [game, setGameState] = gameState;
@@ -156,9 +157,9 @@ function DuelProvider({ children }) {
     },
 
     mergeActiveCard(card, type) {
-      const state = activeCard.current;
-
       if (board.lockeds[type]) return;
+
+      const state = activeCard.current;
 
       if (game.mode === "select:character:leader") {
         activeCard.current = state.set({
@@ -229,93 +230,70 @@ function DuelProvider({ children }) {
       const { amount, targets } =
         params || generatorParams.current.get("addAttack");
 
-      const x = Object.entries(activeCard.current).find(
+      const [cardType, card] = Object.entries(activeCard.current).find(
         ([type, value]) => value != null && targets.includes(type)
       );
 
-      console.log("addAttack", x);
-      console.log("addAttack", amount, targets);
+      setBoard((state) => {
+        let leader =
+          cardType === "leader"
+            ? { ...card, powerAdded: [...card.powerAdded, amount] }
+            : state.leader;
 
-      // setBoard((state) => {
-      //   let leader =
-      //     cardType === "leader"
-      //       ? { ...card, powerAdded: [...card.powerAdded, amount] }
-      //       : state.leader;
-
-      //   let characters =
-      //     cardType === "character"
-      //       ? state.characters.map((item) => {
-      //           let powerAdded = item.powerAdded;
-
-      //           if (item.uuid == card.uuid) {
-      //             powerAdded = [...item.powerAdded, amount];
-      //           }
-
-      //           return {
-      //             ...item,
-      //             powerAdded,
-      //           };
-      //         })
-      //       : state.characters;
-
-      //   return state.merge({
-      //     leader,
-      //     characters,
-      //   });
-      // });
-    },
-
-    addAttackFromDon() {
-      const { character, leader, don } = activeCard.current;
-
-      setBoard((state) =>
-        state.merge({
-          costs: state.costs.filter((cost) => cost.uuid != don.uuid),
-          leader: {
-            ...state.leader,
-            powerAdded: leader
-              ? [...state.leader.powerAdded, 1000]
-              : state.leader.powerAdded,
-            overCards: leader
-              ? [...state.leader.overCards, don]
-              : state.leader.overCards,
-          },
-
-          characters: character
+        let characters =
+          cardType === "character"
             ? state.characters.map((item) => {
                 let powerAdded = item.powerAdded;
-                let overCards = item.overCards;
 
-                if (item.uuid == character.uuid) {
-                  powerAdded = [...item.powerAdded, 1000];
-                  overCards = [...item.overCards, don];
+                if (item.uuid == card.uuid) {
+                  powerAdded = [...item.powerAdded, amount];
                 }
 
                 return {
                   ...item,
                   powerAdded,
-                  overCards,
                 };
               })
-            : state.characters,
-        })
-      );
+            : state.characters;
+
+        return state.merge({
+          leader,
+          characters,
+        });
+      });
     },
 
-    addAttactToCharacter(card, attack = 1000) {
-      let newCard = { ...card };
-      newCard.powerAdded = [...newCard.powerAdded, attack];
-
-      setBoard((state) =>
-        state.merge({
-          characters: state.characters.map((character) => {
-            if (character.uuid == card.uuid) {
-              return newCard;
-            }
-            return character;
-          }),
-        })
+    setDonUnderCard() {
+      const don = activeCard.current.don;
+      const [type, card] = Object.entries(activeCard.current).find(
+        ([, value]) => value != null && value.uuid !== don.uuid
       );
+
+      setBoard((state) => {
+        let object = {
+          costs: state.costs.filter((item) => item.uuid !== don.uuid),
+        };
+
+        if (type === "leader") {
+          object[type] = {
+            ...card,
+            overCards: [...card.overCards, { ...don, rested: true }],
+          };
+        } else if (type === "character") {
+          object[type] = state.characters.map((item) => {
+            if (item.uuid === card.uuid) {
+              return {
+                ...item,
+                overCards: [...item.overCards, don],
+              };
+            }
+
+            return item;
+          });
+        }
+
+        return state.merge(object);
+      });
     },
 
     addAttactToAllCharacters(attack = 1000) {
