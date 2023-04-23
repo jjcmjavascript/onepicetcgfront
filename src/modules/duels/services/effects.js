@@ -1,34 +1,35 @@
-const addAttactToAllCharacters = (amount) => {
-  return {
-    name: 'addAttactToAllCharacters',
-    params: { amount },
-  };
-};
+class Effects {
+  addAttackToAllCharacters(params) {
+    return {
+      name: 'addAttactToAllCharacters',
+      params: { amount: 1000, ...params },
+    };
+  }
 
-const restMultipleDons = (quantity) => {
-  return {
-    name: 'restedMultipleDons',
-    params: { quantity },
-  };
-};
+  restMultipleDons(params) {
+    return {
+      name: 'restedMultipleDons',
+      params: { quantity: 1, ...params },
+    };
+  }
 
-const addAttack = (amount) => {
-  return {
-    name: 'addAttack',
-    params: { amount },
-  };
-};
+  addAttack(params) {
+    return {
+      name: 'addAttack',
+      params: { amount: 1000, ...params },
+    };
+  }
 
-const restDon = () => {
-  return {
-    name: 'restDon',
-    params: {},
-  };
-};
+  restDon(params) {
+    return {
+      name: 'restDon',
+      params: { quantity: 1 },
+    };
+  }
+}
 
-export default Object.seal({
-  addAttactToAllCharacters,
-  restMultipleDons,
-  restDon,
-  addAttack,
+const effects = Object.seal(new Effects());
+
+export default Object.seal((name, params = {}) => {
+  return effects[name](params);
 });

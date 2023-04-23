@@ -10,6 +10,8 @@ import GameState from "../../../models/GameState";
 import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
+import { pause } from "../../../helpers";
+
 const State = GameState.getDefault();
 const Board = new BoardGenerator({}).generateDeckStructure().merge({
   id: 0,
@@ -19,9 +21,17 @@ const ActiveCardSchema = ActiveCard.getDefault();
 
 const DuelContext = createContext();
 
-function* resolver(effects) {
+function* generator(effects) {
   for (let i = 0; i < effects.length; i++) {
-    yield effects[i]();
+    yield effects[i];
+  }
+}
+
+async function iterator(generator) {
+  for (let value of generator) {
+    await pause.sleep(100);
+    const result = await value();
+    console.log("next", result);
   }
 }
 
@@ -29,16 +39,18 @@ function DuelProvider({ children }) {
   const boardOne = useState(Board);
   const boardTwo = useState(EnemyBoard);
   const gameState = useState(State);
-  const activeCard = useState(ActiveCardSchema);
+  const activeCard = useRef(ActiveCardSchema);
   const sockets = useSocket();
+  const activesCards = useState(ActiveCardSchema);
 
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
-  const [activeCards, setActiveCards] = activeCard;
 
-  const activeGenerator = useRef(null);
+  const [, setActiveCard] = activesCards;
+  const currentGenerator = useRef(null);
+  const generatorParams = useRef(new Map());
 
-  const modesToMerge = [
+  const modesToMergeWithAll = [
     "select:character:to:replace",
     "select:character:leader",
   ];
@@ -56,7 +68,7 @@ function DuelProvider({ children }) {
     boardOne,
     boardTwo,
     gameState,
-    activeCards: activeCard,
+    activeCards: activesCards, //No usar
     preview: useState(null),
     showTrashModal: useState(false),
     decks: useState([]),
@@ -82,66 +94,44 @@ function DuelProvider({ children }) {
     /******** SOCKET EFFECTS *****************/
     /****************************************/
     next() {
-      console.log("next");
-      if (activeGenerator.current) {
-        setTimeout(() => {
-          activeGenerator.current.next();
-        }, 100);
-      }
+      currentGenerator.current.next();
     },
 
     resolve(name) {
       const card =
-        activeCards.don || activeCards.leader || activeCards.character;
+        activeCard.current.don ||
+        activeCard.current.leader ||
+        activeCard.current.character;
 
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
+        generatorParams.current.set(chaingPart.name, chaingPart.params);
         return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
-      activeGenerator.current = resolver(arrayMethods);
-
-      this.next();
+      iterator(generator(arrayMethods));
     },
 
-    setMode(mode) {
+    setMode(params) {
+      const { mode } = params;
+
       setGameState((state) =>
         state.merge({
           mode,
         })
       );
-
-      this.next();
     },
 
-    // initSumAttackFromDonEvent() {
-    //   setGameState((state) =>
-    //     state.merge({
-    //       mode: "select:character:leader",
-    //     })
-    //   );
-
-    //   this.lockAllExcept(["character", "leader"]);
-    //   this.activateCharacterSelectorAll();
-    //   this.activateLeaderSelector();
-    // },
-
     initPlayCard() {
-      const card = activeCards.hand;
+      const card = activeCard.current.hand;
 
       this.playCard(card);
     },
 
     initReplaceCharacter() {
-      setGameState((state) =>
-        state.merge({
-          mode: "select:character:to:replace",
-        })
-      );
-
-      this.lockAllExcept(["character"]);
-
+      this.setMode({ mode: "select:character:to:replace" });
+      this.lockAllExcept({ exeptions: ["character"] });
       this.activateCharacterSelectorAll();
     },
 
@@ -162,37 +152,56 @@ function DuelProvider({ children }) {
       this.cleanCharacterSelectorAll();
       this.cleanLeaderSelector();
       this.unlockAll();
-      activeGenerator.current = null;
+      generatorParams.current.clear();
     },
 
-    lockAllExcept(names) {
-      setBoard((state) => state.lockAllExcept(names));
+    mergeActiveCard(card, type) {
+      const state = activeCard.current;
 
-      this.next();
+      if (board.lockeds[type]) return;
+
+      if (game.mode === "select:character:leader") {
+        activeCard.current = state.set({
+          [type]: card,
+          don: state.don,
+        });
+      } else if (modesToMergeWithAll.includes(game.mode)) {
+        activeCard.current = state.merge({
+          [type]: card,
+        });
+      } else if (type === "clean") {
+        activeCard.current = state.getDefault();
+      } else {
+        activeCard.current = state.set({
+          [type]: card,
+        });
+      }
+
+      setActiveCard(activeCard.current);
+    },
+
+    async awaitSelection() {
+      return new Promise((resolve) => {
+        const handlerClick = (event) => {
+          const { target } = event;
+
+          if (target.name === "buttonToWait") {
+            resolve();
+            document.body.removeEventListener("click", handlerClick);
+          }
+        };
+
+        document.body.addEventListener("click", handlerClick);
+      });
+    },
+
+    lockAllExcept(params) {
+      const { exeptions } = params;
+      setBoard((state) => state.lockAllExcept(exeptions));
     },
 
     unlockAll() {
       setBoard((state) => state.unlockAll());
-
-      this.next();
-    },
-
-    mergeActiveCard(card, type) {
-      if (board.lockeds[type]) return;
-
-      if (modesToMerge.includes(game.mode)) {
-        setActiveCards((state) =>
-          state.merge({
-            [type]: card,
-          })
-        );
-      } else {
-        setActiveCards((state) =>
-          state.set({
-            [type]: card,
-          })
-        );
-      }
     },
 
     activateLeaderSelector() {
@@ -204,8 +213,6 @@ function DuelProvider({ children }) {
           },
         })
       );
-
-      this.next();
     },
 
     activateCharacterSelectorAll() {
@@ -216,17 +223,50 @@ function DuelProvider({ children }) {
           }),
         })
       );
-
-      this.next();
     },
 
-    addAttack(a, b) {
-      console.log(a, b);
-      // const { character, leader } = activeCards;
+    addAttack(params) {
+      const { amount, targets } =
+        params || generatorParams.current.get("addAttack");
+
+      const x = Object.entries(activeCard.current).find(
+        ([type, value]) => value != null && targets.includes(type)
+      );
+
+      console.log("addAttack", x);
+      console.log("addAttack", amount, targets);
+
+      // setBoard((state) => {
+      //   let leader =
+      //     cardType === "leader"
+      //       ? { ...card, powerAdded: [...card.powerAdded, amount] }
+      //       : state.leader;
+
+      //   let characters =
+      //     cardType === "character"
+      //       ? state.characters.map((item) => {
+      //           let powerAdded = item.powerAdded;
+
+      //           if (item.uuid == card.uuid) {
+      //             powerAdded = [...item.powerAdded, amount];
+      //           }
+
+      //           return {
+      //             ...item,
+      //             powerAdded,
+      //           };
+      //         })
+      //       : state.characters;
+
+      //   return state.merge({
+      //     leader,
+      //     characters,
+      //   });
+      // });
     },
 
     addAttackFromDon() {
-      const { character, leader, don } = activeCards;
+      const { character, leader, don } = activeCard.current;
 
       setBoard((state) =>
         state.merge({
@@ -260,8 +300,6 @@ function DuelProvider({ children }) {
             : state.characters,
         })
       );
-
-      this.next();
     },
 
     addAttactToCharacter(card, attack = 1000) {
@@ -278,8 +316,6 @@ function DuelProvider({ children }) {
           }),
         })
       );
-
-      this.next();
     },
 
     addAttactToAllCharacters(attack = 1000) {
@@ -293,7 +329,6 @@ function DuelProvider({ children }) {
           }),
         })
       );
-      this.next();
     },
 
     playCard(card) {
@@ -327,12 +362,10 @@ function DuelProvider({ children }) {
           costs,
         });
       });
-
-      this.next();
     },
 
     replaceCharacter() {
-      const { character, hand } = activeCards;
+      const { character, hand } = activeCard.current;
 
       setBoard((state) =>
         state.merge({
@@ -351,9 +384,6 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** END EFFECTS *********************/
     /******************************************/
-    // endSumAttackFromDonEvent() {
-    //   this.cleanAll();
-    // },
 
     /******************************************/
     /******** CLEANERS ***********************/
@@ -380,7 +410,7 @@ function DuelProvider({ children }) {
     },
 
     cleanActiveCards() {
-      setActiveCards((state) => state.getDefault());
+      this.mergeActiveCard(null, "clean");
     },
 
     cleanGameMode() {
@@ -394,51 +424,55 @@ function DuelProvider({ children }) {
 
   const conditions = {
     costs() {
-      const don = activeCards.don;
+      const don = activeCard.current.don;
       return effectRules.costs({ board, don });
     },
     attack() {
-      const card = activeCards.character;
+      const card = activeCard.current.character;
       return effectRules.attack({ board, card, game });
     },
     canAddAtkFromDon() {
-      const don = activeCards.don;
+      const don = activeCard.current.don;
       return effectRules.canAddAtkFromDon({ game, don });
     },
     canShowSelectToAddAtkFromDon() {
       return effectRules.canShowSelectToAddAtkFromDon({
-        activeCards,
+        activeCards: activeCard.current,
         game,
         board,
       });
     },
     rest() {
-      const card = activeCards.don || activeCards.character;
+      const card = activeCard.current.don || activeCard.current.character;
       return effectRules.rest({ board, card });
     },
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });
     },
     canActiveEffect() {
-      return effectRules.canActiveEffect({ activeCards, game, board });
+      return effectRules.canActiveEffect({
+        activeCards: activeCard.current,
+        game,
+        board,
+      });
     },
     canReplaceCharacter() {
       return effectRules.canReplaceCharacter({
-        card: activeCards.hand,
+        card: activeCard.current.hand,
         game,
         board,
       });
     },
     canPlayCardCharacter() {
       return effectRules.canPlayCardCharacter({
-        card: activeCards.hand,
+        card: activeCard.current.hand,
         game,
         board,
       });
     },
     canReplaceCharacterForPlay() {
       return effectRules.canReplaceCharacterForPlay({
-        activeCards,
+        activeCards: activeCard.current,
         game,
         board,
       });

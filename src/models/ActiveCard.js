@@ -7,6 +7,7 @@ class ActiveCard {
     this.zone = object.zone;
     this.leader = object.leader;
     this.live = object.live;
+    this.lastActiveName = null;
   }
 
   static getDefault() {
@@ -21,6 +22,11 @@ class ActiveCard {
     });
   }
 
+  //El lastActiveName es colcado apartir del primer elemento encontrado al hacer merge
+  get lastActive() {
+    return this[this.lastActiveName];
+  }
+
   getDefault() {
     return ActiveCard.getDefault();
   }
@@ -33,10 +39,28 @@ class ActiveCard {
   }
 
   merge(activeCard) {
+    const lastActiveName = Object.keys(activeCard).find(
+      (name) => activeCard[name] !== null
+    );
+
     return new ActiveCard({
       ...this,
       ...activeCard,
+      lastActiveName,
     });
+  }
+
+  setDonAndLeader(activeCard) {
+    return this.set({
+      don: this.don,
+      leader: activeCard,
+    });
+  }
+
+  setByMode(mode, activeCard) {
+    if (mode === 'select:character:leader') {
+      return this.setDonAndLeader(activeCard);
+    }
   }
 }
 

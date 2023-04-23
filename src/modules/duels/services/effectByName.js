@@ -28,29 +28,30 @@ function getEffect(name) {
         chaing: {
           setMode: {
             name: 'setMode',
-            params: ['select:character:leader'],
+            params: { mode: 'select:character:leader' },
           },
           lockAllExcept: {
             name: 'lockAllExcept',
-            params: ['character', 'leader'],
+            params: {
+              exeptions: ['character', 'leader'],
+            },
           },
           activateCharacterSelectorAll: {
             name: 'activateCharacterSelectorAll',
-            params: [],
           },
           activateLeaderSelector: {
             name: 'activateLeaderSelector',
-            params: [],
+          },
+          awaitSelection: {
+            name: 'awaitSelection',
           },
           addAttack: {
-            ...effects.addAttack(1000),
-            others: {
+            ...effects('addAttack', {
               targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
-            },
+            }),
           },
           cleanAll: {
             name: 'cleanAll',
-            params: [],
           },
         },
       },

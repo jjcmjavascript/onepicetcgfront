@@ -40,6 +40,7 @@ export const canAddAtkFromDon = ({ don, game }) => {
 };
 
 export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
+
   return (
     (activeCards.leader || activeCards.character) &&
     game.mode === 'select:character:leader'
@@ -90,7 +91,7 @@ export const canReplaceCharacter = ({ card, board, game }) => {
 
 export const canReplaceCharacterForPlay = ({ activeCards, board, game }) => {
   return (
-    isCharacter({ card : activeCards.hand }) &&
+    isCharacter({ card: activeCards.hand }) &&
     activeCards.character &&
     board.characters.length === 5 &&
     game.mode === 'select:character:to:replace'

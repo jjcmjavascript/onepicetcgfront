@@ -20,7 +20,7 @@ function duelMenu() {
 
     if (conditions.canShowSelectToAddAtkFromDon()) {
       menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.plusAttakFromDon()}>
+        <button key={key} name="buttonToWait">
           {(activeCards.leader || activeCards.character || {}).name} : +1000
         </button>
       ));
@@ -47,7 +47,11 @@ function duelMenu() {
 
     if (conditions.canReplaceCharacterForPlay()) {
       menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.replaceCharacter()}>
+        <button
+          key={key}
+          onClick={() => actions.replaceCharacter()}
+          name="buttonToWait"
+        >
           Reemplazar
         </button>
       ));
