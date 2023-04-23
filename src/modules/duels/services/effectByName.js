@@ -34,6 +34,7 @@ function getEffect(name) {
           }),
           setDonUnderCard: effects('setDonUnderCard'),
           cleanAll: effects('cleanAll'),
+          emitBoard: effects('emitBoard'),
         },
       },
     },

@@ -40,7 +40,6 @@ export const canAddAtkFromDon = ({ don, game }) => {
 };
 
 export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
-
   return (
     (activeCards.leader || activeCards.character) &&
     game.mode === 'select:character:leader'

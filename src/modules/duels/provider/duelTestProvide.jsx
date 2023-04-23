@@ -30,8 +30,7 @@ function* generator(effects) {
 async function iterator(generator) {
   for (let value of generator) {
     await pause.sleep(50);
-    const result = await value();
-    console.log("next", result);
+    await value();
   }
 }
 
@@ -48,7 +47,6 @@ function DuelProvider({ children }) {
   const [board, setBoard] = boardOne;
 
   const [, setActiveCard] = activesCards;
-  const currentGenerator = useRef(null);
   const generatorParams = useRef(new Map());
 
   const modesToMergeWithAll = [
@@ -94,10 +92,6 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** SOCKET EFFECTS *****************/
     /****************************************/
-    next() {
-      currentGenerator.current.next();
-    },
-
     resolve(name) {
       const card =
         activeCard.current.don ||
@@ -139,22 +133,8 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** EFFECTS ***********************/
     /****************************************/
-    cancel() {
-      this.cleanGameMode();
-      this.cleanActiveCards();
-      this.cleanCharacterSelectorAll();
-      this.cleanLeaderSelector();
-      this.unlockAll();
-    },
 
-    cleanAll() {
-      this.cleanGameMode();
-      this.cleanActiveCards();
-      this.cleanCharacterSelectorAll();
-      this.cleanLeaderSelector();
-      this.unlockAll();
-      generatorParams.current.clear();
-    },
+    emitBoard() {},
 
     mergeActiveCard(card, type) {
       if (board.lockeds[type]) return;
@@ -397,6 +377,24 @@ function DuelProvider({ children }) {
           mode: "",
         })
       );
+    },
+
+    cancel() {
+      this.cleanGameMode();
+      this.cleanActiveCards();
+      this.cleanCharacterSelectorAll();
+      this.cleanLeaderSelector();
+      this.unlockAll();
+    },
+
+    cleanAll() {
+      this.cleanGameMode();
+      this.cleanActiveCards();
+      this.cleanCharacterSelectorAll();
+      this.cleanLeaderSelector();
+      this.unlockAll();
+
+      generatorParams.current.clear();
     },
   };
 

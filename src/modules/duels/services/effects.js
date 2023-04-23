@@ -75,6 +75,13 @@ class Effects {
       params: { ...params },
     };
   }
+
+  emitBoard(params) {
+    return {
+      name: 'emitBoard',
+      params: { ...params },
+    };
+  }
 }
 
 const effects = Object.seal(new Effects());

@@ -2,10 +2,9 @@ import React, { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function CardPreview() {
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
   const [preview] = states.preview;
 
-  console.log(preview && preview.type);
   return (
     <>
       <div className="previewAndPhaseZone--preview">

@@ -1,4 +1,4 @@
-import React, { useRef, useContext, memo } from "react";
+import React, { useContext, memo } from "react";
 import Store from "../../provider/duelProvider";
 
 function duelMenu() {
@@ -26,8 +26,8 @@ function duelMenu() {
       ));
     }
 
-    if (conditions.canActiveEffect(activeCards)) {
-    }
+    // if (conditions.canActiveEffect(activeCards)) {
+    // }
 
     if (conditions.canPlayCardCharacter()) {
       menuOptionItems.push((key) => (
