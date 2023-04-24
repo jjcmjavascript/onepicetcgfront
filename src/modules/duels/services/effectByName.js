@@ -1,4 +1,5 @@
 import effects from './effects';
+import conditions from './conditions';
 
 const TARGET_TYPES = Object.seal({
   SELF: 'self',
@@ -32,9 +33,25 @@ function getEffect(name) {
           addAttack: effects('addAttack', {
             targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
           }),
-          setDonUnderCard: effects('setDonUnderCard'),
+          setActiveDonUnderCard: effects('setActiveDonUnderCard'),
           cleanAll: effects('cleanAll'),
           emitBoard: effects('emitBoard'),
+        },
+      },
+    },
+
+    zoro: {
+      zoroEffect: {
+        label: '+1000 a todos los personajes',
+        trigger: 'onActive',
+        conditions: [
+          conditions('mode'),
+          conditions('phase'),
+          conditions('donAttached'),
+        ],
+        chaing: {
+          addAttackToAll: effects('addAttackToAll'),
+          cleanAll: effects('cleanAll'),
         },
       },
     },

@@ -12,7 +12,12 @@ function duelMenu() {
   if (!boardOne.locked && isMyTurn) {
     if (conditions.canAddAtkFromDon()) {
       menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.resolve("addAttackFromDon")}>
+        <button
+          key={key}
+          onClick={() =>
+            actions.resolve({ where: "don", name: "addAttackFromDon" })
+          }
+        >
           +1000
         </button>
       ));
@@ -25,9 +30,6 @@ function duelMenu() {
         </button>
       ));
     }
-
-    // if (conditions.canActiveEffect(activeCards)) {
-    // }
 
     if (conditions.canPlayCardCharacter()) {
       menuOptionItems.push((key) => (
@@ -57,6 +59,25 @@ function duelMenu() {
       ));
     }
 
+    if (activeCards?.leader) {
+      Object.entries(activeCards.leader.effects).forEach(
+        ([effectName, effectValue]) => {
+          if (conditions.resolve({ where: "leader", name: effectName })) {
+            menuOptionItems.push((key) => (
+              <button
+                key={key}
+                onClick={() =>
+                  actions.resolve({ name: effectName, where: "leader" })
+                }
+              >
+                Activar: {effectValue.label}
+              </button>
+            ));
+          }
+        }
+      );
+    }
+
     menuOptionItems.push((key) => (
       <button key={key} onClick={() => actions.finishTurn()}>
         Terminar Turno
@@ -69,12 +90,6 @@ function duelMenu() {
       Cancelar
     </button>
   ));
-
-  // menuOptionItems.push((key) => (
-  //   <button key={key} onClick={() => actions.resolve("addAttackFromLeader")}>
-  //     Test Ataque pa todos
-  //   </button>
-  // ));
 
   return (
     <>

@@ -29,6 +29,7 @@ class Effects {
 
   addAttack(params) {
     return {
+      label: 'Agregar ataque',
       name: 'addAttack',
       params: { amount: 1000, ...params },
     };
@@ -80,6 +81,20 @@ class Effects {
     return {
       name: 'emitBoard',
       params: { ...params },
+    };
+  }
+
+  setActiveDonUnderCard(params) {
+    return {
+      name: 'setActiveDonUnderCard',
+      params: { ...params },
+    };
+  }
+
+  addAttackToAll(params) {
+    return {
+      name: 'addAttackToAll',
+      params: { amount: 1000, ...params },
     };
   }
 }

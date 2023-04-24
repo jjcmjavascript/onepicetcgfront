@@ -143,6 +143,7 @@ class Card {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
+      card.effects = getEffectsByName('zoro');
       deck.push(card);
     }
 

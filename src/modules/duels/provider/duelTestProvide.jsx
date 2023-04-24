@@ -92,12 +92,8 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** SOCKET EFFECTS *****************/
     /****************************************/
-    resolve(name) {
-      const card =
-        activeCard.current.don ||
-        activeCard.current.leader ||
-        activeCard.current.character;
-
+    resolve({ where, name }) {
+      const card = activeCard.current[where];
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
@@ -243,7 +239,22 @@ function DuelProvider({ children }) {
       });
     },
 
-    setDonUnderCard() {
+    addAttackToAll(params) {
+      const { amount } = params;
+
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            return {
+              ...character,
+              powerAdded: [...character.powerAdded, amount],
+            };
+          }),
+        })
+      );
+    },
+
+    setActiveDonUnderCard() {
       const don = activeCard.current.don;
       const [type, card] = Object.entries(activeCard.current).find(
         ([, value]) => value != null && value.uuid !== don.uuid
@@ -255,16 +266,16 @@ function DuelProvider({ children }) {
         };
 
         if (type === "leader") {
-          object[type] = {
-            ...card,
-            overCards: [...card.overCards, { ...don, rested: true }],
+          object["leader"] = {
+            ...state.leader,
+            overCards: [...state.leader.overCards, { ...don, rested: true }],
           };
         } else if (type === "character") {
-          object[type] = state.characters.map((item) => {
+          object["characters"] = state.characters.map((item) => {
             if (item.uuid === card.uuid) {
               return {
                 ...item,
-                overCards: [...item.overCards, don],
+                overCards: [...item.overCards, { ...don, rested: true }],
               };
             }
 
@@ -399,6 +410,22 @@ function DuelProvider({ children }) {
   };
 
   const conditions = {
+    resolve({ where, name }) {
+      const currentCard = activeCard.current[where];
+      const effect = currentCard.effects[name];
+      const chaing = effect.conditions;
+
+      return chaing.every((rule) => {
+        return effectRules[rule.name]({
+          board,
+          game,
+          activesCards,
+          currentCard,
+          params: rule.params,
+        });
+      });
+    },
+
     costs() {
       const don = activeCard.current.don;
       return effectRules.costs({ board, don });
