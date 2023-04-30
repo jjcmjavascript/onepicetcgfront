@@ -1,11 +1,10 @@
 class Play {
   constructor(play) {
-    this.effectName = play.effectName || null;
-    this.type = play.type || null;
-
-    this.card = play.card || null;
-    this.playerId = play.playerId || null;
-    this.inTheirTurn = play.inThemTurn || false;
+    this.effectName = play.effectName;
+    this.type = play.type;
+    this.card = play.card;
+    this.playerId = play.playerId;
+    this.inTheirTurn = play.inTheirTurn;
   }
 
   get isCard() {
