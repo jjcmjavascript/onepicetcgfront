@@ -1,9 +1,11 @@
 import Player from '../models/Player';
 import Card from '../models/Card';
 
-class DeckGenerator {
+class BoardGenerator {
   constructor() {
-    this.board = new Player({});
+    this.board = new Player({
+      id: Math.ceil(Math.random() * 20),
+    });
   }
 
   generateDeck() {
@@ -86,7 +88,7 @@ class DeckGenerator {
     this.board.dons = dons;
     this.board.costs = dons.splice(0, 7);
     this.board.characters = characters.splice(0, 5);
-    this.board.deck = [...characters, ...stages, ...events]
+    this.board.deck = [...characters, ...stages, ...events];
     this.board.lives = this.board.deck.splice(0, this.board.leader.lives);
     this.board.hand = this.board.deck.splice(0, 5);
 
@@ -94,4 +96,4 @@ class DeckGenerator {
   }
 }
 
-export default DeckGenerator;
+export default BoardGenerator;

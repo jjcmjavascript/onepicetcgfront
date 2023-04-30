@@ -47,9 +47,8 @@ class GameState {
       plays: this.plays.merge({
         turnNumber: this.turnNumber,
         play: {
-          playerId: this.currentTurnPlayerId,
-          inTheirTurn: this.currentTurnPlayerId === play.playerId,
           ...play,
+          inTheirTurn: this.currentTurnPlayerId === play.playerId,
         },
       }),
     });

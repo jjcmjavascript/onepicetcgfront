@@ -362,33 +362,16 @@ function DuelProvider({ children }) {
       this.cleanAll();
     },
 
-    oncePerTurn(params) {
-      const { effectName, type } = params;
-
-      setGameState((state) => {
-        let plays = state.plays;
-        if (!plays[state.turnNumber]) {
-          plays[state.turnNumber] = [];
-        }
-
-        plays[state.turnNumber].push({
-          effectName,
-          type,
-        });
-
-        return state.merge({
-          plays,
-        });
-      });
-    },
-
     registerPlay(params) {
-      const { effectName, cardName } = params;
+      const { type, effectName } = params;
+      // card
+      // playerId
 
       setGameState((state) =>
         state.mergePlay({
-          name: cardName,
-          effectName,
+          name: effectName,
+          type,
+          playerId: boardOne.id,
         })
       );
     },
@@ -450,8 +433,6 @@ function DuelProvider({ children }) {
 
       generatorParams.current.clear();
     },
-
-
   };
 
   const conditions = {

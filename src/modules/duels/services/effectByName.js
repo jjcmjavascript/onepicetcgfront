@@ -54,7 +54,7 @@ function getEffect(name) {
           addAttackToAll: effects('addAttackToAll'),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'zoroEffect',
+            effectName: 'zoro:op001',
           }),
           cleanAll: effects('cleanAll'),
         },
@@ -76,7 +76,7 @@ function getEffect(name) {
           addAttackToAll: effects('addAttackToAll'),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'zoroEffect',
+            effectName: 'law:op001',
           }),
           cleanAll: effects('cleanAll'),
         },
