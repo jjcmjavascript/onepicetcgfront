@@ -1,3 +1,36 @@
+class Play {
+  constructor(play) {
+    this.name = play.name || null;
+    this.card = play.card || null;
+    this.playerId = play.playerId || null;
+    this.inTheirTurn = play.inThemTurn || false;
+  }
+
+  get isCard() {
+    return this.card !== null;
+  }
+}
+
+class Plays {
+  constructor(plays) {
+    this.plays = plays;
+  }
+
+  static getDefault() {
+    return new Plays({
+      1: [],
+    });
+  }
+
+  merge({ turnNumber, play }) {
+    const currentPlays = this.plays[turnNumber] || [];
+    return new Plays({
+      ...this.plays,
+      [turnNumber]: [...currentPlays, new Play(play)],
+    });
+  }
+}
+
 class GameState {
   constructor(gameState) {
     this.plays = gameState.plays;
@@ -19,14 +52,8 @@ class GameState {
       mode: '',
       pendingEffects: [],
       continuesEffects: [],
-      plays: {
-        1: [],
-      },
+      plays: Plays.getDefault(),
     });
-  }
-
-  getDefault() {
-    return GameState.getDefault();
   }
 
   get currentPlays() {
@@ -44,6 +71,19 @@ class GameState {
     return new GameState({
       ...this,
       ...gameState,
+    });
+  }
+
+  mergePlay(play) {
+    return this.merge({
+      plays: this.plays.merge({
+        turnNumber: this.turnNumber,
+        play: {
+          playerId: this.currentTurnPlayerId,
+          inTheirTurn: this.currentTurnPlayerId === play.playerId,
+          ...play,
+        },
+      }),
     });
   }
 }

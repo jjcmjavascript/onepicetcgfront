@@ -439,6 +439,16 @@ function DuelProvider({ children }) {
 
       generatorParams.current.clear();
     },
+
+    registerPlay(params) {
+      const { effectName, cardName } = params;
+
+      setGameState((state) => state.mergePlay({
+        name: cardName,
+        effectName,
+
+      }));
+    },
   };
 
   const conditions = {
