@@ -92,6 +92,17 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** SOCKET EFFECTS *****************/
     /****************************************/
+    resolveCard({ card, name }) {
+      const effect = card.effects[name];
+      const chaing = effect.chaing;
+      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+        generatorParams.current.set(chaingPart.name, chaingPart.params);
+        return () => this[chaingPart.name].call(this, chaingPart.params);
+      });
+
+      iterator(generator(arrayMethods));
+    },
+
     resolve({ where, name }) {
       const card = activeCard.current[where];
       const effect = card.effects[name];
@@ -350,6 +361,27 @@ function DuelProvider({ children }) {
 
       this.cleanAll();
     },
+
+    oncePerTurn(params) {
+      const { effectName, type } = params;
+
+      setGameState((state) => {
+        let plays = state.plays;
+        if (!plays[state.turnNumber]) {
+          plays[state.turnNumber] = [];
+        }
+
+        plays[state.turnNumber].push({
+          effectName,
+          type,
+        });
+
+        return state.merge({
+          plays,
+        });
+      });
+    },
+
     /******************************************/
     /******** END EFFECTS *********************/
     /******************************************/
@@ -410,6 +442,25 @@ function DuelProvider({ children }) {
   };
 
   const conditions = {
+    resolveCard({ card, name }) {
+      const currentCard = card;
+      const effect = currentCard.effects[name];
+      const chaing = effect.conditions;
+
+      return chaing.every((rule) => {
+        return (
+          effectRules[rule.name]({
+            board,
+            game,
+            activesCards,
+            currentCard,
+            effectName: name,
+            params: rule.params,
+          }) === true
+        );
+      });
+    },
+
     resolve({ where, name }) {
       const currentCard = activeCard.current[where];
       const effect = currentCard.effects[name];
@@ -421,6 +472,7 @@ function DuelProvider({ children }) {
           game,
           activesCards,
           currentCard,
+          effectName: name,
           params: rule.params,
         });
       });
@@ -488,6 +540,26 @@ function DuelProvider({ children }) {
       playerBoard: board,
     });
   };
+
+  // Leader Auto Effects
+  useEffect(() => {
+    if (!board.leader) return;
+
+    Object.entries(board.leader.effects).forEach(
+      ([effectName, effectValue]) => {
+        const result = conditions.resolveCard({
+          card: board.leader,
+          name: effectName,
+        });
+
+        if (result) {
+          if (effectValue.trigger === "auto") {
+            actions.resolveCard({ name: effectName, card: board.leader });
+          }
+        }
+      }
+    );
+  }, [board.leader]);
 
   useEffect(() => {
     deckService.getDecks().then((decks) => {

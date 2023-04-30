@@ -116,16 +116,7 @@ class Card {
       underCardId: null,
       toSelect: false,
       selected: false,
-      effects: [
-        {
-          name: 'zoroEffect',
-          trigger: 'onPlay',
-          conditions: {
-            phase: 'main',
-            cost: 1,
-          },
-        },
-      ],
+      effects: {},
     };
 
     return new Card(fakeCard);
@@ -143,7 +134,7 @@ class Card {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
-      card.effects = getEffectsByName('zoro');
+      card.effects = getEffectsByName('law');
       deck.push(card);
     }
 

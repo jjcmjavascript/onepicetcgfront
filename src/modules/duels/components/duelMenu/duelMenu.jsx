@@ -63,16 +63,18 @@ function duelMenu() {
       Object.entries(activeCards.leader.effects).forEach(
         ([effectName, effectValue]) => {
           if (conditions.resolve({ where: "leader", name: effectName })) {
-            menuOptionItems.push((key) => (
-              <button
-                key={key}
-                onClick={() =>
-                  actions.resolve({ name: effectName, where: "leader" })
-                }
-              >
-                Activar: {effectValue.label}
-              </button>
-            ));
+            if (effectValue.trigger !== "auto") {
+              menuOptionItems.push((key) => (
+                <button
+                  key={key}
+                  onClick={() =>
+                    actions.resolve({ name: effectName, where: "leader" })
+                  }
+                >
+                  Activar: {effectValue.label}
+                </button>
+              ));
+            }
           }
         }
       );

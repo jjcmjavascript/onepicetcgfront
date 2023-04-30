@@ -1,5 +1,5 @@
 class Conditions {
-  mode(params) {
+  currentMode(params) {
     return {
       name: 'mode',
       params: { mode: '', ...params },
@@ -16,6 +16,20 @@ class Conditions {
   donAttached(params) {
     return {
       name: 'donAttached',
+      params: { quantity: 1, ...params },
+    };
+  }
+
+  oncePerTurn(params) {
+    return {
+      name: 'oncePerTurn',
+      params: { ...params },
+    };
+  }
+
+  charactersQuantity(params) {
+    return {
+      name: 'characters',
       params: { quantity: 1, ...params },
     };
   }

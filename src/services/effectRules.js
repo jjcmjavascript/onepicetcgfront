@@ -56,9 +56,11 @@ export const phase = ({ game, params }) => game.currentPhase === params.phase;
 export const oncePerTurn = ({ game, effectName }) => {
   const currentTurnPlays = game.currentPlays;
 
-  return !currentTurnPlays.find((play) => {
-    return play.type === effectName;
+  const result = !currentTurnPlays.find((play) => {
+    return play.effectName === effectName;
   });
+
+  return result;
 };
 
 export const rest = ({ card }) => {

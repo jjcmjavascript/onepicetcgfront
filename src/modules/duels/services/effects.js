@@ -97,6 +97,13 @@ class Effects {
       params: { amount: 1000, ...params },
     };
   }
+
+  oncePerTurn(params) {
+    return {
+      name: 'oncePerTurn',
+      params: { ...params },
+    };
+  }
 }
 
 const effects = Object.seal(new Effects());

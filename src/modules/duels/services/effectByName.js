@@ -21,7 +21,7 @@ function getEffect(name) {
   const effectsHash = {
     don: {
       addAttackFromDon: {
-        trigger: 'onActive',
+        trigger: 'activate',
         chaing: {
           setMode: effects('setMode', { mode: 'select:character:leader' }),
           lockAllExcept: effects('lockAllExcept', {
@@ -43,14 +43,41 @@ function getEffect(name) {
     zoro: {
       zoroEffect: {
         label: '+1000 a todos los personajes',
-        trigger: 'onActive',
+        trigger: 'auto',
         conditions: [
-          conditions('mode'),
+          conditions('oncePerTurn'),
+          conditions('currentMode'),
           conditions('phase'),
           conditions('donAttached'),
         ],
         chaing: {
           addAttackToAll: effects('addAttackToAll'),
+          oncePerTurn: effects('oncePerTurn', {
+            type: 'leader_effect',
+            effectName: 'zoroEffect',
+          }),
+          cleanAll: effects('cleanAll'),
+        },
+      },
+    },
+
+    law: {
+      lawEffect: {
+        label: 'Regresar 1 y Jugar 1',
+        trigger: 'activate',
+        conditions: [
+          conditions('oncePerTurn'),
+          conditions('currentMode'),
+          conditions('phase'),
+          conditions('donAttached', { quantity: 2 }),
+          conditions('charactersQuantity', { quantity: 5 }),
+        ],
+        chaing: {
+          addAttackToAll: effects('addAttackToAll'),
+          oncePerTurn: effects('oncePerTurn', {
+            type: 'leader_effect',
+            effectName: 'zoroEffect',
+          }),
           cleanAll: effects('cleanAll'),
         },
       },
