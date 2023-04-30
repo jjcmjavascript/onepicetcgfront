@@ -1,36 +1,4 @@
-class Play {
-  constructor(play) {
-    this.name = play.name || null;
-    this.card = play.card || null;
-    this.playerId = play.playerId || null;
-    this.inTheirTurn = play.inThemTurn || false;
-  }
-
-  get isCard() {
-    return this.card !== null;
-  }
-}
-
-class Plays {
-  constructor(plays) {
-    this.plays = plays;
-  }
-
-  static getDefault() {
-    return new Plays({
-      1: [],
-    });
-  }
-
-  merge({ turnNumber, play }) {
-    const currentPlays = this.plays[turnNumber] || [];
-    return new Plays({
-      ...this.plays,
-      [turnNumber]: [...currentPlays, new Play(play)],
-    });
-  }
-}
-
+import Plays from './Plays';
 class GameState {
   constructor(gameState) {
     this.plays = gameState.plays;

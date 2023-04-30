@@ -52,7 +52,7 @@ function getEffect(name) {
         ],
         chaing: {
           addAttackToAll: effects('addAttackToAll'),
-          oncePerTurn: effects('oncePerTurn', {
+          registerPlay: effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'zoroEffect',
           }),
@@ -74,7 +74,7 @@ function getEffect(name) {
         ],
         chaing: {
           addAttackToAll: effects('addAttackToAll'),
-          oncePerTurn: effects('oncePerTurn', {
+          registerPlay: effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'zoroEffect',
           }),

@@ -53,7 +53,7 @@ export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
 
 export const phase = ({ game, params }) => game.currentPhase === params.phase;
 
-export const oncePerTurn = ({ game, effectName }) => {
+export const registerPlay = ({ game, effectName }) => {
   const currentTurnPlays = game.currentPlays;
 
   const result = !currentTurnPlays.find((play) => {
