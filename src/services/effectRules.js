@@ -53,9 +53,10 @@ export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
 
 export const phase = ({ game, params }) => game.currentPhase === params.phase;
 
-export const registerPlay = ({ game, effectName }) => {
+export const oncePerTurn = ({ game, effectName }) => {
   const currentTurnPlays = game.currentPlays;
 
+  console.log(currentTurnPlays, effectName);
   const result = !currentTurnPlays.find((play) => {
     return play.effectName === effectName;
   });
@@ -111,3 +112,7 @@ export const donAttached = ({ currentCard, params }) => {
 };
 
 export const mode = ({ game, params }) => game.mode === params.mode;
+
+export const charactersQuantity = ({ board, params }) => {
+  return board.characters.length === params.quantity;
+};

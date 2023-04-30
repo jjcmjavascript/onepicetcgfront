@@ -364,14 +364,12 @@ function DuelProvider({ children }) {
 
     registerPlay(params) {
       const { type, effectName } = params;
-      // card
-      // playerId
 
       setGameState((state) =>
         state.mergePlay({
-          name: effectName,
+          effectName,
           type,
-          playerId: boardOne.id,
+          playerId: board.id,
         })
       );
     },
@@ -472,14 +470,14 @@ function DuelProvider({ children }) {
       });
     },
 
-    costs() {
-      const don = activeCard.current.don;
-      return effectRules.costs({ board, don });
-    },
-    attack() {
-      const card = activeCard.current.character;
-      return effectRules.attack({ board, card, game });
-    },
+    // costs() {
+    //   const don = activeCard.current.don;
+    //   return effectRules.costs({ board, don });
+    // },
+    // attack() {
+    //   const card = activeCard.current.character;
+    //   return effectRules.attack({ board, card, game });
+    // },
     canAddAtkFromDon() {
       const don = activeCard.current.don;
       return effectRules.canAddAtkFromDon({ game, don });
@@ -491,10 +489,10 @@ function DuelProvider({ children }) {
         board,
       });
     },
-    rest() {
-      const card = activeCard.current.don || activeCard.current.character;
-      return effectRules.rest({ board, card });
-    },
+    // rest() {
+    //   const card = activeCard.current.don || activeCard.current.character;
+    //   return effectRules.rest({ board, card });
+    // },
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });
     },

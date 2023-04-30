@@ -40,8 +40,8 @@ function getEffect(name) {
       },
     },
 
-    zoro: {
-      zoroEffect: {
+    'RoronoaZoro:OP01-001': {
+      'RoronoaZoro:OP01-001:EFFECT:1': {
         label: '+1000 a todos los personajes',
         trigger: 'auto',
         conditions: [
@@ -54,15 +54,15 @@ function getEffect(name) {
           addAttackToAll: effects('addAttackToAll'),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'zoro:op001',
+            effectName: 'RoronoaZoro:OP01-001:EFFECT:1',
           }),
           cleanAll: effects('cleanAll'),
         },
       },
     },
 
-    law: {
-      lawEffect: {
+    'TrafalgarLaw:OP01-002': {
+      'TrafalgarLaw:OP01-002:EFFECT:1': {
         label: 'Regresar 1 y Jugar 1',
         trigger: 'activate',
         conditions: [
@@ -76,7 +76,7 @@ function getEffect(name) {
           addAttackToAll: effects('addAttackToAll'),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'law:op001',
+            effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
           }),
           cleanAll: effects('cleanAll'),
         },

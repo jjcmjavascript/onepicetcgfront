@@ -98,9 +98,9 @@ class Effects {
     };
   }
 
-  oncePerTurn(params) {
+  registerPlay(params) {
     return {
-      name: 'oncePerTurn',
+      name: 'registerPlay',
       params: { ...params },
     };
   }

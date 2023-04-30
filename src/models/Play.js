@@ -1,6 +1,6 @@
 class Play {
   constructor(play) {
-    this.name = play.name || null;
+    this.effectName = play.effectName || null;
     this.type = play.type || null;
 
     this.card = play.card || null;

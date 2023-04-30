@@ -25,7 +25,7 @@ class GameState {
   }
 
   get currentPlays() {
-    return this.plays[this.turnNumber] || [];
+    return this.plays.list[this.turnNumber] || [];
   }
 
   set(gameState) {
