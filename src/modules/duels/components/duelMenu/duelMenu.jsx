@@ -26,7 +26,8 @@ function duelMenu() {
     if (conditions.canShowConfirmButton()) {
       menuOptionItems.push((key) => (
         <button key={key} name="buttonToWait">
-          Confirm: {(activeCards.leader || activeCards.character || {}).name}
+          Confirmar Objetivo:{" "}
+          {Object.values(activeCards).find((active) => active != null).name}
         </button>
       ));
     }

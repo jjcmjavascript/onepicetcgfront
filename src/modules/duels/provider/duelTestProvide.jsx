@@ -21,8 +21,8 @@ const ActiveCardSchema = ActiveCard.getDefault();
 const DuelContext = createContext();
 const defaultActiveEffect = {
   card: null,
-  params: new Map(),
-  affectedCards: [],
+  effectNamesAndParams: new Map(),
+  affectedCards: new Set(),
 };
 
 function* generator(effects) {
@@ -102,10 +102,18 @@ function DuelProvider({ children }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
-        activeCardEffect.current.params.set(chaingPart.name, chaingPart.params);
+        //Register the effect and its params
+        activeCardEffect.current.effectNamesAndParams.set(
+          chaingPart.name,
+          chaingPart.params
+        );
         return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
+      //Register the card that is activating the effect
+      activeCardEffect.current.card = card;
+
+      // Effects are resolved by this
       iterator(generator(arrayMethods));
     },
 
@@ -114,10 +122,18 @@ function DuelProvider({ children }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
-        activeCardEffect.current.params.set(chaingPart.name, chaingPart.params);
+        //Register the effect and its params
+        activeCardEffect.current.effectNamesAndParams.set(
+          chaingPart.name,
+          chaingPart.params
+        );
         return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
+      //Register the card that is activating the effect
+      activeCardEffect.current.card = card;
+
+      // Effects are resolved by this
       iterator(generator(arrayMethods));
     },
 
@@ -133,8 +149,8 @@ function DuelProvider({ children }) {
 
     initPlayCard() {
       const card = activeCard.current.hand;
-
-      this.playCard(card);
+      card;
+      this.playCardFromHand();
     },
 
     initReplaceCharacter() {
@@ -150,15 +166,22 @@ function DuelProvider({ children }) {
     emitBoard() {},
 
     mergeActiveCard(card, type) {
-      if (board.lockeds[type]) return;
+      if (
+        board.lockeds[type] ||
+        (game.mode.includes("select") && !card.toSelect)
+      ) {
+        return;
+      }
 
       const state = activeCard.current;
       const modesToMergeWithAll = [
         "select:character:to:replace",
-        "select:character:leader",
+        "select:character&&leader",
       ];
 
-      if (game.mode === "select:character:leader") {
+      if (type === "clean") {
+        activeCard.current = state.getDefault();
+      } else if (game.mode === "select:character&&leader") {
         activeCard.current = state.set({
           [type]: card,
           don: state.don,
@@ -167,8 +190,6 @@ function DuelProvider({ children }) {
         activeCard.current = state.merge({
           [type]: card,
         });
-      } else if (type === "clean") {
-        activeCard.current = state.getDefault();
       } else {
         activeCard.current = state.set({
           [type]: card,
@@ -184,8 +205,8 @@ function DuelProvider({ children }) {
           const { target } = event;
 
           if (target.name === "buttonToWait") {
-            resolve();
             document.body.removeEventListener("click", handlerClick);
+            resolve();
           }
         };
 
@@ -225,7 +246,8 @@ function DuelProvider({ children }) {
 
     addAttack(params) {
       const { amount, targets } =
-        params || activeCardEffect.current.params.get("addAttack");
+        params ||
+        activeCardEffect.current.effectNamesAndParams.get("addAttack");
 
       const [cardType, card] = Object.entries(activeCard.current).find(
         ([type, value]) => value != null && targets.includes(type)
@@ -308,7 +330,9 @@ function DuelProvider({ children }) {
       });
     },
 
-    playCard(card) {
+    playCardFromHand() {
+      const card = activeCard.current.hand;
+
       setBoard((state) =>
         state.merge({
           hand: state.hand.filter((handCard) => handCard.uuid !== card.uuid),
@@ -371,8 +395,9 @@ function DuelProvider({ children }) {
       );
     },
 
-    returnCharacterFromFieldToHand() {
+    returnCharacterFromFieldToHand(params) {
       const { character } = activeCard.current;
+      const { registerAffectedCard } = params;
 
       setBoard((state) =>
         state.merge({
@@ -382,23 +407,35 @@ function DuelProvider({ children }) {
           hand: [...state.hand, character],
         })
       );
+
+      if (registerAffectedCard) {
+        this.setAffectedCards({ cards: [character] });
+      }
     },
 
-    activeHandSelectorFiltered(params) {
-      const { filters } = params;
-      let hand = [...board.hand];
+    setAffectedCards(params) {
+      const { cards } = params;
 
-      for (let filter of filters) {
-        hand = [
-          ...hand,
-          ...this[filter]({ arr: board.hand, ...filter.params }),
+      cards.forEach((card) => {
+        activeCardEffect.current.affectedCards.add(card);
+      });
+    },
+
+    activateHandSelectorFiltered(params) {
+      let filteredHand = [];
+      const filters = Object.entries(params);
+
+      for (const [functionName, functionParams] of filters) {
+        filteredHand = [
+          ...filteredHand,
+          ...this[functionName]({ arr: board.hand, ...functionParams }),
         ];
       }
 
       setBoard((state) =>
         state.merge({
-          hand: hand.map((handCard) => {
-            if (board.hand.find((card) => card.uuid === handCard.uuid)) {
+          hand: state.hand.map((handCard) => {
+            if (filteredHand.find((card) => card.uuid === handCard.uuid)) {
               return { ...handCard, toSelect: true };
             }
 
@@ -408,36 +445,28 @@ function DuelProvider({ children }) {
       );
     },
 
-    filterByColorComparingActiveCard(params) {
-      const { arr, include, where } = params;
-      const colors = activeCard.current[where].colors;
-
-      return arr.filter((card) => {
-        let hasColor = false;
-
-        for (let color of colors) {
-          hasColor = card.colors.includes(color);
-
-          if (hasColor) break;
-        }
-
-        return include ? hasColor : !hasColor;
-      });
-    },
-
     filterByColor(params) {
-      const { arr, colors, include } = params;
+      const { arr, equal, from } = params;
+
+      let colors = [];
+
+      if (from === "activeCard") {
+        colors = [];
+      } else if (from === "affectedCards") {
+        colors = [...activeCardEffect.current.affectedCards.values()]
+          .map((card) => card.colors)
+          .flat();
+      }
 
       return arr.filter((card) => {
         let hasColor = false;
 
         for (let color of colors) {
           hasColor = card.colors.includes(color);
-
           if (hasColor) break;
         }
 
-        return include ? hasColor : !hasColor;
+        return equal ? hasColor : !hasColor;
       });
     },
 
@@ -486,7 +515,7 @@ function DuelProvider({ children }) {
       );
     },
 
-    clearHandSelector() {
+    cleanHandSelector() {
       return setBoard((state) =>
         state.merge({
           hand: state.hand.map((card) => ({ ...card, toSelect: false })),
@@ -504,7 +533,7 @@ function DuelProvider({ children }) {
       this.cleanCharacterSelectorAll();
       this.cleanLeaderSelector();
       this.unlockAll();
-      this.clearHandSelector();
+      this.cleanHandSelector();
 
       activeCardEffect.current = {
         ...defaultActiveEffect,

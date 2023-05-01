@@ -108,13 +108,41 @@ class Effects {
   returnCharacterFromFieldToHand(params) {
     return {
       name: 'returnCharacterFromFieldToHand',
-      params: { quantity: 1, ...params },
+      params: { registerAffectedCard: true, quantity: 1, ...params },
     };
   }
 
   cleanCharacterSelectorAll(params) {
     return {
       name: 'cleanCharacterSelectorAll',
+      params: { ...params },
+    };
+  }
+
+  cleanHandSelector(params) {
+    return {
+      name: 'cleanHandSelector',
+      params: { ...params },
+    };
+  }
+
+  activateHandSelectorFiltered(params) {
+    return {
+      name: 'activeHandSelectorFiltered',
+      params: { ...params },
+    };
+  }
+
+  cleanActiveCards(params) {
+    return {
+      name: 'cleanActiveCards',
+      params: { ...params },
+    };
+  }
+
+  playCardFromHand(params) {
+    return {
+      name: 'playCardFromHand',
       params: { ...params },
     };
   }

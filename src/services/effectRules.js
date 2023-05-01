@@ -46,10 +46,19 @@ export const canAddAtkFromDon = ({ don, game }) => {
 };
 
 export const canShowConfirmButton = ({ activeCards, game }) => {
+  const modes = {
+    'select:character&&leader': ['leader', 'character'],
+    'select:character:in:characterZone': ['character'],
+    'select:character:in:hand': ['hand'],
+  };
+
+  const currentModeSelected = modes[game.mode];
+
   return (
-    ((activeCards.leader || activeCards.character) &&
-      game.mode === 'select:character:leader') ||
-    game.mode === 'select:character'
+    currentModeSelected &&
+    Object.values(currentModeSelected).some((name) =>
+      Boolean(activeCards[name])
+    )
   );
 };
 
@@ -70,7 +79,7 @@ export const rest = ({ card }) => {
 };
 
 export const characterSelect = ({ game, card }) => {
-  return rest({ card }) && game.mode === 'select:character';
+  return rest({ card }) && game.mode === 'select:character:in:characterZone';
 };
 
 export const canPlayCard = ({ card, board, game }) => {

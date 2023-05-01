@@ -23,7 +23,7 @@ function getEffect(name) {
       addAttackFromDon: {
         trigger: 'activate',
         chaing: {
-          setMode: effects('setMode', { mode: 'select:character:leader' }),
+          setMode: effects('setMode', { mode: 'select:character&&leader' }),
           lockAllExcept: effects('lockAllExcept', {
             exeptions: ['character', 'leader'],
           }),
@@ -73,7 +73,9 @@ function getEffect(name) {
           conditions('hasExactCharacters', { quantity: 5 }),
         ],
         chaing: {
-          setMode: effects('setMode', { mode: 'select:character' }),
+          setMode: effects('setMode', {
+            mode: 'select:character:in:characterZone',
+          }),
           lockAllExcept: effects('lockAllExcept', {
             exeptions: ['character'],
           }),
@@ -86,9 +88,23 @@ function getEffect(name) {
             type: 'leader_effect',
             effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
           }),
-          activeHandSelectorFiltered: effects('activeHandSelectorFiltered', {
-            filterByColor: {},
+          cleanCharacterSelectorAll: effects('cleanCharacterSelectorAll'),
+          cleanHandSelector: effects('cleanHandSelector'),
+          cleanActiveCards: effects('cleanActiveCards'),
+          lockAllExceptAgaing: effects('lockAllExcept', {
+            exeptions: ['hand'],
           }),
+          activateHandSelectorFiltered: effects('activateHandSelectorFiltered', {
+            filterByColor: {
+              equal: false,
+              from: 'affectedCards', // card / affectedCards
+            },
+          }),
+          setModeAgaing: effects('setMode', {
+            mode: 'select:character:in:hand',
+          }),
+          awaitSelectionAgaing: effects('awaitSelection'),
+          playCardFromHand: effects('playCardFromHand'),
           cleanAll: effects('cleanAll'),
         },
       },

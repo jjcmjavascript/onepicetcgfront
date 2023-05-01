@@ -68,7 +68,7 @@ function DuelProvider({ children }) {
 
       setGameState((state) =>
         state.merge({
-          mode: "select:character:leader",
+          mode: "select:character&&leader",
         })
       );
       this.activateCharacterSelectorAll();
@@ -96,7 +96,7 @@ function DuelProvider({ children }) {
 
     // setters
     mergeActiveCard(card, type) {
-      if (["select:character:leader"].includes(game.mode)) {
+      if (["select:character&&leader"].includes(game.mode)) {
         setActiveCards((state) =>
           state.merge({
             [type]: card,
@@ -207,7 +207,7 @@ function DuelProvider({ children }) {
       });
     },
 
-    playCard(card) {
+    playCardFromHand(card) {
       setBoard((state) =>
         state.merge({
           hand: state.hand.filter((handCard) => handCard.uuid !== card.uuid),

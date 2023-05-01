@@ -49,19 +49,6 @@ class ActiveCard {
       lastActiveName,
     });
   }
-
-  setDonAndLeader(activeCard) {
-    return this.set({
-      don: this.don,
-      leader: activeCard,
-    });
-  }
-
-  setByMode(mode, activeCard) {
-    if (mode === 'select:character:leader') {
-      return this.setDonAndLeader(activeCard);
-    }
-  }
 }
 
 export default ActiveCard;

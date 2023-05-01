@@ -4,7 +4,7 @@ import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
 import Trash from "./trash";
 
-function LeaderZone({ children }) {
+function LeaderZone() {
   const trashElementRef = useRef();
   const deckElementRef = useRef();
   const leaderElementRef = useRef();
@@ -12,7 +12,8 @@ function LeaderZone({ children }) {
   const { states, actions } = useContext(Store.DuelContext);
   const [board] = states.boardOne;
   const [, setPreview] = states.preview;
-  const [, setShowTrashModal] = states.showTrashModal;
+  // const [, setShowTrashModal] = states.showTrashModal;
+  const [activeCards] = states.activeCards;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -28,9 +29,12 @@ function LeaderZone({ children }) {
         <FieldCardFull
           ref={leaderElementRef}
           card={board.leader}
-          onClick={()=> actions.mergeActiveCard(board.leader, "leader")}
+          onClick={() => actions.mergeActiveCard(board.leader, "leader")}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
+          className={`${
+            activeCards.leader?.uuid === board.leader?.uuid ? "innerShadow" : ""
+          }`}
         />
 
         <div className="field--card_half"></div>
