@@ -19,7 +19,7 @@ const Board = new BoardGenerator({}).generateDeckStructure().merge({
 const EnemyBoard = new BoardGenerator({}).generateDeckStructure();
 const ActiveCardSchema = ActiveCard.getDefault();
 const DuelContext = createContext();
-const defaultAtiveEffect = {
+const defaultActiveEffect = {
   card: null,
   params: new Map(),
   affectedCards: [],
@@ -60,7 +60,7 @@ function DuelProvider({ children }) {
    * - Si bien cada funcion recibe automaticamente los parametros que necesita para ejecutarse por el iterador a veces son necesarios parametros adicionales que se almacenan aqui
    * Las cartas afectadas
    */
-  const activeCardEffect = useRef({ ...defaultAtiveEffect });
+  const activeCardEffect = useRef({ ...defaultActiveEffect });
 
   const hooks = { sockets };
 
@@ -408,8 +408,9 @@ function DuelProvider({ children }) {
       );
     },
 
-    filterByColor(params) {
-      const { arr, colors, include } = params;
+    filterByColorComparingActiveCard(params) {
+      const { arr, include, where } = params;
+      const colors = activeCard.current[where].colors;
 
       return arr.filter((card) => {
         let hasColor = false;
@@ -424,9 +425,8 @@ function DuelProvider({ children }) {
       });
     },
 
-    filterByColorComparingActiveCard(params) {
-      const { arr, include, where } = params;
-      const colors = activeCard.current[where].colors;
+    filterByColor(params) {
+      const { arr, colors, include } = params;
 
       return arr.filter((card) => {
         let hasColor = false;
@@ -507,7 +507,7 @@ function DuelProvider({ children }) {
       this.clearHandSelector();
 
       activeCardEffect.current = {
-        ...defaultAtiveEffect,
+        ...defaultActiveEffect,
       };
     },
   };
