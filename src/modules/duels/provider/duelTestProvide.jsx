@@ -75,7 +75,6 @@ function DuelProvider({ children }) {
     selectedDeck: useState(""),
   };
 
-
   const {
     duelSocket,
     initDuelSocket,
@@ -307,19 +306,6 @@ function DuelProvider({ children }) {
 
         return state.merge(object);
       });
-    },
-
-    addAttactToAllCharacters(attack = 1000) {
-      setBoard((state) =>
-        state.merge({
-          characters: state.characters.map((character) => {
-            return {
-              ...character,
-              powerAdded: [...character.powerAdded, attack],
-            };
-          }),
-        })
-      );
     },
 
     playCard(card) {

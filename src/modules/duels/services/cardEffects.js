@@ -79,15 +79,15 @@ function getEffect(name) {
           }),
           activateCharacterSelectorAll: effects('activateCharacterSelectorAll'),
           awaitSelection: effects('awaitSelection'),
-          returnCharacterFromFieldToHand: effects('returnCharacterFromFieldToHand'),
+          returnCharacterFromFieldToHand: effects(
+            'returnCharacterFromFieldToHand'
+          ),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
           }),
           activeHandSelectorFiltered: effects('activeHandSelectorFiltered', {
-            filterByColor: {
-
-            }
+            filterByColor: {},
           }),
           cleanAll: effects('cleanAll'),
         },
