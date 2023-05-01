@@ -81,25 +81,29 @@ function getEffect(name) {
           }),
           activateCharacterSelectorAll: effects('activateCharacterSelectorAll'),
           awaitSelection: effects('awaitSelection'),
-          returnCharacterFromFieldToHand: effects(
-            'returnCharacterFromFieldToHand'
-          ),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
           }),
+          restMultipleDons: effects('restMultipleDons', { quantity: 2 }),
+          returnCharacterFromFieldToHand: effects(
+            'returnCharacterFromFieldToHand'
+          ),
           cleanCharacterSelectorAll: effects('cleanCharacterSelectorAll'),
           cleanHandSelector: effects('cleanHandSelector'),
           cleanActiveCards: effects('cleanActiveCards'),
           lockAllExceptAgaing: effects('lockAllExcept', {
             exeptions: ['hand'],
           }),
-          activateHandSelectorFiltered: effects('activateHandSelectorFiltered', {
-            filterByColor: {
-              equal: false,
-              from: 'affectedCards', // card / affectedCards
-            },
-          }),
+          activateHandSelectorFiltered: effects(
+            'activateHandSelectorFiltered',
+            {
+              filterByColor: {
+                equal: false,
+                from: 'affectedCards', // card / affectedCards
+              },
+            }
+          ),
           setModeAgaing: effects('setMode', {
             mode: 'select:character:in:hand',
           }),
@@ -111,7 +115,7 @@ function getEffect(name) {
     },
   };
 
-  return effectsHash[name];
+  return effectsHash[name] || {};
 }
 
 export default Object.seal(getEffect);

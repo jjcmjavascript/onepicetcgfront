@@ -22,7 +22,7 @@ class Effects {
 
   restMultipleDons(params) {
     return {
-      name: 'restedMultipleDons',
+      name: 'restMultipleDons',
       params: { quantity: 1, ...params },
     };
   }
@@ -128,7 +128,7 @@ class Effects {
 
   activateHandSelectorFiltered(params) {
     return {
-      name: 'activeHandSelectorFiltered',
+      name: 'activateHandSelectorFiltered',
       params: { ...params },
     };
   }

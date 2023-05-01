@@ -168,7 +168,7 @@ function DuelProvider({ children }) {
     mergeActiveCard(card, type) {
       if (
         board.lockeds[type] ||
-        (game.mode.includes("select") && !card.toSelect)
+        (game.mode.includes("select") && !card?.toSelect)
       ) {
         return;
       }
@@ -343,21 +343,19 @@ function DuelProvider({ children }) {
       this.cleanAll();
     },
 
-    restedMultipleDons(quantity = 1) {
+    restMultipleDons(params) {
+      const { quantity } = params;
+
       setBoard((state) => {
-        let costs = state.costs;
+        let iteration = quantity;
+        let costs = state.costs.map((cost) => {
+          if (iteration > 0 && cost.rested == false) {
+            iteration--;
+            return { ...cost, rested: true };
+          }
 
-        if (quantity > 0) {
-          costs = state.costs.map((cost) => {
-            const canRested = !cost.rested && quantity > 0;
-            canRested && quantity--;
-
-            return {
-              ...cost,
-              rested: canRested ? true : cost.rested,
-            };
-          });
-        }
+          return cost;
+        });
 
         return state.merge({
           costs,
