@@ -29,8 +29,9 @@ export const attack = ({ board, game, card }) => {
   return canPhase && game.mode === '' && !play;
 };
 
-export const costs = ({ board, quantity }) => {
+export const hasAvaibleCost = ({ board, params }) => {
   const { costs } = board;
+  const { quantity } = params;
 
   return costs.filter((cost) => !cost.rested).length >= quantity;
 };
@@ -44,10 +45,11 @@ export const canAddAtkFromDon = ({ don, game }) => {
   );
 };
 
-export const canShowSelectToAddAtkFromDon = ({ activeCards, game }) => {
+export const canShowConfirmButton = ({ activeCards, game }) => {
   return (
-    (activeCards.leader || activeCards.character) &&
-    game.mode === 'select:character:leader'
+    ((activeCards.leader || activeCards.character) &&
+      game.mode === 'select:character:leader') ||
+    game.mode === 'select:character'
   );
 };
 
@@ -56,7 +58,6 @@ export const phase = ({ game, params }) => game.currentPhase === params.phase;
 export const oncePerTurn = ({ game, effectName }) => {
   const currentTurnPlays = game.currentPlays;
 
-  console.log(currentTurnPlays, effectName);
   const result = !currentTurnPlays.find((play) => {
     return play.effectName === effectName;
   });
@@ -74,7 +75,8 @@ export const characterSelect = ({ game, card }) => {
 
 export const canPlayCard = ({ card, board, game }) => {
   const canPhase = phase({ game, params: { phase: 'main' } });
-  const canCost = card && costs({ board, quantity: card.cost });
+  const canCost =
+    card && hasAvaibleCost({ board, params: { quantity: card.cost } });
   const canPlay = !game.mode && canPhase && canCost;
 
   return canPlay;
@@ -113,6 +115,6 @@ export const donAttached = ({ currentCard, params }) => {
 
 export const mode = ({ game, params }) => game.mode === params.mode;
 
-export const charactersQuantity = ({ board, params }) => {
+export const hasExactCharacters = ({ board, params }) => {
   return board.characters.length === params.quantity;
 };

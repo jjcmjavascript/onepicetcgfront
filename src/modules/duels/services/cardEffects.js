@@ -69,14 +69,25 @@ function getEffect(name) {
           conditions('oncePerTurn'),
           conditions('currentMode'),
           conditions('phase'),
-          conditions('donAttached', { quantity: 2 }),
-          conditions('charactersQuantity', { quantity: 5 }),
+          conditions('hasAvaibleCost', { quantity: 2 }),
+          conditions('hasExactCharacters', { quantity: 5 }),
         ],
         chaing: {
-          addAttackToAll: effects('addAttackToAll'),
+          setMode: effects('setMode', { mode: 'select:character' }),
+          lockAllExcept: effects('lockAllExcept', {
+            exeptions: ['character'],
+          }),
+          activateCharacterSelectorAll: effects('activateCharacterSelectorAll'),
+          awaitSelection: effects('awaitSelection'),
+          returnCharacterFromFieldToHand: effects('returnCharacterFromFieldToHand'),
           registerPlay: effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
+          }),
+          activeHandSelectorFiltered: effects('activeHandSelectorFiltered', {
+            filterByColor: {
+
+            }
           }),
           cleanAll: effects('cleanAll'),
         },

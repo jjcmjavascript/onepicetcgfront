@@ -18,8 +18,12 @@ const Board = new BoardGenerator({}).generateDeckStructure().merge({
 });
 const EnemyBoard = new BoardGenerator({}).generateDeckStructure();
 const ActiveCardSchema = ActiveCard.getDefault();
-
 const DuelContext = createContext();
+const defaultAtiveEffect = {
+  card: null,
+  params: new Map(),
+  affectedCards: [],
+};
 
 function* generator(effects) {
   for (let i = 0; i < effects.length; i++) {
@@ -39,29 +43,26 @@ function DuelProvider({ children }) {
   const boardTwo = useState(EnemyBoard);
   const gameState = useState(State);
   const sockets = useSocket();
-
-  const activeCard = useRef(ActiveCardSchema);
-  const activesCards = useState(ActiveCardSchema);
+  const activeCard = useRef(ActiveCardSchema); //usar
+  const activesCards = useState(ActiveCardSchema); //No usar
 
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
-
   const [, setActiveCard] = activesCards;
-  const generatorParams = useRef(new Map());
 
-  const modesToMergeWithAll = [
-    "select:character:to:replace",
-    "select:character:leader",
-  ];
+  /**
+   * Este ref es para guardar de forma precisa el efecto activo y poder manejar
+   * fin fallos las mutaciones de estado que se producen en el juego
+   * Almacena la carta que se activa
+   * Parametros (estos parametros tienen la estrucutura nombre funcion y params, ejempl:
+   * - {name: "setMode", params: {mode: "select:character:to:replace"}} )
+   * - Destacar que estas funciones son ejecutadas por el iterador de efectos: iterator(generator(arrayMethods));
+   * - Si bien cada funcion recibe automaticamente los parametros que necesita para ejecutarse por el iterador a veces son necesarios parametros adicionales que se almacenan aqui
+   * Las cartas afectadas
+   */
+  const activeCardEffect = useRef({ ...defaultAtiveEffect });
 
-  const {
-    duelSocket,
-    initDuelSocket,
-    stopDuelSocket,
-    joinRoom,
-    duelRoom,
-    SOCKET_DUEL_URL,
-  } = sockets;
+  const hooks = { sockets };
 
   const states = {
     boardOne,
@@ -74,9 +75,15 @@ function DuelProvider({ children }) {
     selectedDeck: useState(""),
   };
 
-  const hooks = {
-    sockets,
-  };
+
+  const {
+    duelSocket,
+    initDuelSocket,
+    stopDuelSocket,
+    joinRoom,
+    duelRoom,
+    SOCKET_DUEL_URL,
+  } = sockets;
 
   const actions = {
     isMyTurn() {
@@ -96,7 +103,7 @@ function DuelProvider({ children }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
-        generatorParams.current.set(chaingPart.name, chaingPart.params);
+        activeCardEffect.current.params.set(chaingPart.name, chaingPart.params);
         return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
@@ -108,7 +115,7 @@ function DuelProvider({ children }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
-        generatorParams.current.set(chaingPart.name, chaingPart.params);
+        activeCardEffect.current.params.set(chaingPart.name, chaingPart.params);
         return () => this[chaingPart.name].call(this, chaingPart.params);
       });
 
@@ -147,6 +154,10 @@ function DuelProvider({ children }) {
       if (board.lockeds[type]) return;
 
       const state = activeCard.current;
+      const modesToMergeWithAll = [
+        "select:character:to:replace",
+        "select:character:leader",
+      ];
 
       if (game.mode === "select:character:leader") {
         activeCard.current = state.set({
@@ -215,7 +226,7 @@ function DuelProvider({ children }) {
 
     addAttack(params) {
       const { amount, targets } =
-        params || generatorParams.current.get("addAttack");
+        params || activeCardEffect.current.params.get("addAttack");
 
       const [cardType, card] = Object.entries(activeCard.current).find(
         ([type, value]) => value != null && targets.includes(type)
@@ -374,6 +385,81 @@ function DuelProvider({ children }) {
       );
     },
 
+    returnCharacterFromFieldToHand() {
+      const { character } = activeCard.current;
+
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.filter(
+            (currentCharacter) => currentCharacter.uuid !== character.uuid
+          ),
+          hand: [...state.hand, character],
+        })
+      );
+    },
+
+    activeHandSelectorFiltered(params) {
+      const { filters } = params;
+      let hand = [...board.hand];
+
+      for (let filter of filters) {
+        hand = [
+          ...hand,
+          ...this[filter]({ arr: board.hand, ...filter.params }),
+        ];
+      }
+
+      setBoard((state) =>
+        state.merge({
+          hand: hand.map((handCard) => {
+            if (board.hand.find((card) => card.uuid === handCard.uuid)) {
+              return { ...handCard, toSelect: true };
+            }
+
+            return handCard;
+          }),
+        })
+      );
+    },
+
+    filterByColor(params) {
+      const { arr, colors, include } = params;
+
+      return arr.filter((card) => {
+        let hasColor = false;
+
+        for (let color of colors) {
+          hasColor = card.colors.includes(color);
+
+          if (hasColor) break;
+        }
+
+        return include ? hasColor : !hasColor;
+      });
+    },
+
+    filterByColorComparingActiveCard(params) {
+      const { arr, include, where } = params;
+      const colors = activeCard.current[where].colors;
+
+      return arr.filter((card) => {
+        let hasColor = false;
+
+        for (let color of colors) {
+          hasColor = card.colors.includes(color);
+
+          if (hasColor) break;
+        }
+
+        return include ? hasColor : !hasColor;
+      });
+    },
+
+    filterByCosts(params) {
+      const { arr, cost, symbol = ">=" } = params;
+      return arr.filter((card) => eval(`${card.cost} ${symbol} ${cost}`));
+    },
+
     /******************************************/
     /******** END EFFECTS *********************/
     /******************************************/
@@ -414,12 +500,16 @@ function DuelProvider({ children }) {
       );
     },
 
+    clearHandSelector() {
+      return setBoard((state) =>
+        state.merge({
+          hand: state.hand.map((card) => ({ ...card, toSelect: false })),
+        })
+      );
+    },
+
     cancel() {
-      this.cleanGameMode();
-      this.cleanActiveCards();
-      this.cleanCharacterSelectorAll();
-      this.cleanLeaderSelector();
-      this.unlockAll();
+      this.cleanAll();
     },
 
     cleanAll() {
@@ -428,8 +518,11 @@ function DuelProvider({ children }) {
       this.cleanCharacterSelectorAll();
       this.cleanLeaderSelector();
       this.unlockAll();
+      this.clearHandSelector();
 
-      generatorParams.current.clear();
+      activeCardEffect.current = {
+        ...defaultAtiveEffect,
+      };
     },
   };
 
@@ -469,11 +562,6 @@ function DuelProvider({ children }) {
         });
       });
     },
-
-    // costs() {
-    //   const don = activeCard.current.don;
-    //   return effectRules.costs({ board, don });
-    // },
     // attack() {
     //   const card = activeCard.current.character;
     //   return effectRules.attack({ board, card, game });
@@ -482,8 +570,8 @@ function DuelProvider({ children }) {
       const don = activeCard.current.don;
       return effectRules.canAddAtkFromDon({ game, don });
     },
-    canShowSelectToAddAtkFromDon() {
-      return effectRules.canShowSelectToAddAtkFromDon({
+    canShowConfirmButton() {
+      return effectRules.canShowConfirmButton({
         activeCards: activeCard.current,
         game,
         board,

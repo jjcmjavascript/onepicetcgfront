@@ -134,7 +134,7 @@ class Card {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
-      card.effects = getEffectsByName('RoronoaZoro:OP01-001');
+      card.effects = getEffectsByName('TrafalgarLaw:OP01-002');
       deck.push(card);
     }
 

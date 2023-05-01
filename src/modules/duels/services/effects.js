@@ -104,6 +104,20 @@ class Effects {
       params: { ...params },
     };
   }
+
+  returnCharacterFromFieldToHand(params) {
+    return {
+      name: 'returnCharacterFromFieldToHand',
+      params: { quantity: 1, ...params },
+    };
+  }
+
+  cleanCharacterSelectorAll(params) {
+    return {
+      name: 'cleanCharacterSelectorAll',
+      params: { ...params },
+    };
+  }
 }
 
 const effects = Object.seal(new Effects());

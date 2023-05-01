@@ -43,7 +43,6 @@ class GameState {
   }
 
   mergePlay(play) {
-    console.log('mergePlay', play);
     return this.merge({
       plays: this.plays.merge({
         turnNumber: this.turnNumber,

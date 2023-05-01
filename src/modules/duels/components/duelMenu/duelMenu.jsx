@@ -23,10 +23,10 @@ function duelMenu() {
       ));
     }
 
-    if (conditions.canShowSelectToAddAtkFromDon()) {
+    if (conditions.canShowConfirmButton()) {
       menuOptionItems.push((key) => (
         <button key={key} name="buttonToWait">
-          {(activeCards.leader || activeCards.character || {}).name} : +1000
+          Confirm: {(activeCards.leader || activeCards.character || {}).name}
         </button>
       ));
     }

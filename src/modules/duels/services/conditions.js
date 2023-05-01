@@ -27,9 +27,16 @@ class Conditions {
     };
   }
 
-  charactersQuantity(params) {
+  hasExactCharacters(params) {
     return {
-      name: 'characters',
+      name: 'hasExactCharacters',
+      params: { quantity: 1, ...params },
+    };
+  }
+
+  hasAvaibleCost(params) {
+    return {
+      name: 'hasAvaibleCost',
       params: { quantity: 1, ...params },
     };
   }

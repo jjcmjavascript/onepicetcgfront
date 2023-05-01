@@ -236,9 +236,9 @@ function DuelProvider({ children }) {
   };
 
   const conditions = {
-    costs() {
+    hasAvaibleCost() {
       const don = activeCards.don;
-      return effectRules.costs({ board, don });
+      return effectRules.hasAvaibleCost({ board, don });
     },
     attack() {
       const card = activeCards.character;
@@ -248,8 +248,8 @@ function DuelProvider({ children }) {
       const don = activeCards.don;
       return effectRules.canAddAtkFromDon({ game, don });
     },
-    canShowSelectToAddAtkFromDon() {
-      return effectRules.canShowSelectToAddAtkFromDon({
+    canShowConfirmButton() {
+      return effectRules.canShowConfirmButton({
         activeCards,
         game,
         board,
