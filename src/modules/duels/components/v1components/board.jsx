@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 
 import CharacterZone from "./characterArea/characterZone";
 import DonZone from "./donArea/donZone";
@@ -14,7 +14,6 @@ function Board({ rotate }) {
   const { boardOne } = states;
 
   const [board, setBoard] = boardOne;
-  const { rooms, duelSocket } = hooks.sockets;
 
   return (
     <>
@@ -38,4 +37,4 @@ function Board({ rotate }) {
   );
 }
 
-export default Board;
+export default memo(Board);

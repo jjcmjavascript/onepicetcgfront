@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function CardPreview() {
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
   const [preview] = states.preview;
 
   return (
@@ -15,7 +15,9 @@ function CardPreview() {
           />
         )}
       </div>
-      <span className="text_preview text-light">{preview && preview.card_text}</span>
+      <span className="text_preview text-light">
+        {preview && preview.card_text}
+      </span>
     </>
   );
 }

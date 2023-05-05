@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 function RevealCard() {
   return (
@@ -10,4 +10,4 @@ function RevealCard() {
   );
 }
 
-export default RevealCard;
+export default memo(RevealCard);

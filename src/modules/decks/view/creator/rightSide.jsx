@@ -7,7 +7,7 @@ import Input from "../../../../components/input";
 export default function RightSide({ className }) {
   const { hooks, actions, states } = useContext(store.CardContext);
   const [activeCard] = states.activeCard;
-  const { deck, setName, reset } = hooks.deck;
+  const { deck, setName, setDeckFromBackend } = hooks.deck;
   const { decks } = hooks;
 
   return (
@@ -17,7 +17,7 @@ export default function RightSide({ className }) {
           className="success col-12 mt-1"
           disabled={false}
           onClick={() => {
-            decks.saveDeck(deck, reset);
+            decks.saveDeck(deck, setDeckFromBackend);
           }}
         >
           Guardar

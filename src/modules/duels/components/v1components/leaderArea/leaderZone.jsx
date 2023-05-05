@@ -1,28 +1,19 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, memo } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
 import Trash from "./trash";
 
-import DeckOptions from "./deckOptions";
-import DeckOptionItem from "./deckOptionItem";
-
-import TrashOptions from "./deckOptions";
-import TrashOptionItem from "./deckOptionItem";
-
-import { shuffle } from "../../../../../helpers";
-
-function LeaderZone({ children }) {
+function LeaderZone() {
   const trashElementRef = useRef();
-  const trashOptionElementRef = useRef();
-
   const deckElementRef = useRef();
-  const deckOptionElementRef = useRef();
+  const leaderElementRef = useRef();
 
-  const { states, hooks } = useContext(Store.DuelContext);
-  const [board, setBoardOneState] = states.boardOne;
+  const { states, actions } = useContext(Store.DuelContext);
+  const [board] = states.boardOne;
   const [, setPreview] = states.preview;
-  const [, setShowTrashModal] = states.showTrashModal;
+  // const [, setShowTrashModal] = states.showTrashModal;
+  const [activeCards] = states.activeCards;
 
   const onMouseOver = (card) => {
     setPreview(card);
@@ -32,92 +23,18 @@ function LeaderZone({ children }) {
     setPreview(null);
   };
 
-  const toggleDeckOptions = () => {
-    const optionsElement = deckOptionElementRef.current;
-    const deckElement = deckElementRef.current;
-
-    if (optionsElement.classList.contains("hide")) {
-      optionsElement.style.width = `${deckElement.clientWidth * 1.5}px`;
-      optionsElement.style.left = `${deckElement.offsetLeft / 1.05}px`;
-      optionsElement.classList.remove("hide");
-    } else {
-      optionsElement.style.width = `0px`;
-      optionsElement.style.left = `0px`;
-      optionsElement.classList.add("hide");
-    }
-  };
-
-  const drawFromDeck = () => {
-    const newCard = board.deck[0];
-
-    setBoardOneState((current) => {
-      return {
-        ...current,
-        deck: current.deck.filter((card) => card.uuid !== newCard.uuid),
-      };
-    });
-
-    // setHand([...hand, newCard]);
-  };
-
-  const shuffleDeck = () => {
-    setBoardOneState((current) => {
-      return {
-        ...current,
-        deck: shuffle(current.deck),
-      };
-    });
-  };
-
-  const discardFromDeck = () => {
-    const newCard = board.deck[0];
-
-    setBoardOneState((current) => {
-      return {
-        ...current,
-        deck: current.deck.filter((card) => card.uuid !== newCard.uuid),
-        trash: [...current.trash, newCard],
-      };
-    });
-  };
-
-  const toggleTrashOptions = () => {
-    const optionsElement = trashOptionElementRef.current;
-    const trashElement = trashElementRef.current;
-
-    if (optionsElement.classList.contains("hide")) {
-      optionsElement.style.width = `${trashElement.clientWidth * 1.5}px`;
-      optionsElement.style.left = `${trashElement.offsetLeft / 1.05}px`;
-      optionsElement.classList.remove("hide");
-    } else {
-      optionsElement.style.width = `0px`;
-      optionsElement.style.left = `0px`;
-      optionsElement.classList.add("hide");
-    }
-  };
-
-  const showTrash = () => {
-    setShowTrashModal(true);
-    toggleTrashOptions();
-  };
-
   return (
     <>
       <div className="field--card_area">
-        <DeckOptions ref={deckOptionElementRef}>
-          <DeckOptionItem onClick={drawFromDeck}>Robar</DeckOptionItem>
-          <DeckOptionItem onClick={shuffleDeck}>Barajar</DeckOptionItem>
-          <DeckOptionItem onClick={discardFromDeck}>Descartar</DeckOptionItem>
-        </DeckOptions>
-
-        <TrashOptions ref={trashOptionElementRef}>
-          <TrashOptionItem onClick={showTrash}>Mostrar</TrashOptionItem>
-        </TrashOptions>
-
         <FieldCardFull
+          ref={leaderElementRef}
           card={board.leader}
+          onClick={() => actions.mergeActiveCard(board.leader, "leader")}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
+          className={`${
+            activeCards.leader?.uuid === board.leader?.uuid ? "innerShadow" : ""
+          }`}
         />
 
         <div className="field--card_half"></div>
@@ -128,7 +45,6 @@ function LeaderZone({ children }) {
           card={board.leader}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
-          onClick={toggleDeckOptions}
         />
 
         <div className="field--card_half"></div>
@@ -138,11 +54,11 @@ function LeaderZone({ children }) {
           count={board.trash.length}
           onMouseOut={() => onMouseOut(board.leader)}
           onMouseOver={() => onMouseOver(board.leader)}
-          onClick={toggleTrashOptions}
+          // onClick={actions.setActiveCard(card, "don")}
         />
       </div>
     </>
   );
 }
 
-export default LeaderZone;
+export default memo(LeaderZone);

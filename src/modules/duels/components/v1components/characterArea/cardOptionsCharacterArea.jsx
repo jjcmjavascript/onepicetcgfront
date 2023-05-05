@@ -1,4 +1,4 @@
-import React, {forwardRef} from "react";
+import React, { forwardRef } from "react";
 
 function CardOptionCharacterAreaItem(props, ref) {
   const { children } = props;

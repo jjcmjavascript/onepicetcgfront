@@ -1,9 +1,13 @@
 .rotated {
-  transform: rotate(180deg); /* Equal to rotateZ(45deg) */
+  transform: rotate(180deg);
 }
 
 .rotate270 {
-  transform: rotate(270deg); /* Equal to rotateZ(45deg) */
+  transform: rotate(270deg);
+}
+
+.rotate85 {
+  transform: rotate(85deg);
 }
 
 /* to here */
@@ -19,7 +23,7 @@
 .previewAndPhaseZone {
   min-height: 100vh;
   max-height: 100vh;
-  width: 30vw;
+  width: 20vw;
   border: 1px solid red;
 }
 
@@ -47,13 +51,14 @@
   box-shadow: -5px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
-.previewAndPhaseZone--phases > button:hover, button:active {
+.previewAndPhaseZone--phases > button:hover,
+button:active {
   background-color: rgb(90, 1, 90);
 }
 
-
 .previewAndPhaseZone--phases > button.active--phase {
-  box-shadow: 0 0 5px 3px rgb(39, 1, 39);
+  box-shadow: 0 0 5px 3px rgb(226, 130, 226);
+  background-color: rgb(90, 1, 90);
 }
 
 .previewAndPhaseZone--preview {

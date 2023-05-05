@@ -46,7 +46,7 @@
   display: grid;
   min-height: 50vh;
   max-height: 50vh;
-  width: 70vw;
+  width: 60vw;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -64,6 +64,8 @@
   max-height: 11.25vh;
   white-space: nowrap;
   position: relative;
+  grid-gap: 3px;
+  margin-top: 2px;
 }
 
 .field--card_full {
@@ -72,8 +74,18 @@
   cursor: pointer;
   border-radius: 5px;
   transition: 0.2s;
-  padding: 4px;
   display: inline-block;
+}
+
+.field--card__effectLists {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  z-index: 2;
+  font-size: 0.8rem;
+  color: black;
+  font-weight: bold;
+  text-shadow: 0px 0px 1px white;
 }
 
 .field--card_full_used::after {
@@ -90,15 +102,48 @@
   position: relative;
   width: 55px;
   cursor: pointer;
-  padding: 4px;
 }
 
 .field--card__image {
   width: 100%;
   height: 100%;
   object-fit: fill;
-  box-shadow: 0px 0px 1px 2px rgb(255, 255, 255);
+  /* box-shadow: 0px 0px 1px 2px rgb(255, 255, 255); */
   border-radius: 2px;
+  background-color: blueviolet;
+}
+
+.card_to_select::after {
+  box-shadow: inset 0 0 20px 2px #00e676;
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  border-radius: 2px;
+  content: "";
+}
+
+.field--card_full:hover::after {
+  box-shadow: inset 0 0 20px 2px gold;
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  border-radius: 2px;
+  content: "";
+}
+
+.innerShadow::after {
+  box-shadow: inset 0 0 20px 2px gold;
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  border-radius: 2px;
+  content: "";
 }
 
 .bgBlack80 {
@@ -147,7 +192,7 @@
   transition: 0.2s;
 }
 
-.don--card__used::after {
+.card--rested::after {
   content: "";
   position: absolute;
   top: 0;
@@ -155,6 +200,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(9, 9, 9, 0.8);
+  /* rotate: 90deg; */
 }
 
 /* HAND AREA */
@@ -163,8 +209,10 @@
   max-width: 50vw;
   min-width: 50vw;
   max-height: 11.25vh;
-  white-space: nowrap;
-  position: relative;
+  /* white-space: nowrap;
+  position: relative; */
+  grid-gap: 2px;
+  margin-top: 2px;
 }
 
 .hand--options {
@@ -261,5 +309,3 @@
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.8);
 }
-
-

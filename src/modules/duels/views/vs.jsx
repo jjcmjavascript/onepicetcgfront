@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
 import Swal from "sweetalert2";
@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
 import VsPlayer from "../components/vsPlayer";
+import TurnSelector from "../components/turnSelector";
 
 import constants from "../services/constants";
 
@@ -13,22 +14,21 @@ const views = {
   duel: <VsPlayer />,
   rockScissorPaper: <RockScissorPaper />,
   waitingArea: <WatingArea />,
+  turnSelector: <TurnSelector />,
 };
 
 function wrapper() {
   const history = useNavigate();
-
+  const { states, hooks } = useContext(Store.DuelContext);
   const [view, setView] = useState("waitingArea");
 
-  const { states, hooks } = useContext(Store.DuelContext);
-
+  const { sockets: hookSocket } = hooks;
   const {
     selectedDeck: selectedDeckState,
     boardOne,
     boardTwo,
     gameState,
   } = states;
-  const { sockets: hookSocket } = hooks;
 
   const [, setBoardOneState] = boardOne;
   const [, setBoardTwoState] = boardTwo;
@@ -67,31 +67,30 @@ function wrapper() {
       setView("rockScissorPaper");
     });
 
-    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_RESULT, (payload) => {
-      if (payload.result) {
-        setView("duel");
+    duelSocket.on(constants.GAME_TURN_SELECTION_INIT, (payload) => {
+      console.log(constants.GAME_TURN_SELECTION_INIT);
+
+      if (payload.playerId) {
+        setView(
+          payload.playerId === duelSocket.id ? "turnSelector" : "waitingArea"
+        );
       }
     });
 
-    duelSocket.on(constants.DUEL_CANCELED, (payload) => {
-      if (payload.players.includes(duelSocket.id)) {
-        duelSocket.leave(hookSocket.duelRoom);
-        history("/duels");
-      }
+    duelSocket.on(constants.GAME_TURN_SELECTION_END, (payload) => {
+      setView("duel");
     });
 
     duelSocket.on(constants.GAME_INITIAL_BOARD_STATE, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      console.log(constants.GAME_INITIAL_BOARD_STATE);
+      setBoardOneState((state) => state.set(payload.board));
 
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.rivalBoard };
-      });
+      setBoardTwoState((state) => state.set(payload.rivalBoard));
     });
 
     duelSocket.on(constants.GAME_STATE, (payload) => {
-      setGameState(payload.game);
+      console.log(constants.GAME_STATE, payload);
+      setGameState((state) => state.set(payload.game));
     });
 
     duelSocket.on(constants.GAME_PHASES_MULLIGAN, (payload) => {
@@ -108,29 +107,37 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_MULLIGAN, (payload) => {
-      setBoardOneState(payload.board);
+      console.log(constants.GAME_MULLIGAN);
+
+      setBoardOneState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_RIVAL_MULLIGAN, (payload) => {
-      setBoardTwoState(payload.board);
-    });
+      console.log(constants.GAME_RIVAL_MULLIGAN);
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_REFRESH, (payload) => {
+      console.log(constants.GAME_PHASES_REFRESH, payload);
+
+      setBoardOneState((state) => state.set(payload.board));
+
       duelSocket.emit(constants.GAME_PHASES_REFRESH_END, {
         room: payload.room,
       });
     });
 
+    duelSocket.on(constants.GAME_RIVAL_PHASES_REFRESH, (payload) => {
+      console.log(constants.GAME_RIVAL_PHASES_REFRESH);
+
+      setBoardTwoState((state) => state.set(payload.board));
+    });
+
     duelSocket.on(constants.GAME_PHASES_DRAW, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      console.log(constants.GAME_PHASES_DRAW);
+
+      setBoardOneState((state) => state.set(payload.board));
 
       duelSocket.emit(constants.GAME_PHASES_DRAW_END, {
         room: payload.room,
@@ -138,21 +145,15 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_DRAW, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
-    });
+      console.log(constants.GAME_RIVAL_PHASES_DRAW);
 
-    duelSocket.on(constants.GAME_INITIAL_RIVAL_BOARD_STATE, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_DON, (payload) => {
-      setBoardOneState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      console.log(constants.GAME_PHASES_DON);
+
+      setBoardOneState((state) => state.set(payload.board));
 
       duelSocket.emit(constants.GAME_PHASES_DON_END, {
         room: payload.room,
@@ -160,29 +161,25 @@ function wrapper() {
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_DON, (payload) => {
-      setBoardTwoState((currentBoard) => {
-        return { ...currentBoard, ...payload.board };
-      });
+      console.log(constants.GAME_RIVAL_PHASES_DON);
+
+      setBoardTwoState((state) => state.set(payload.board));
     });
 
     duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
-      console.log("GAME_PHASES_MAIN");
-
-      duelSocket.emit(constants.GAME_PHASES_MAIN_END, {
-        room: payload.room,
-      });
+      console.log(constants.GAME_PHASES_MAIN);
     });
 
     duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
-      console.log("GAME_RIVAL_PHASES_MAIN");
+      console.log(constants.GAME_RIVAL_PHASES_MAIN);
     });
 
-    duelSocket.on(constants.GAME_PHASE_END, (payload) => {
-      console.log("GAME_PHASE_END");
+    duelSocket.on(constants.GAME_DON_PLUS, (payload) => {
+      console.log(constants.GAME_DON_PLUS);
     });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_END, (payload) => {
-      console.log("GAME_RIVAL_PHASES_END");
+    duelSocket.on(constants.GAME_RIVAL_DON_PLUS, (payload) => {
+      console.log(constants.GAME_RIVAL_DON_PLUS);
     });
   }
 

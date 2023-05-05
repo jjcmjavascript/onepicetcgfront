@@ -53,7 +53,7 @@ export default function useDecks() {
     setFilteredDeck(filteredDecks);
   };
 
-  const saveDeck = async (deck, resetDeck) => {
+  const saveDeck = async (deck, setDeckFromBackend) => {
     if (!rules.isValidDeck(deck)) {
       return swalMessage(
         'Invalid Deck',
@@ -72,15 +72,15 @@ export default function useDecks() {
       const name = deck.name;
       const id = deck.id;
 
-      const deck = id
+      let formatedDeck = id
         ? await deckService.updateDeck({ cards, name, id })
         : await deckService.saveDeck({ cards, name });
 
-      deck = formatCardsForDeck(deck);
+      formatedDeck = formatCardsForDeck(formatedDeck, { withDons: false });
+
+      setDeckFromBackend(formatedDeck);
 
       swalMessage('Perfecto!', 'Deck almacenado con exito!', 'success');
-
-      resetDeck();
     } catch (err) {
       swalMessage('Error', err.message, 'error');
     }

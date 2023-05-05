@@ -5,7 +5,9 @@ export default function BadgeRounded({ className, color, children }) {
   const defaultClassName = "badge rounded-pill text-bg-primary";
 
   return (
-    <span className={color && classWithColor || className || defaultClassName}>
+    <span
+      className={(color && classWithColor) || className || defaultClassName}
+    >
       {children}
     </span>
   );

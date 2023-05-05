@@ -43,8 +43,8 @@ function RockScissorPaper() {
 
   const onClick = (choice) => {
     setChoice(choice);
-
-    duelSocket.emit(constants.GAME_ROCK_PAPER_SCISSORS_CHOISE, {
+    console.log(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE)
+    duelSocket.emit(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE, {
       room: duelRoom,
       choice,
     });
