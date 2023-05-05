@@ -6,6 +6,7 @@ function duelMenu() {
 
   const [boardOne] = states.boardOne;
   const [activeCards] = states.activeCards;
+  // const currentEffectPile = states.currentEffectPile;
   const isMyTurn = actions.isMyTurn();
   const menuOptionItems = [];
 
@@ -27,7 +28,11 @@ function duelMenu() {
       menuOptionItems.push((key) => (
         <button key={key} name="buttonToWait">
           Confirmar Objetivo:{" "}
-          {Object.values(activeCards).find((active) => active != null).name}
+          {
+            Object.values(activeCards).find(
+              (active) => active != null && active.type != "Don"
+            ).name
+          }
         </button>
       ));
     }
@@ -88,11 +93,17 @@ function duelMenu() {
     ));
   }
 
-  menuOptionItems.push((key) => (
-    <button key={key} onClick={() => actions.cancel()}>
-      Cancelar
-    </button>
-  ));
+  // if (currentEffectPile.current) {
+    menuOptionItems.push((key) => (
+      <button
+        className={"active--phase"}
+        key={key}
+        onClick={() => actions.cancel()}
+      >
+        Cancelar
+      </button>
+    ));
+  // }
 
   return (
     <>

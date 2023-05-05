@@ -126,9 +126,16 @@ class Effects {
     };
   }
 
-  activateHandSelectorFiltered(params) {
+  activateHandSelectorFilteredAnd(params) {
     return {
-      name: 'activateHandSelectorFiltered',
+      name: 'activateHandSelectorFilteredAnd',
+      params: { ...params },
+    };
+  }
+
+  activateHandSelectorFilteredOr(params) {
+    return {
+      name: 'activateHandSelectorFilteredOr',
       params: { ...params },
     };
   }

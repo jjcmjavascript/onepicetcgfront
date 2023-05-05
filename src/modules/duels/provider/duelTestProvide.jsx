@@ -19,6 +19,7 @@ const Board = new BoardGenerator({}).generateDeckStructure().merge({
 const EnemyBoard = new BoardGenerator({}).generateDeckStructure();
 const ActiveCardSchema = ActiveCard.getDefault();
 const DuelContext = createContext();
+
 const defaultActiveEffect = {
   card: null,
   effectNamesAndParams: new Map(),
@@ -31,13 +32,6 @@ function* generator(effects) {
   }
 }
 
-async function iterator(generator) {
-  for (let value of generator) {
-    await pause.sleep(50);
-    await value();
-  }
-}
-
 function DuelProvider({ children }) {
   const boardOne = useState(Board);
   const boardTwo = useState(EnemyBoard);
@@ -45,7 +39,8 @@ function DuelProvider({ children }) {
   const sockets = useSocket();
   const activeCard = useRef(ActiveCardSchema); //usar
   const activesCards = useState(ActiveCardSchema); //No usar
-
+  const currentEffectPile = useRef(null);
+  const stopPile = useRef(false);
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
   const [, setActiveCard] = activesCards;
@@ -73,6 +68,7 @@ function DuelProvider({ children }) {
     showTrashModal: useState(false),
     decks: useState([]),
     selectedDeck: useState(""),
+    currentEffectPile,
   };
 
   const {
@@ -98,7 +94,20 @@ function DuelProvider({ children }) {
     /******************************************/
     /******** SOCKET EFFECTS *****************/
     /****************************************/
-    resolveCard({ card, name }) {
+    async iterator(generator) {
+      for (const value of generator) {
+        console.log("iterator", value);
+        console.log("stop", stopPile.current);
+        if (stopPile.current) {
+          stopPile.current = false;
+          break;
+        }
+        await pause.sleep(50);
+        await value();
+      }
+    },
+
+    async resolveCard({ card, name }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
       const arrayMethods = Object.values(chaing).map((chaingPart) => {
@@ -114,10 +123,10 @@ function DuelProvider({ children }) {
       activeCardEffect.current.card = card;
 
       // Effects are resolved by this
-      iterator(generator(arrayMethods));
+      this.iterator(generator(arrayMethods));
     },
 
-    resolve({ where, name }) {
+    async resolve({ where, name }) {
       const card = activeCard.current[where];
       const effect = card.effects[name];
       const chaing = effect.chaing;
@@ -134,7 +143,7 @@ function DuelProvider({ children }) {
       activeCardEffect.current.card = card;
 
       // Effects are resolved by this
-      iterator(generator(arrayMethods));
+      this.iterator(generator(arrayMethods));
     },
 
     setMode(params) {
@@ -179,9 +188,7 @@ function DuelProvider({ children }) {
         "select:character&&leader",
       ];
 
-      if (type === "clean") {
-        activeCard.current = state.getDefault();
-      } else if (game.mode === "select:character&&leader") {
+      if (game.mode === "select:character&&leader") {
         activeCard.current = state.set({
           [type]: card,
           don: state.don,
@@ -419,7 +426,7 @@ function DuelProvider({ children }) {
       });
     },
 
-    activateHandSelectorFiltered(params) {
+    activateHandSelectorFilteredOr(params) {
       let filteredHand = [];
       const filters = Object.entries(params);
 
@@ -428,6 +435,30 @@ function DuelProvider({ children }) {
           ...filteredHand,
           ...this[functionName]({ arr: board.hand, ...functionParams }),
         ];
+      }
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.map((handCard) => {
+            if (filteredHand.find((card) => card.uuid === handCard.uuid)) {
+              return { ...handCard, toSelect: true };
+            }
+
+            return handCard;
+          }),
+        })
+      );
+    },
+
+    activateHandSelectorFilteredAnd(params) {
+      let filteredHand = board.hand;
+      const filters = Object.entries(params);
+
+      for (const [functionName, functionParams] of filters) {
+        filteredHand = this[functionName]({
+          arr: filteredHand,
+          ...functionParams,
+        });
       }
 
       setBoard((state) =>
@@ -468,8 +499,9 @@ function DuelProvider({ children }) {
       });
     },
 
-    filterByCosts(params) {
-      const { arr, cost, symbol = ">=" } = params;
+    filterByCost(params) {
+      const { arr, cost, symbol } = params;
+
       return arr.filter((card) => eval(`${card.cost} ${symbol} ${cost}`));
     },
 
@@ -502,7 +534,9 @@ function DuelProvider({ children }) {
     },
 
     cleanActiveCards() {
-      this.mergeActiveCard(null, "clean");
+      const active = ActiveCard.getDefault();
+      activeCard.current = active;
+      setActiveCard(active);
     },
 
     cleanGameMode() {
@@ -521,7 +555,19 @@ function DuelProvider({ children }) {
       );
     },
 
+    removeClickFromStack() {
+      // este proceso es para que el evento click del boton no se quede en el stack
+      const elementWithHandler = document.createElement("button");
+      elementWithHandler.name = "buttonToWait";
+      elementWithHandler.onclick = () => {};
+      document.body.appendChild(elementWithHandler);
+      elementWithHandler.click();
+      document.body.removeChild(elementWithHandler);
+    },
+
     cancel() {
+      stopPile.current = true;
+      this.removeClickFromStack();
       this.cleanAll();
     },
 
