@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 
 const checkSession = async () => {
   return new Promise((res, rej) => {
-    return res(true);
+    return res(false);
   });
 };
 
