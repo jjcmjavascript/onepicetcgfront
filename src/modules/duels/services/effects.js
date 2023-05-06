@@ -153,6 +153,34 @@ class Effects {
       params: { ...params },
     };
   }
+
+  initPlayCard() {
+    return {
+      name: 'initPlayCard',
+      params: {},
+    };
+  }
+
+  playCard() {
+    return {
+      name: 'playCard',
+      params: {},
+    };
+  }
+
+  replaceCharacter() {
+    return {
+      name: 'replaceCharacter',
+      params: {},
+    };
+  }
+
+  restMultipleDonsFromActive(params) {
+    return {
+      name: 'restMultipleDonsFromActive',
+      params: { ...params },
+    };
+  }
 }
 
 const effects = Object.seal(new Effects());

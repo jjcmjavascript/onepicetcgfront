@@ -17,7 +17,7 @@ class Player {
     this.didMulligan = player.didMulligan || false;
     this.mulliganAvailable = player.mulliganAvailable || true;
     this.locked = player.locked || false;
-    this.mode = player.mode || null;
+    this.mode = player.mode || null; //pendiente de refactor
 
     this.leader = player.leader || null;
     this.don = player.don || null;
@@ -30,6 +30,7 @@ class Player {
     this.deck = player.deck || [];
     this.hand = player.hand || [];
 
+    // define los elementos que estan bloqueados en el objeto activeCard - posible refactor
     this.lockeds = player.lockeds || lockeds;
   }
 
@@ -55,11 +56,11 @@ class Player {
     });
   }
 
-  lockAllExcept(excepts = []) {
+  lockAllExcept(exceptions = []) {
     let newLockeds = { ...lockeds };
 
     Object.keys(newLockeds).forEach((key) => {
-      if (excepts.includes(key)) {
+      if (exceptions.includes(key)) {
         newLockeds[key] = false;
       } else {
         newLockeds[key] = true;

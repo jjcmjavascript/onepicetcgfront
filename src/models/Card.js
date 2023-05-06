@@ -128,6 +128,7 @@ class Card {
     for (let i = 0; i < character; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Character';
+      card.effects = effectsMapper('characters');
       deck.push(card);
     }
 

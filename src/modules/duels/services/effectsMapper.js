@@ -15,10 +15,41 @@ const TARGET_TYPES = Object.seal({
   OPPONENT_CHARACTER: 'opponentCharacter',
   OPPONENT_EVENT: 'opponentEvent',
   OPPONENT_DON: 'opponentDon',
+  ACTIVE_HAND: 'hand',
 });
 
 function getEffect(name) {
   const effectsHash = {
+    characters: {
+      play: {
+        label: 'Jugar personaje',
+        trigger: 'activate',
+        conditions: [conditions('canPlayCardCharacter')],
+        chaing: [
+          effects('initPlayCard'),
+          effects('restMultipleDonsFromActive', {
+            target: TARGET_TYPES.ACTIVE_HAND,
+          }),
+          effects('cleanAll'),
+        ],
+      },
+      replace: {
+        label: 'Reemplazar personaje',
+        trigger: 'activate',
+        conditions: [conditions('canReplaceCharacterForPlay')],
+        chaing: [
+          effects('setMode', { mode: 'select:character:to:replace' }),
+          effects('lockAllExcept', { exeptions: ['character'] }),
+          effects('activateCharacterSelectorAll'),
+          effects('awaitSelection'),
+          effects('restMultipleDonsFromActive', {
+            target: TARGET_TYPES.ACTIVE_HAND,
+          }),
+          effects('replaceCharacter'),
+          effects('cleanAll'),
+        ],
+      },
+    },
     don: {
       addAttackFromDon: {
         trigger: 'activate',

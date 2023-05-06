@@ -26,40 +26,12 @@ function duelMenu() {
     if (conditions.canShowConfirmButton()) {
       menuOptionItems.push((key) => (
         <button key={key} name="buttonToWait">
-          Confirmar Objetivo:{" "}
+          Confirmar:
           {
             Object.values(activeCards).find(
               (active) => active != null && active.type != "Don"
             ).name
           }
-        </button>
-      ));
-    }
-
-    if (conditions.canPlayCardCharacter()) {
-      menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.initPlayCard()}>
-          Jugar: {activeCards.hand.name}
-        </button>
-      ));
-    }
-
-    if (conditions.canReplaceCharacter()) {
-      menuOptionItems.push((key) => (
-        <button key={key} onClick={() => actions.initReplaceCharacter()}>
-          Jugar: {activeCards.hand.name}
-        </button>
-      ));
-    }
-
-    if (conditions.canReplaceCharacterForPlay()) {
-      menuOptionItems.push((key) => (
-        <button
-          key={key}
-          onClick={() => actions.replaceCharacter()}
-          name="buttonToWait"
-        >
-          Reemplazar
         </button>
       ));
     }
@@ -85,6 +57,27 @@ function duelMenu() {
       );
     }
 
+    if (activeCards?.hand) {
+      Object.entries(activeCards.hand.effects).forEach(
+        ([effectName, effectValue]) => {
+          if (conditions.resolve({ where: "hand", name: effectName })) {
+            if (effectValue.trigger !== "auto") {
+              menuOptionItems.push((key) => (
+                <button
+                  key={key}
+                  onClick={() =>
+                    actions.resolve({ name: effectName, where: "hand" })
+                  }
+                >
+                  Activar: {effectValue.label}
+                </button>
+              ));
+            }
+          }
+        }
+      );
+    }
+
     menuOptionItems.push((key) => (
       <button key={key} onClick={() => actions.finishTurn()}>
         Terminar Turno
@@ -93,15 +86,15 @@ function duelMenu() {
   }
 
   // if (currentEffectPile.current) {
-    menuOptionItems.push((key) => (
-      <button
-        className={"active--phase"}
-        key={key}
-        onClick={() => actions.cancel()}
-      >
-        Cancelar
-      </button>
-    ));
+  menuOptionItems.push((key) => (
+    <button
+      className={"active--phase"}
+      key={key}
+      onClick={() => actions.cancel()}
+    >
+      Cancelar
+    </button>
+  ));
   // }
 
   return (

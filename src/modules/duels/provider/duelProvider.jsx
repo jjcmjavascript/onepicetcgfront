@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 import duelTestProvide from "./duelTestProvide";
 
-import * as effectRules from "../../../services/effectRules";
+import * as effectRules from "../services/effectRules";
 import constants from "../services/constants";
 import deckService from "../services/deckService";
 
