@@ -92,8 +92,12 @@ export const canPlayCard = ({ card, board, game }) => {
   return canPlay;
 };
 
-export const canPlayCardCharacter = ({ card, board, game }) => {
+export const canPlayCardCharacter = ({ activeCards, board, game }) => {
+  const card = activeCards.hand;
+
   return (
+    card &&
+    isCharacter({ card }) &&
     canPlayCard({ card, board, game }) &&
     card.type === 'Character' &&
     board.characters.length < 5
@@ -104,7 +108,6 @@ export const canReplaceCharacterForPlay = ({ activeCards, board, game }) => {
   return (
     isCharacter({ card: activeCards.hand }) &&
     canPlayCard({ card: activeCards.hand, board, game }) &&
-    // activeCards.character &&
     board.characters.length === 5
   );
 };

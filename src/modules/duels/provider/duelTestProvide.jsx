@@ -348,9 +348,6 @@ function DuelProvider({ children }) {
       const { target } = params;
       const card = activeCard.current[target];
 
-      console.log('params', params);
-      console.log('card', card);
-
       this.restMultipleDons({
         quantity: card.cost,
       });

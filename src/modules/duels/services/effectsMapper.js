@@ -26,10 +26,10 @@ function getEffect(name) {
         trigger: 'activate',
         conditions: [conditions('canPlayCardCharacter')],
         chaing: [
-          effects('initPlayCard'),
           effects('restMultipleDonsFromActive', {
             target: TARGET_TYPES.ACTIVE_HAND,
           }),
+          effects('initPlayCard'),
           effects('cleanAll'),
         ],
       },
