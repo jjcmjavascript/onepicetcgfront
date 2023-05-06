@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect, useRef } from "react";
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
 
-import * as effectRules from "../../../services/effectRules";
+import * as effectRules from "../services/effectRules";
 
 import BoardGenerator from "../../../services/BoardGenerator";
 import GameState from "../../../models/GameState";
@@ -11,6 +11,7 @@ import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
 import { pause } from "../../../helpers";
+// import Swal from "sweetalert2";
 
 const State = GameState.getDefault();
 const Board = new BoardGenerator({}).generateDeckStructure().merge({
@@ -43,7 +44,7 @@ function DuelProvider({ children }) {
   const stopPile = useRef(false);
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
-  const [, setActiveCard] = activesCards;
+  const [, setActiveCard] = activesCards; //No usar
 
   /**
    * Este ref es para guardar de forma precisa el efecto activo y poder manejar
@@ -96,12 +97,11 @@ function DuelProvider({ children }) {
     /****************************************/
     async iterator(generator) {
       for (const value of generator) {
-        console.log("iterator", value);
-        console.log("stop", stopPile.current);
         if (stopPile.current) {
           stopPile.current = false;
           break;
         }
+
         await pause.sleep(50);
         await value();
       }
@@ -110,7 +110,7 @@ function DuelProvider({ children }) {
     async resolveCard({ card, name }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
-      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+      const arrayMethods = chaing.map((chaingPart) => {
         //Register the effect and its params
         activeCardEffect.current.effectNamesAndParams.set(
           chaingPart.name,
@@ -130,7 +130,7 @@ function DuelProvider({ children }) {
       const card = activeCard.current[where];
       const effect = card.effects[name];
       const chaing = effect.chaing;
-      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+      const arrayMethods = chaing.map((chaingPart) => {
         //Register the effect and its params
         activeCardEffect.current.effectNamesAndParams.set(
           chaingPart.name,
@@ -160,12 +160,6 @@ function DuelProvider({ children }) {
       const card = activeCard.current.hand;
       card;
       this.playCardFromHand();
-    },
-
-    initReplaceCharacter() {
-      this.setMode({ mode: "select:character:to:replace" });
-      this.lockAllExcept({ exeptions: ["character"] });
-      this.activateCharacterSelectorAll();
     },
 
     /******************************************/
@@ -350,6 +344,15 @@ function DuelProvider({ children }) {
       this.cleanAll();
     },
 
+    restMultipleDonsFromActive(params) {
+      const { target } = params;
+      const card = activeCard.current[target];
+
+      this.restMultipleDons({
+        quantity: card.cost,
+      });
+    },
+
     restMultipleDons(params) {
       const { quantity } = params;
 
@@ -384,8 +387,6 @@ function DuelProvider({ children }) {
           trash: [...state.trash, character],
         })
       );
-
-      this.cleanAll();
     },
 
     registerPlay(params) {
@@ -506,10 +507,6 @@ function DuelProvider({ children }) {
     },
 
     /******************************************/
-    /******** END EFFECTS *********************/
-    /******************************************/
-
-    /******************************************/
     /******** CLEANERS ***********************/
     /****************************************/
     cleanCharacterSelectorAll() {
@@ -596,7 +593,7 @@ function DuelProvider({ children }) {
           effectRules[rule.name]({
             board,
             game,
-            activesCards,
+            activeCards: activeCard.current,
             currentCard,
             effectName: name,
             params: rule.params,
@@ -614,14 +611,14 @@ function DuelProvider({ children }) {
         return effectRules[rule.name]({
           board,
           game,
-          activesCards,
+          activeCards: activeCard.current,
           currentCard,
           effectName: name,
           params: rule.params,
         });
       });
     },
-    // attack() {
+    // canAttack() {
     //   const card = activeCard.current.character;
     //   return effectRules.attack({ board, card, game });
     // },
@@ -636,7 +633,7 @@ function DuelProvider({ children }) {
         board,
       });
     },
-    // rest() {
+    // canRest() {
     //   const card = activeCard.current.don || activeCard.current.character;
     //   return effectRules.rest({ board, card });
     // },
@@ -645,27 +642,6 @@ function DuelProvider({ children }) {
     },
     canActiveEffect() {
       return effectRules.canActiveEffect({
-        activeCards: activeCard.current,
-        game,
-        board,
-      });
-    },
-    canReplaceCharacter() {
-      return effectRules.canReplaceCharacter({
-        card: activeCard.current.hand,
-        game,
-        board,
-      });
-    },
-    canPlayCardCharacter() {
-      return effectRules.canPlayCardCharacter({
-        card: activeCard.current.hand,
-        game,
-        board,
-      });
-    },
-    canReplaceCharacterForPlay() {
-      return effectRules.canReplaceCharacterForPlay({
         activeCards: activeCard.current,
         game,
         board,

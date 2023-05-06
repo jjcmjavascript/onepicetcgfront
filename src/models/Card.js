@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import CryptoJS from 'crypto-js';
-import getEffectsByName from '../modules/duels/services/cardEffects';
+import effectsMapper from '../modules/duels/services/effectsMapper';
 
 class Card {
   constructor(cardObject) {
@@ -128,13 +128,14 @@ class Card {
     for (let i = 0; i < character; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Character';
+      card.effects = effectsMapper('characters');
       deck.push(card);
     }
 
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
-      card.effects = getEffectsByName('TrafalgarLaw:OP01-002');
+      card.effects = effectsMapper('TrafalgarLaw:OP01-002');
       deck.push(card);
     }
 
@@ -153,7 +154,7 @@ class Card {
     for (let i = 0; i < dons; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Don';
-      card.effects = getEffectsByName('don');
+      card.effects = effectsMapper('don');
       deck.push(card);
     }
 

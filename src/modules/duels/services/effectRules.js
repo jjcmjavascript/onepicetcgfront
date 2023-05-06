@@ -50,6 +50,7 @@ export const canShowConfirmButton = ({ activeCards, game }) => {
     'select:character&&leader': ['leader', 'character'],
     'select:character:in:characterZone': ['character'],
     'select:character:in:hand': ['hand'],
+    'select:character:to:replace': ['character'],
   };
 
   const currentModeSelected = modes[game.mode];
@@ -91,28 +92,23 @@ export const canPlayCard = ({ card, board, game }) => {
   return canPlay;
 };
 
-export const canPlayCardCharacter = ({ card, board, game }) => {
+export const canPlayCardCharacter = ({ activeCards, board, game }) => {
+  const card = activeCards.hand;
+
   return (
+    card &&
+    isCharacter({ card }) &&
     canPlayCard({ card, board, game }) &&
     card.type === 'Character' &&
     board.characters.length < 5
   );
 };
 
-export const canReplaceCharacter = ({ card, board, game }) => {
-  return (
-    canPlayCard({ card, board, game }) &&
-    card.type === 'Character' &&
-    board.characters.length === 5
-  );
-};
-
 export const canReplaceCharacterForPlay = ({ activeCards, board, game }) => {
   return (
     isCharacter({ card: activeCards.hand }) &&
-    activeCards.character &&
-    board.characters.length === 5 &&
-    game.mode === 'select:character:to:replace'
+    canPlayCard({ card: activeCards.hand, board, game }) &&
+    board.characters.length === 5
   );
 };
 

@@ -20,10 +20,10 @@ class Conditions {
     };
   }
 
-  oncePerTurn(params) {
+  oncePerTurn() {
     return {
       name: 'oncePerTurn',
-      params: { ...params },
+      params: {},
     };
   }
 
@@ -38,6 +38,27 @@ class Conditions {
     return {
       name: 'hasAvaibleCost',
       params: { quantity: 1, ...params },
+    };
+  }
+
+  canPlayCard() {
+    return {
+      name: 'canPlayCard',
+      params: {},
+    };
+  }
+
+  canPlayCardCharacter() {
+    return {
+      name: 'canPlayCardCharacter',
+      params: {},
+    };
+  }
+
+  canReplaceCharacterForPlay() {
+    return {
+      name: 'canReplaceCharacterForPlay',
+      params: {},
     };
   }
 }
