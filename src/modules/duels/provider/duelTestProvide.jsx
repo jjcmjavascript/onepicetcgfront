@@ -11,6 +11,7 @@ import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
 import { pause } from "../../../helpers";
+// import Swal from "sweetalert2";
 
 const State = GameState.getDefault();
 const Board = new BoardGenerator({}).generateDeckStructure().merge({
@@ -96,12 +97,11 @@ function DuelProvider({ children }) {
     /****************************************/
     async iterator(generator) {
       for (const value of generator) {
-        console.log("iterator", value);
-        console.log("stop", stopPile.current);
         if (stopPile.current) {
           stopPile.current = false;
           break;
         }
+
         await pause.sleep(50);
         await value();
       }
@@ -110,7 +110,7 @@ function DuelProvider({ children }) {
     async resolveCard({ card, name }) {
       const effect = card.effects[name];
       const chaing = effect.chaing;
-      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+      const arrayMethods = chaing.map((chaingPart) => {
         //Register the effect and its params
         activeCardEffect.current.effectNamesAndParams.set(
           chaingPart.name,
@@ -130,7 +130,7 @@ function DuelProvider({ children }) {
       const card = activeCard.current[where];
       const effect = card.effects[name];
       const chaing = effect.chaing;
-      const arrayMethods = Object.values(chaing).map((chaingPart) => {
+      const arrayMethods = chaing.map((chaingPart) => {
         //Register the effect and its params
         activeCardEffect.current.effectNamesAndParams.set(
           chaingPart.name,
@@ -506,10 +506,6 @@ function DuelProvider({ children }) {
     },
 
     /******************************************/
-    /******** END EFFECTS *********************/
-    /******************************************/
-
-    /******************************************/
     /******** CLEANERS ***********************/
     /****************************************/
     cleanCharacterSelectorAll() {
@@ -621,7 +617,7 @@ function DuelProvider({ children }) {
         });
       });
     },
-    // attack() {
+    // canAttack() {
     //   const card = activeCard.current.character;
     //   return effectRules.attack({ board, card, game });
     // },
@@ -636,7 +632,7 @@ function DuelProvider({ children }) {
         board,
       });
     },
-    // rest() {
+    // canRest() {
     //   const card = activeCard.current.don || activeCard.current.character;
     //   return effectRules.rest({ board, card });
     // },

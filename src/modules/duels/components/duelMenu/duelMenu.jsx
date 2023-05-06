@@ -6,7 +6,6 @@ function duelMenu() {
 
   const [boardOne] = states.boardOne;
   const [activeCards] = states.activeCards;
-  // const currentEffectPile = states.currentEffectPile;
   const isMyTurn = actions.isMyTurn();
   const menuOptionItems = [];
 
