@@ -50,6 +50,7 @@ function getEffect(name) {
         ],
       },
     },
+
     don: {
       addAttackFromDon: {
         trigger: 'activate',
