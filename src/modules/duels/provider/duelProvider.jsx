@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useRef } from "react";
 
 import duelTestProvide from "./duelTestProvide";
 import useSocket from "@hooks/useSocket";
+import deckService from "@duels/services/deckService";
 
 import * as effectRules from "@duels/services/effectRules";
 
@@ -642,6 +643,12 @@ function DuelProvider({ children }) {
     },
   };
 
+  useEffect(() => {
+    deckService.getDecks().then((decks) => {
+      states.decks[1](decks);
+    });
+  }, []);
+
   /******************************************/
   /******** AUTOMATIC EFFECTS **************/
   /****************************************/
@@ -679,4 +686,4 @@ function DuelProvider({ children }) {
 }
 const duelProvider = { DuelProvider, DuelContext };
 
-export default testMode === 'true' ? duelTestProvide : duelProvider;
+export default testMode === "true" ? duelTestProvide : duelProvider;

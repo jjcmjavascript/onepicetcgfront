@@ -1,13 +1,14 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Store from "../provider/duelProvider";
-import Swal from "sweetalert2/dist/sweetalert2.all.js";
-import RockScissorPaper from "../components/rockScissorPaper";
-import WatingArea from "../components/waitingArea";
-import VsPlayer from "../components/vsPlayer";
-import TurnSelector from "../components/turnSelector";
 
-import constants from "../services/constants";
+import Store from "@duels/provider/duelProvider";
+import RockScissorPaper from "@duels/components/rockScissorPaper";
+import WatingArea from "@duels/components/waitingArea";
+import VsPlayer from "@duels/components/vsPlayer";
+import TurnSelector from "@duels/components/turnSelector";
+
+import Swal from "sweetalert2/dist/sweetalert2.all.js";
+import constants from "@duels/services/constants";
 
 const views = {
   duel: <VsPlayer />,
