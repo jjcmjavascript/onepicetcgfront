@@ -23,7 +23,7 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      {testMode ? <VsPlayer /> : <DuelMode />}
+      {testMode === 'true' ? <VsPlayer /> : <DuelMode />}
     </Store.DuelProvider>
   );
 }
