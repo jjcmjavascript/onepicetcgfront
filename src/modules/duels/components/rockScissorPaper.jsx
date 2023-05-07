@@ -28,7 +28,7 @@ const RockScissorsPaperContainerItem = ({ children, onClick, active }) => {
   );
 };
 
-const Message = ({ children, active }) => {
+const Message = ({ children }) => {
   const className = `text-light text-center rockScissorsPaperContainer--box__item--message`;
   return <h1 className={className}>{children}</h1>;
 };
@@ -89,10 +89,6 @@ function RockScissorPaper() {
 }
 
 function wrapper() {
-  const style = {
-    top: "50vh",
-  };
-
   return (
     <ContainerFluidDark>
       <RockScissorPaper />

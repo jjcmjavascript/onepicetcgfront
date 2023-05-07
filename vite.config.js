@@ -16,7 +16,8 @@ export default defineConfig({
       fix: true,
       emitWarning: false,
       emitError: true,
-      failOnError: false,
+      failOnWarning: false,
+      failOnError: true,
     }),
   ],
 

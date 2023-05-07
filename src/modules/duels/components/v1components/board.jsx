@@ -10,10 +10,10 @@ import LifeCardHalf from "./LifeCardHalf";
 import Store from "../../provider/duelProvider";
 
 function Board({ rotate }) {
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
   const { boardOne } = states;
 
-  const [board, setBoard] = boardOne;
+  const [board] = boardOne;
 
   return (
     <>

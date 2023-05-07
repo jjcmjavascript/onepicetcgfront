@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import SimpleCard from "../../components/simpleCard";
 import Container from "../../../../components/container";
 import BadgeRounded from "../../../../components/badgeRounded";
@@ -16,8 +16,9 @@ export default function MainCreatorSection({ className }) {
   const { id } = useParams();
   const leader = deck.cards.find((item) => item.type_id === LEADER_ID);
 
-  // Si tiene id, entonces se llama a la api para obtener el deck
-  id && getDeckById(id, setDeckFromBackend);
+  useEffect(() => {
+    id && getDeckById(id, setDeckFromBackend);
+  }, [id]);
 
   return (
     <>

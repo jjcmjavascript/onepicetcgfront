@@ -1,7 +1,7 @@
 import { useContext, memo } from "react";
 import Store from "../../provider/duelProvider";
 
-function duelMenu() {
+function DuelMenu() {
   const { states, actions, conditions } = useContext(Store.DuelContext);
 
   const [boardOne] = states.boardOne;
@@ -110,4 +110,4 @@ function duelMenu() {
   );
 }
 
-export default memo(duelMenu);
+export default memo(DuelMenu);

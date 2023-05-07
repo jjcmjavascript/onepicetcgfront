@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import deckService from '../services/deckService';
 import rules from '../../../helpers/deckRules';
 import formatCardsForDeck from '../../../helpers/formatCardsForDeck';
@@ -17,33 +17,25 @@ export default function useDecks() {
   const [filteredDeck, setFilteredDeck] = useState([]);
 
   const getDecks = () => {
-    useEffect(() => {
-      deckService
-        .getDecks()
-        .then((decks) => {
-          decks = formatCardsForDeck(decks);
-          setDecks(decks);
-          setFilteredDeck(decks);
-        })
-        .catch((err) => {
-          swalMessage('Error', err.message, 'error');
-        });
-    }, []);
+    return deckService
+      .getDecks()
+      .then((decks) => {
+        decks = formatCardsForDeck(decks);
+        setDecks(decks);
+        setFilteredDeck(decks);
+      })
+      .catch((err) => {
+        swalMessage('Error', err.message, 'error');
+      });
   };
 
   const getDeckById = (deckId, setDeckFromBackend) => {
-    useEffect(() => {
-      (async () => {
-        try {
-          const deck = await deckService.findDeck(deckId);
-          const formatedDeck = formatCardsForDeck(deck);
+    (async () => {
+      const deck = await deckService.findDeck(deckId);
+      const formatedDeck = formatCardsForDeck(deck);
 
-          setDeckFromBackend(formatedDeck);
-        } catch (err) {
-          swalMessage('Error', err.message, 'error');
-        }
-      })();
-    }, [deckId]);
+      setDeckFromBackend(formatedDeck);
+    })();
   };
 
   const filterByName = (name) => {

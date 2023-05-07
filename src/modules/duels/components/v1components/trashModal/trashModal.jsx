@@ -4,11 +4,10 @@ import Store from "../../../provider/duelProvider";
 import TrashModalOptions from "./trashModalOptions";
 import TrashModalOptionItem from "./trashModalOptionItem";
 
-function TrashModal({}) {
+function TrashModal() {
   const SCAPE_KEY = 27;
-
   const modalTrashRef = useRef();
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
 
   const { boardOne, showTrashModal, preview } = states;
   const [showModal, setShowModal] = showTrashModal;
@@ -93,7 +92,11 @@ function TrashModal({}) {
 
   useEffect(() => {
     document.querySelector("body").addEventListener("keyup", (evt) => {
-      if (evt.keyCode === SCAPE_KEY) {
+      if (
+        evt.keyCode === SCAPE_KEY ||
+        evt.key === "Escape" ||
+        evt.code === "Escape"
+      ) {
         setShowModal(false);
       }
     });
@@ -125,7 +128,7 @@ function TrashModal({}) {
             id={`id_${card.uuid}`}
             onMouseOver={() => onMouseOver(card)}
             key={card.uuid}
-            onClick={(_) => toggleDeckOptions(card)}
+            onClick={() => toggleDeckOptions(card)}
           >
             <span className="text-light">{index + 1}</span>
             <img src={card._image.route} className="field--card__image" />
