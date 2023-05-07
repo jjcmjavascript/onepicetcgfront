@@ -3,11 +3,11 @@ import { createContext, useState, useEffect, useRef } from "react";
 import deckService from "@duels/services/deckService";
 import useSocket from "@hooks/useSocket";
 
-import * as effectRules from "@duel/services/effectRules";
+import * as effectRules from "@duels/services/effectRules";
 
-import BoardGenerator from "@duel/services/BoardGenerator";
+import BoardGenerator from "@duels/services/BoardGenerator";
 import GameState from "@models/GameState";
-import constants from "@duel/services/constants";
+import constants from "@duels/services/constants";
 import ActiveCard from "@models/ActiveCard";
 import { pause } from "@helpers";
 
