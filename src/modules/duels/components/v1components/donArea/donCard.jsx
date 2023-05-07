@@ -1,5 +1,3 @@
-import React from "react";
-
 function DonCard({ card, quantity, onClick }) {
   return (
     <>

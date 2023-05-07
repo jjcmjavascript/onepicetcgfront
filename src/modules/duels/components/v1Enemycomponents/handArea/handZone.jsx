@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
@@ -12,7 +12,12 @@ function HandZone() {
       <div className="field--card_area__hand">
         {boardTwoState.hand.map((card) => {
           return (
-            <FieldCardFull card={card} key={card.uuid} id={`id_${card.uuid}`} className="rotated"/>
+            <FieldCardFull
+              card={card}
+              key={card.uuid}
+              id={`id_${card.uuid}`}
+              className="rotated"
+            />
           );
         })}
       </div>

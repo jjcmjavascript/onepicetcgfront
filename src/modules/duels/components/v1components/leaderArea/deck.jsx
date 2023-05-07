@@ -1,6 +1,6 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
-function Deck({ children, count = 0, id, onClick }, ref) {
+function Deck({ count = 0, id, onClick }, ref) {
   const tempImg =
     "https://cf.geekdo-images.com/lBPmfYGjJ-UQ5DZ_wKuBGA__imagepage/img/GNe5INGZDgiakJibSM0zNWLMxSQ=/fit-in/900x600/filters:no_upscale():strip_icc()/pic1737624.jpg";
   return (

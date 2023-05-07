@@ -1,5 +1,3 @@
-import React from "react";
-
 function CardOptionItem({ children, onClick }) {
   return (
     <>

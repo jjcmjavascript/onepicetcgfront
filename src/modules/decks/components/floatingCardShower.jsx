@@ -1,5 +1,3 @@
-import React from "react";
-
 const defaultStyle = {
   zIndex: 2,
   width: "300px",

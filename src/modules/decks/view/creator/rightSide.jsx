@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import store from "../../provider/deckProvider";
 import SimpleCard from "../../components/simpleCard";
 import Btn from "../../../../components/btn";
 import Input from "../../../../components/input";
 
 export default function RightSide({ className }) {
-  const { hooks, actions, states } = useContext(store.CardContext);
+  const { hooks, states } = useContext(store.CardContext);
   const [activeCard] = states.activeCard;
   const { deck, setName, setDeckFromBackend } = hooks.deck;
   const { decks } = hooks;

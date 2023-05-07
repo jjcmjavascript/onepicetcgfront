@@ -2,25 +2,19 @@ FROM node:18-alpine3.16
 
 WORKDIR /app
 
-COPY package*.json ./
-##RUN npm ci
-
-## env needed for: node path error prevention
-##ENV PATH=/usr/src/node_modules/.bin:$PATH
-
-RUN npm install -g env-cmd
-
-##COPY yarn.lock ./
-
 COPY . .
 
-RUN unset NODE_OPTIONS
-RUN yarn config delete proxy
-RUN npm config rm proxy
-RUN npm config rm https-proxy
+## env needed for: node path error prevention
+ENV PATH=/app/node_modules/.bin:$PATH
 
-##RUN yarn --no-lockfile --network-timeout 100000
+RUN npm install -g vite
+
+## fix wsl node_modules permission denied
+RUN mkdir -m 775 -p /app/node_modules
+RUN chown node:node /app/node_modules
+
+USER node
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "docker"]
+CMD [ "npm", "start"]

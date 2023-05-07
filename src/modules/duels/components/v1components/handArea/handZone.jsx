@@ -1,4 +1,4 @@
-import React, { useContext,  memo } from "react";
+import { useContext, memo } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 
@@ -31,9 +31,7 @@ function HandZone() {
               onClick={() => actions.mergeActiveCard(card, "hand")}
               onMouseOver={() => onMouseOver(card)}
               onMouseOut={() => onMouseOut(card)}
-              className={`${
-                activeCards.hand === card ? "innerShadow" : ""
-              }`}
+              className={`${activeCards.hand === card ? "innerShadow" : ""}`}
             />
           );
         })}

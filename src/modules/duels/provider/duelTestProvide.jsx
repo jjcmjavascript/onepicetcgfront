@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 
 import deckService from "../services/deckService";
 import useSocket from "../../../hooks/useSocket";
@@ -11,7 +11,7 @@ import constants from "../services/constants";
 import ActiveCard from "../../../models/ActiveCard";
 
 import { pause } from "../../../helpers";
-// import Swal from "sweetalert2";
+// import Swal from "sweetalert2/dist/sweetalert2.all.js";
 
 const State = GameState.getDefault();
 const Board = new BoardGenerator({}).generateDeckStructure().merge({

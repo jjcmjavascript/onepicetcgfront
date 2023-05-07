@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MessageAlert from "../../../components/messageAlert";
 import Store from "../provider/duelProvider";
 

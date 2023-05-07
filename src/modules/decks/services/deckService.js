@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL + 'deck';
+const baseUrl = import.meta.env.VITE_APP_BACKEND_URL + 'deck';
 
 const headers = {
   'Content-Type': 'application/json',

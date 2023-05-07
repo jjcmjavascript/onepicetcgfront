@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Link } from "react-router-dom";
 
 const logedHeader = () => {
@@ -6,7 +5,7 @@ const logedHeader = () => {
     <nav className="navbar navbar-dark bg-dark">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Home {process.env.REACT_APP_TEST}
+          Home {import.meta.env.VITE_APP_TEST}
         </Link>
         <Link to="/decks" className="navbar-brand">
           Decks

@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 function Trash({ children, count = 0, id, onClick }, ref) {
   const tempImg = "https://pbs.twimg.com/tweet_video_thumb/Dq3QwNuXgAMfVN-.jpg";

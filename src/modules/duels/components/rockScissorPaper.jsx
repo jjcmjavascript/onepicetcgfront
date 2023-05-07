@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Store from "../provider/duelProvider";
 
 import ContainerFluidDark from "../../../components/containerFluidDark";
@@ -43,7 +43,7 @@ function RockScissorPaper() {
 
   const onClick = (choice) => {
     setChoice(choice);
-    console.log(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE)
+    console.log(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE);
     duelSocket.emit(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE, {
       room: duelRoom,
       choice,

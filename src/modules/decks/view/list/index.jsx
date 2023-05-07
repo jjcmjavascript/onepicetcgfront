@@ -1,4 +1,3 @@
-import React from "react";
 import MainSection from "./main";
 import SearchSection from "./search";
 import Store from "../../provider/deckProvider";

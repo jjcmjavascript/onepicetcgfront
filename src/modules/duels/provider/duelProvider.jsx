@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import duelTestProvide from "./duelTestProvide";
 
@@ -12,7 +12,7 @@ import GameState from "../../../models/GameState";
 import Player from "../../../models/Player";
 import ActiveCard from "../../../models/ActiveCard";
 
-const testMode = process.env.REACT_APP_TEST_BOARD;
+const testMode = import.meta.env.VITE_APP_TEST_BOARD;
 const State = GameState.getDefault();
 const Board = Player.getDefault();
 const EnemyBoard = Player.getDefault();

@@ -1,6 +1,11 @@
-import React from "react";
-
-function FieldCardFull({ card, onMouseOver, onMouseOut, id, onClick , className}) {
+function FieldCardFull({
+  card,
+  onMouseOver,
+  onMouseOut,
+  id,
+  onClick,
+  className,
+}) {
   return (
     <>
       <div

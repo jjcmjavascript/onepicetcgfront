@@ -1,8 +1,8 @@
-import React, { createContext, useState } from "react";
-import Swal from 'sweetalert2'
+import { createContext, useState } from "react";
+import Swal from "sweetalert2/dist/sweetalert2.all.js";
 
 const checkSession = async () => {
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     return res(true);
   });
 };
@@ -26,8 +26,8 @@ function GlobalProvider({ children }) {
         html: html,
         icon: "success",
       });
-    }
-  }
+    },
+  };
 
   return (
     <GlobalContext.Provider
@@ -35,7 +35,7 @@ function GlobalProvider({ children }) {
         isLoged,
         setLoged,
         checkSession,
-        actions
+        actions,
       }}
     >
       {children}

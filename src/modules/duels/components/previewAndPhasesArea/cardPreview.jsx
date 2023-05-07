@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function CardPreview() {

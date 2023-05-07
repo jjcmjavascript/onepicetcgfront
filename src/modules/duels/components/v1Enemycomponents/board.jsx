@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import CharacterZone from "./characterArea/characterZone";
 import DonZone from "./donArea/donZone";
@@ -7,7 +7,7 @@ import LeaderZone from "./leaderArea/leaderZone";
 import LifeCardHalf from "./LifeCardHalf";
 import Store from "../../provider/duelProvider";
 
-function Board({ }) {
+function Board({}) {
   const { states, hooks } = useContext(Store.DuelContext);
   const { boardTwo } = states;
   const [board, setBoard] = boardTwo;

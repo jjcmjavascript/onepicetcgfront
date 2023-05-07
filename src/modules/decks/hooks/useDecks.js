@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
+import { useState, useEffect } from 'react';
 import deckService from '../services/deckService';
 import rules from '../../../helpers/deckRules';
 import formatCardsForDeck from '../../../helpers/formatCardsForDeck';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 const swalMessage = (title, html, icon) => {
   Swal.fire({

@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Store from "../provider/duelProvider";
-import Swal from "sweetalert2";
-
+import Swal from "sweetalert2/dist/sweetalert2.all.js";
 import RockScissorPaper from "../components/rockScissorPaper";
 import WatingArea from "../components/waitingArea";
 import VsPlayer from "../components/vsPlayer";
@@ -17,7 +16,7 @@ const views = {
   turnSelector: <TurnSelector />,
 };
 
-function wrapper() {
+function Vs() {
   const history = useNavigate();
   const { states, hooks } = useContext(Store.DuelContext);
   const [view, setView] = useState("waitingArea");
@@ -32,10 +31,9 @@ function wrapper() {
 
   const [, setBoardOneState] = boardOne;
   const [, setBoardTwoState] = boardTwo;
-  const [game, setGameState] = gameState;
+  const [, setGameState] = gameState;
 
-  const { duelSocket, duelRoom, initDuelSocket, joinRoom, SOCKET_DUEL_URL } =
-    hookSocket;
+  const { duelSocket, initDuelSocket, joinRoom, SOCKET_DUEL_URL } = hookSocket;
 
   const [selectedDeck] = selectedDeckState;
 
@@ -63,7 +61,7 @@ function wrapper() {
   }, [duelSocket]);
 
   if (duelSocket) {
-    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_START, (payload) => {
+    duelSocket.on(constants.GAME_ROCK_SCISSORS_PAPER_START, () => {
       setView("rockScissorPaper");
     });
 
@@ -77,7 +75,7 @@ function wrapper() {
       }
     });
 
-    duelSocket.on(constants.GAME_TURN_SELECTION_END, (payload) => {
+    duelSocket.on(constants.GAME_TURN_SELECTION_END, () => {
       setView("duel");
     });
 
@@ -166,19 +164,19 @@ function wrapper() {
       setBoardTwoState((state) => state.set(payload.board));
     });
 
-    duelSocket.on(constants.GAME_PHASES_MAIN, (payload) => {
+    duelSocket.on(constants.GAME_PHASES_MAIN, () => {
       console.log(constants.GAME_PHASES_MAIN);
     });
 
-    duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, (payload) => {
+    duelSocket.on(constants.GAME_RIVAL_PHASES_MAIN, () => {
       console.log(constants.GAME_RIVAL_PHASES_MAIN);
     });
 
-    duelSocket.on(constants.GAME_DON_PLUS, (payload) => {
+    duelSocket.on(constants.GAME_DON_PLUS, () => {
       console.log(constants.GAME_DON_PLUS);
     });
 
-    duelSocket.on(constants.GAME_RIVAL_DON_PLUS, (payload) => {
+    duelSocket.on(constants.GAME_RIVAL_DON_PLUS, () => {
       console.log(constants.GAME_RIVAL_DON_PLUS);
     });
   }
@@ -186,4 +184,4 @@ function wrapper() {
   return <>{views[view]}</>;
 }
 
-export default wrapper;
+export default Vs;

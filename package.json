@@ -4,35 +4,23 @@
   "private": true,
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "crypto-js": "^4.1.1",
-    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "^5.0.1",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
     "sweetalert2": "^11.4.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "env-cmd -f .env react-scripts start",
-    "start:legacy": "env-cmd -f .env react-scripts --openssl-legacy-provider start",
-    "docker": "env-cmd -f .env react-scripts --openssl-legacy-provider start",
-    "build": "env-cmd -f .env react-scripts --openssl-legacy-provider start build",
-    "test": "env-cmd -f .env react-scripts --openssl-legacy-provider start test"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "docker": "vite --port 3000",
+    "start": "vite --port 3000",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -47,8 +35,12 @@
     ]
   },
   "devDependencies": {
-    "eslint": "5.12.0",
-    "eslint-plugin-react": "^7.31.11",
-    "prettier": "2.8.0"
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.40.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "vite": "^4.3.5",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-svgr": "^3.2.0"
   }
 }

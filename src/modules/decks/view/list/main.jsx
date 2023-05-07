@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import store from "../../provider/deckProvider";
 import Container from "../../../../components/container";
 import CardComponent from "../../../../components/card";
@@ -40,7 +40,7 @@ export default function MainDeckListSection() {
                 <Btn
                   className="danger btn-sm"
                   title="Borrar"
-                  onClick={(event) => deleteDeck(deck.id)}
+                  onClick={() => deleteDeck(deck.id)}
                 >
                   <FiDelete />
                 </Btn>

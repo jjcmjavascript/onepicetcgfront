@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes } from "react-router-dom";
-import React, { useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { GlobalContext } from "./providers/global";
 import LogedHeader from "./components/logedHeader";
 import privateRoutes from "./routes/private";
@@ -12,7 +12,7 @@ function App() {
     checkSession().then((res) => {
       setLoged(res);
     });
-  }, []);
+  }, [false]);
 
   return (
     <BrowserRouter>

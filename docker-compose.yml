@@ -1,16 +1,17 @@
 version: '3.9'
 services:
-  node:
+  front:
     build:
       context: ./
       dockerfile: dockerfile
-    ##command: 'npm start'
+    command: npm run docker
     volumes:
       - ./:/app
-      - /app/node_modules
+      - modules_front:/app/node_modules
     ports:
-      ##- ${REACT_APP_PORT}:3000
       - 3000:3000
     networks:
       - default
     env_file: .env
+volumes:
+  modules_front: {}

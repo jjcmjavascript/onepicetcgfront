@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Store from "../../provider/duelProvider";
 
 function PhaseZone() {
@@ -19,7 +19,7 @@ function PhaseZone() {
       defaultClass = defaultClass.concat(" active--phase");
     }
 
-    if(!actions.isMyTurn()) {
+    if (!actions.isMyTurn()) {
       defaultClass = defaultClass.concat(" bg-primary");
     }
 

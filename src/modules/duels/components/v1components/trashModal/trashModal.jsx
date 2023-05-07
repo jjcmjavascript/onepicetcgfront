@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, memo } from "react";
+import { useContext, useEffect, useRef, useState, memo } from "react";
 import Store from "../../../provider/duelProvider";
 
 import TrashModalOptions from "./trashModalOptions";

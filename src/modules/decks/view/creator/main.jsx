@@ -1,10 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import SimpleCard from "../../components/simpleCard";
 import Container from "../../../../components/container";
 import BadgeRounded from "../../../../components/badgeRounded";
 import { useParams } from "react-router-dom";
 import store from "../../provider/deckProvider";
-import { DON as DON_ID, LEADER as LEADER_ID } from "../../../../helpers/cardTypes";
+import {
+  DON as DON_ID,
+  LEADER as LEADER_ID,
+} from "../../../../helpers/cardTypes";
 
 export default function MainCreatorSection({ className }) {
   const { hooks } = useContext(store.CardContext);

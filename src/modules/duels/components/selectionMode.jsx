@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 import Store from "../provider/duelProvider";
 import ContainerFluidDark from "../../../components/containerFluidDark";
@@ -16,7 +16,7 @@ function DuelMode() {
   const [decks] = states.decks;
   const { sockets } = hooks;
   const [selectedDeck, setDeck] = states.selectedDeck;
-  const { disconectSocket, SOCKET_DUEL_URL, duel } = sockets;
+  const { disconectSocket, SOCKET_DUEL_URL } = sockets;
 
   const handleSelect = (e) => {
     const id = parseInt(e.target.value);
