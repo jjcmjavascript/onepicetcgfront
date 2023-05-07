@@ -1,5 +1,5 @@
 import { memo, forwardRef } from "react";
-import FieldCardEffectList from "../FieldCardEffectList";
+import FieldCardEffectList from "../fieldCardEffectList";
 
 function FieldCardFull(
   { card, onMouseOver, onMouseOut, id, onClick, className = "" },
