@@ -1,16 +1,16 @@
 import { createContext, useState, useEffect, useRef } from "react";
 
-import deckService from "../services/deckService";
-import useSocket from "../../../hooks/useSocket";
+import deckService from "@duels/services/deckService";
+import useSocket from "@hooks/useSocket";
 
-import * as effectRules from "../services/effectRules";
+import * as effectRules from "@duel/services/effectRules";
 
-import BoardGenerator from "../../../services/BoardGenerator";
-import GameState from "../../../models/GameState";
-import constants from "../services/constants";
-import ActiveCard from "../../../models/ActiveCard";
+import BoardGenerator from "@duel/services/BoardGenerator";
+import GameState from "@models/GameState";
+import constants from "@duel/services/constants";
+import ActiveCard from "@models/ActiveCard";
+import { pause } from "@helpers";
 
-import { pause } from "../../../helpers";
 // import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 
 const State = GameState.getDefault();

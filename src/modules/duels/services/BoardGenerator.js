@@ -1,5 +1,5 @@
-import Player from '../models/Player';
-import Card from '../models/Card';
+import Player from '../../../models/Player';
+import Card from '../../../models/Card';
 
 class BoardGenerator {
   constructor() {
