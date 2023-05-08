@@ -87,6 +87,7 @@ function getEffect(name) {
           effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'RoronoaZoro:OP01-001:EFFECT:1',
+            effectScope: 'always',
           }),
           effects('cleanAll'),
         ],

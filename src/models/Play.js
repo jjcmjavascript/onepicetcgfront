@@ -5,6 +5,7 @@ class Play {
     this.card = play.card;
     this.playerId = play.playerId;
     this.inTheirTurn = play.inTheirTurn;
+    this.effectScope = play.effectScope;
   }
 
   get isCard() {
