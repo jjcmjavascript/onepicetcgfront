@@ -8,68 +8,46 @@ class BoardGenerator {
     });
   }
 
-  generateDeck() {
-    for (let i = 0; i < 51; i++) {
-      this.board.deck.push(Card.generateFakeCard());
+  generateFakeDeck({ character, leader, stage, event, dons }) {
+    let deck = [];
+
+    for (let i = 0; i < character; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Character';
+      deck.push(card);
     }
 
-    return this;
-  }
-
-  generateDons() {
-    for (let i = 0; i < 10; i++) {
-      this.board.dons.push(Card.generateFakeCard());
+    for (let i = 0; i < leader; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Leader';
+      deck.push(card);
     }
 
-    return this;
-  }
-
-  generateHand(quantity = 5) {
-    for (let i = 0; i < quantity; i++) {
-      this.board.hand.push(this.board.deck.pop());
+    for (let i = 0; i < stage; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Stage';
+      deck.push(card);
     }
 
-    return this;
-  }
+    for (let i = 0; i < event; i++) {
+      let card = Card.generateFakeCard();
+      card.type = 'Event';
+      deck.push(card);
+    }
 
-  generateLeader() {
-    this.board.leader = this.board.deck.pop();
+    for (let i = 0; i < dons; i++) {
+      let card = Card.generateFakeCard();
+      card.name = 'DON!!';
+      card.type = 'Don';
+      card.code = 'OP01-001';
+      deck.push(card);
+    }
 
-    return this;
-  }
-
-  generateLives() {
-    this.board.lives = this.board.deck.splice(0, 5);
-
-    return this;
-  }
-
-  generateCharacter(quantity = 1) {
-    this.board.characters = this.board.deck.splice(0, quantity);
-
-    return this;
-  }
-
-  generateCosts() {
-    this.board.costs = this.board.dons.splice(0, 9);
-
-    return this;
-  }
-
-  generateBoard() {
-    this.generateDeck()
-      .generateDons()
-      .generateHand()
-      .generateLeader()
-      .generateLives()
-      .generateCharacter()
-      .generateCosts();
-
-    return this.board;
+    return deck;
   }
 
   generateDeckStructure() {
-    const deck = Card.generateFakeDeck({
+    const deck = this.generateFakeDeck({
       character: 36,
       leader: 1,
       stage: 4,
@@ -91,6 +69,7 @@ class BoardGenerator {
     this.board.deck = [...characters, ...stages, ...events];
     this.board.lives = this.board.deck.splice(0, this.board.leader.lives);
     this.board.hand = this.board.deck.splice(0, 5);
+    this.board.trash = [];
 
     return this.board;
   }

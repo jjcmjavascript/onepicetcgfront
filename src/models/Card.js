@@ -141,44 +141,6 @@ class Card {
 
     return new Card(fakeCard);
   }
-
-  static generateFakeDeck({ character, leader, stage, event, dons }) {
-    let deck = [];
-
-    for (let i = 0; i < character; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Character';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < leader; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Leader';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < stage; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Stage';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < event; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Event';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < dons; i++) {
-      let card = Card.generateFakeCard();
-      card.name = 'DON!!';
-      card.type = 'Don';
-      card.code = 'OP01-001';
-      deck.push(card);
-    }
-
-    return deck;
-  }
 }
 
 export default Card;
