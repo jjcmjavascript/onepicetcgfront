@@ -28,17 +28,29 @@ class GameState {
     return this.plays.list[this.turnNumber] || [];
   }
 
+  mapObjectToClasses(gameState) {
+    return Object.entries(gameState).reduce((acc, [key, value]) => {
+      acc[key] = value;
+
+      if (key === 'plays') {
+        acc[key] = Plays.getInstancefromObject(value);
+      }
+
+      return acc;
+    }, {});
+  }
+
   set(gameState) {
     return new GameState({
       ...GameState.getDefault(),
-      ...gameState,
+      ...this.mapObjectToClasses(gameState),
     });
   }
 
   merge(gameState) {
     return new GameState({
       ...this,
-      ...gameState,
+      ...this.mapObjectToClasses(gameState),
     });
   }
 

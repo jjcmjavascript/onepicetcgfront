@@ -51,7 +51,7 @@ function getEffect(name) {
       },
     },
 
-    don: {
+    'Don!!:don': {
       addAttackFromDon: {
         trigger: 'activate',
         chaing: [

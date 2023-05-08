@@ -171,7 +171,7 @@ function DuelProvider({ children }) {
     mergeActiveCard(card, type) {
       if (
         board.lockeds[type] ||
-        (game.mode.includes("select") && !card?.toSelect)
+        (game.mode?.includes("select") && !card?.toSelect)
       ) {
         return;
       }
