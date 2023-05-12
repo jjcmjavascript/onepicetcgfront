@@ -20,7 +20,9 @@ RUN npm config rm proxy
 RUN npm config rm https-proxy
 
 ##RUN yarn --no-lockfile --network-timeout 100000
-
+USER "1000:1000"
+RUN chmod -R 777 /app
+RUN npm install
 EXPOSE 3000
 
-CMD [ "npm", "run", "docker"]
+CMD [ "npm", "run", "start"]

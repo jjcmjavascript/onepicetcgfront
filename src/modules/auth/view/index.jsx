@@ -4,10 +4,10 @@ import Input from "../components/input";
 
 function Login() {
   return (
-    <div class="container-fluid zoro d-flex align-items-center justify-content-center vh-100">
-      <div class="login-box text-light">
+    <div className="container-fluid zoro d-flex align-items-center justify-content-center vh-100">
+      <div className="login-box text-light">
       
-        <Input className="login" placeholder="Iniciar"/>
+        <Input className="login" placeholder="Inisciar"/>
         <Input className="sing-up" placeholder="Registrar"/>
 
         <Input className="email container-fluid" placeholder="Ingrese su correo"/>
