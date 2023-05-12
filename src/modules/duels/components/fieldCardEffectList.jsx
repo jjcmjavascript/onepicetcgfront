@@ -1,5 +1,3 @@
-import React from "react";
-
 function FieldCardEffectList({ card }) {
   const items = [];
   const attack = card.powerAdded.reduce((prev, next) => prev + next, 0);

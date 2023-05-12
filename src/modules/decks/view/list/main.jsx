@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import { useContext, useEffect } from "react";
+
 import store from "../../provider/deckProvider";
 import Container from "../../../../components/container";
 import CardComponent from "../../../../components/card";
@@ -16,7 +17,9 @@ export default function MainDeckListSection() {
     minHeight: "70vh",
   };
 
-  decks.getDecks();
+  useEffect(() => {
+    decks.getDecks();
+  }, []);
 
   const deleteDeck = (id) => {
     decks.deleteDeck(id);
@@ -40,7 +43,7 @@ export default function MainDeckListSection() {
                 <Btn
                   className="danger btn-sm"
                   title="Borrar"
-                  onClick={(event) => deleteDeck(deck.id)}
+                  onClick={() => deleteDeck(deck.id)}
                 >
                   <FiDelete />
                 </Btn>

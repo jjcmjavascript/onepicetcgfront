@@ -1,5 +1,3 @@
-import React from "react";
-
 const container = ({ children, style, className = "container-fluid" }) => {
   return (
     <div className={className} style={style}>

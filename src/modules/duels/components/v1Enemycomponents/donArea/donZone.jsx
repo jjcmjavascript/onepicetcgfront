@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Store from "../../../provider/duelProvider";
 
 import DonCard from "./donCard";
 import DonCardHalf from "./donCardHalf";
 
-function DonZone({ children }) {
+function DonZone() {
   const { states } = useContext(Store.DuelContext);
   const [board] = states.boardTwo;
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const initialDeck = {
   name: '',
@@ -8,7 +8,6 @@ const initialDeck = {
 
 const useDeck = (rules) => {
   const [deck, setDeck] = useState(initialDeck);
-
   const setInDeck = (card) => {
     if (rules.isAllowed(card, deck)) {
       deck.cards.push(card);

@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import store from "../../provider/deckProvider";
 import FiltersSection from "../../components/filtersSection";
 import ListContainer from "../../components/listContainer";
 import SimpleCard from "../../components/simpleCard";
+import { useEffect } from "react";
 
 export default function LeftSide({ className }) {
   const { hooks, states } = useContext(store.CardContext);
@@ -23,7 +24,9 @@ export default function LeftSide({ className }) {
     }
   };
 
-  getPaginateCards(filters);
+  useEffect(() => {
+    getPaginateCards(filters);
+  }, [filters]);
 
   return (
     <div className={className}>

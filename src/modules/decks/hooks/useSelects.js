@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import cardService from '../services/cardService';
 
 const useSelects = () => {
@@ -12,14 +12,12 @@ const useSelects = () => {
   });
 
   const getSelects = () => {
-    useEffect(() => {
-      cardService.getSelects().then((res) => {
-        setFiltersSelects(res.data);
-      });
-    }, []);
+    return cardService.getSelects().then((res) => {
+      setFiltersSelects(res.data);
+    });
   };
 
-  return {filtersSelects, setFiltersSelects, getSelects};
+  return { filtersSelects, setFiltersSelects, getSelects };
 };
 
 export default useSelects;

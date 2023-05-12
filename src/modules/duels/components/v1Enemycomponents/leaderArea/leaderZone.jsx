@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import { useContext, useRef } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import Deck from "./deck";
@@ -12,14 +12,14 @@ import TrashOptionItem from "./deckOptionItem";
 
 import { shuffle } from "../../../../../helpers";
 
-function LeaderZone({ children }) {
+function LeaderZone() {
   const trashElementRef = useRef();
   const trashOptionElementRef = useRef();
 
   const deckElementRef = useRef();
   const deckOptionElementRef = useRef();
 
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
   const [board, setBoardOneState] = states.boardTwo;
   const [, setPreview] = states.preview;
   const [, setShowTrashModal] = states.showTrashModal;

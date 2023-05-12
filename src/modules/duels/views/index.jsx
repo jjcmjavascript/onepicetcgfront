@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 
 import Store from "../provider/duelProvider";
@@ -9,7 +8,7 @@ import VsPlayer from "../components/vsPlayer";
 import "../components/css/duel.css";
 import "../components/css/boardV1.css";
 
-const testMode = process.env.REACT_APP_TEST_BOARD;
+const testMode = import.meta.env.VITE_APP_TEST_BOARD;
 
 const views = {
   "/duels": <Mode />,
@@ -24,7 +23,7 @@ const DuelMode = () => {
 function Wraper() {
   return (
     <Store.DuelProvider>
-      {testMode ? <VsPlayer /> : <DuelMode />}
+      {testMode === 'true' ? <VsPlayer /> : <DuelMode />}
     </Store.DuelProvider>
   );
 }

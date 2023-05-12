@@ -1,5 +1,3 @@
-import React from "react";
-
 const select = ({ children, className = "form-select" }) => {
   return <select className={className}>{children}</select>;
 };

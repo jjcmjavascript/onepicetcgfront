@@ -1,5 +1,4 @@
-import React, { useContext, memo } from "react";
-
+import { useContext, memo } from "react";
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 

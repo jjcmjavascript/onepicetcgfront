@@ -51,7 +51,7 @@ function getEffect(name) {
       },
     },
 
-    don: {
+    'Don!!:don': {
       addAttackFromDon: {
         trigger: 'activate',
         chaing: [
@@ -87,6 +87,7 @@ function getEffect(name) {
           effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'RoronoaZoro:OP01-001:EFFECT:1',
+            effectScope: 'always',
           }),
           effects('cleanAll'),
         ],

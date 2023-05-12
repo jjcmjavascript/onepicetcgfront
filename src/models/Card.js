@@ -50,6 +50,27 @@ class Card {
     return this.power + this.powerAdded.reduce((a, b) => a + b, 0);
   }
 
+  get effects() {
+    const name = this.name
+      .toString()
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join('')
+      .concat(`:${this.code}`);
+
+    let effects = effectsMapper(name) || {};
+
+    if (this.type === 'Character') {
+      effects = {
+        ...effects,
+        ...effectsMapper('characters'),
+      };
+    }
+
+    return effects;
+  }
+
   static generateFakeCard() {
     const options = ['monsterid', 'robohash', 'wavatar'];
     const choice = faker.helpers.arrayElement(options);
@@ -116,49 +137,9 @@ class Card {
       underCardId: null,
       toSelect: false,
       selected: false,
-      effects: {},
     };
 
     return new Card(fakeCard);
-  }
-
-  static generateFakeDeck({ character, leader, stage, event, dons }) {
-    let deck = [];
-
-    for (let i = 0; i < character; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Character';
-      card.effects = effectsMapper('characters');
-      deck.push(card);
-    }
-
-    for (let i = 0; i < leader; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Leader';
-      card.effects = effectsMapper('TrafalgarLaw:OP01-002');
-      deck.push(card);
-    }
-
-    for (let i = 0; i < stage; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Stage';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < event; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Event';
-      deck.push(card);
-    }
-
-    for (let i = 0; i < dons; i++) {
-      let card = Card.generateFakeCard();
-      card.type = 'Don';
-      card.effects = effectsMapper('don');
-      deck.push(card);
-    }
-
-    return deck;
   }
 }
 

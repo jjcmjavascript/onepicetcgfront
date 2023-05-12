@@ -1,13 +1,13 @@
-import React, { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef } from "react";
 
 import Store from "../../../provider/duelProvider";
 import FieldCardFull from "../fieldCardFull";
 import CardOptionsCharacterArea from "./cardOptionsCharacterArea";
 import CardOptionCharacterAreaItem from "./cardOptionCharacterAreaItem";
 
-function CharactedZone({ children }) {
+function CharactedZone( ) {
   const handOptionElementRef = useRef();
-  const { states, hooks } = useContext(Store.DuelContext);
+  const { states } = useContext(Store.DuelContext);
   const { boardTwo } = states;
 
   const [boardOneState, setBoardOneState] = boardTwo;
@@ -18,7 +18,7 @@ function CharactedZone({ children }) {
     setPreview(card);
   };
 
-  const onMouseOut = (card) => {
+  const onMouseOut = () => {
     setPreview(null);
   };
 
@@ -37,7 +37,7 @@ function CharactedZone({ children }) {
     }
   };
 
-  const hideOptions = (card) => {
+  const hideOptions = () => {
     const optionsElement = handOptionElementRef.current;
     optionsElement.classList.add("hideFull");
     setActiveCard(null);
@@ -132,8 +132,8 @@ function CharactedZone({ children }) {
               id={`id_${card.uuid}`}
               key={card.uuid}
               card={card}
-              onMouseOut={(_) => onMouseOut(card)}
-              onMouseOver={(_) => onMouseOver(card)}
+              onMouseOut={() => onMouseOut(card)}
+              onMouseOver={() => onMouseOver(card)}
               onClick={() => toggleOptions(card)}
             />
           );

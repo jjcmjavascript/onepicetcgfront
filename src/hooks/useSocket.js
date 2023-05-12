@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import mySocketIo from '../services/mySocketIo';
 
-const appUrl = process.env.REACT_APP_BACKEND_URL_SOCKET;
+const appUrl = import.meta.env.VITE_APP_BACKEND_URL_SOCKET;
 
 const SOCKET_GENERAL_URL = '/';
 const SOCKET_DUEL_URL = 'duel';

@@ -1,5 +1,3 @@
-import React from "react";
-
 const input = ({ placeholder, value,  ariaLabel, onChange, className, type = "text" }) => {
   return (
     <input

@@ -1,15 +1,15 @@
-import React, { useState, useContext, useCallback } from "react";
+import { useState, useContext, useEffect } from "react";
 import Input from "../../../components/input";
 import Btn from "../../../components/btn";
 import BtnOutline from "../../../components/btnOutline";
 import store from "../provider/deckProvider";
 import { BsSearch } from "react-icons/bs";
 
-const FiltersSection = (props) => {
+const FiltersSection = () => {
   const validRegExp = /^[\w|\s]+$/i;
   const { hooks, states } = useContext(store.CardContext);
   const { filtersSelects, getSelects } = hooks.selects;
-  const [_, setFilters] = states.filters;
+  const [, setFilters] = states.filters;
   const { setCards } = hooks.paginate;
 
   const [nameValue, setNameValue] = useState("");
@@ -55,7 +55,9 @@ const FiltersSection = (props) => {
     }
   };
 
-  getSelects()
+  useEffect(() => {
+    getSelects();
+  }, []);
 
   return (
     <>

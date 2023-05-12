@@ -1,5 +1,5 @@
 import setUuid from './setUuid';
-import { DON, LEADER } from './cardTypes';
+import { DON } from './cardTypes';
 
 function formatCardsForDeck(decks, control = { withDons: true }) {
   if (Array.isArray(decks)) {

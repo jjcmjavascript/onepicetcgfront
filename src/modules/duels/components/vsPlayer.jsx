@@ -1,4 +1,3 @@
-import React from "react";
 import PreviewAndPhaseZone from "../components/previewAndPhasesArea/previewAndPhaseZone";
 import DuelMenu from "../components/duelMenu/duelMenu";
 import Board from "../components/v1components/board";

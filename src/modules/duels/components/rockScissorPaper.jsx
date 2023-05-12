@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Store from "../provider/duelProvider";
 
 import ContainerFluidDark from "../../../components/containerFluidDark";
@@ -28,7 +28,7 @@ const RockScissorsPaperContainerItem = ({ children, onClick, active }) => {
   );
 };
 
-const Message = ({ children, active }) => {
+const Message = ({ children }) => {
   const className = `text-light text-center rockScissorsPaperContainer--box__item--message`;
   return <h1 className={className}>{children}</h1>;
 };
@@ -43,7 +43,7 @@ function RockScissorPaper() {
 
   const onClick = (choice) => {
     setChoice(choice);
-    console.log(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE)
+    console.log(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE);
     duelSocket.emit(constants.GAME_ROCK_PAPER_SCISSORS_CHOICE, {
       room: duelRoom,
       choice,
@@ -89,10 +89,6 @@ function RockScissorPaper() {
 }
 
 function wrapper() {
-  const style = {
-    top: "50vh",
-  };
-
   return (
     <ContainerFluidDark>
       <RockScissorPaper />

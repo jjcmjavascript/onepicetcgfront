@@ -1,22 +1,35 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 
 import duelTestProvide from "./duelTestProvide";
+import useSocket from "@hooks/useSocket";
+import deckService from "@duels/services/deckService";
 
-import * as effectRules from "../services/effectRules";
-import constants from "../services/constants";
-import deckService from "../services/deckService";
+import * as effectRules from "@duels/services/effectRules";
 
-import useSocket from "../../../hooks/useSocket";
+import constants from "@duels/services/constants";
+import { pause } from "@helpers";
 
-import GameState from "../../../models/GameState";
-import Player from "../../../models/Player";
-import ActiveCard from "../../../models/ActiveCard";
+import GameState from "@models/GameState";
+import Player from "@models/Player";
+import ActiveCard from "@models/ActiveCard";
 
-const testMode = process.env.REACT_APP_TEST_BOARD;
+const testMode = import.meta.env.VITE_APP_TEST_BOARD;
 const State = GameState.getDefault();
 const Board = Player.getDefault();
 const EnemyBoard = Player.getDefault();
 const ActiveCardSchema = ActiveCard.getDefault();
+
+const defaultActiveEffect = {
+  card: null,
+  effectNamesAndParams: new Map(),
+  affectedCards: new Set(),
+};
+
+function* generator(effects) {
+  for (let i = 0; i < effects.length; i++) {
+    yield effects[i];
+  }
+}
 
 const DuelContext = createContext();
 
@@ -24,28 +37,42 @@ function DuelProvider({ children }) {
   const boardOne = useState(Board);
   const boardTwo = useState(EnemyBoard);
   const gameState = useState(State);
-  const activeCard = useState(ActiveCardSchema);
   const sockets = useSocket();
-
+  const activeCard = useRef(ActiveCardSchema); //usar
+  const activesCards = useState(ActiveCardSchema); //No usar
+  const currentEffectPile = useRef(null);
+  const stopPile = useRef(false);
   const [game, setGameState] = gameState;
   const [board, setBoard] = boardOne;
-  const [activeCards, setActiveCards] = activeCard;
-  const { duelSocket, duelRoom } = sockets;
+  const [, setActiveCard] = activesCards; //No usar
+
+  /**
+   * Este ref es para guardar de forma precisa el efecto activo y poder manejar
+   * fin fallos las mutaciones de estado que se producen en el juego
+   * Almacena la carta que se activa
+   * Parametros (estos parametros tienen la estrucutura nombre funcion y params, ejempl:
+   * - {name: "setMode", params: {mode: "select:character:to:replace"}} )
+   * - Destacar que estas funciones son ejecutadas por el iterador de efectos: iterator(generator(arrayMethods));
+   * - Si bien cada funcion recibe automaticamente los parametros que necesita para ejecutarse por el iterador a veces son necesarios parametros adicionales que se almacenan aqui
+   * Las cartas afectadas
+   */
+  const activeCardEffect = useRef({ ...defaultActiveEffect });
+
+  const hooks = { sockets };
 
   const states = {
     boardOne,
     boardTwo,
     gameState,
-    activeCards: activeCard,
+    activeCards: activesCards, //No usar
     preview: useState(null),
     showTrashModal: useState(false),
     decks: useState([]),
     selectedDeck: useState(""),
+    currentEffectPile,
   };
 
-  const hooks = {
-    sockets,
-  };
+  const { duelSocket, duelRoom } = sockets;
 
   const actions = {
     isMyTurn() {
@@ -58,57 +85,136 @@ function DuelProvider({ children }) {
       });
     },
 
-    // events initializers
-    initSumAttackFromDonEvent() {
-      console.log(constants.GAME_DON_PLUS);
-      // duelSocket.emit(constants.GAME_DON_PLUS, {
-      //   room: duelRoom,
-      //   donUuid: card.uuid,
-      // });
+    /******************************************/
+    /******** SOCKET EFFECTS *****************/
+    /****************************************/
+    async iterator(generator) {
+      for (const value of generator) {
+        if (stopPile.current) {
+          stopPile.current = false;
+          break;
+        }
 
-      setGameState((state) =>
-        state.merge({
-          mode: "select:character&&leader",
-        })
-      );
-      this.activateCharacterSelectorAll();
-      this.activateLeaderSelector();
+        await pause.sleep(50);
+        await value();
+      }
     },
 
-    endSumAttackFromDonEvent() {
-      setActiveCards((state) => state.getDefault());
+    async resolveCard({ card, name }) {
+      const effect = card.effects[name];
+      const chaing = effect.chaing;
+      const arrayMethods = chaing.map((chaingPart) => {
+        //Register the effect and its params
+        activeCardEffect.current.effectNamesAndParams.set(
+          chaingPart.name,
+          chaingPart.params
+        );
+        return () => this[chaingPart.name].call(this, chaingPart.params);
+      });
+
+      //Register the card that is activating the effect
+      activeCardEffect.current.card = card;
+
+      // Effects are resolved by this
+      this.iterator(generator(arrayMethods));
+    },
+
+    async resolve({ where, name }) {
+      const card = activeCard.current[where];
+      const effect = card.effects[name];
+      const chaing = effect.chaing;
+      const arrayMethods = chaing.map((chaingPart) => {
+        //Register the effect and its params
+        activeCardEffect.current.effectNamesAndParams.set(
+          chaingPart.name,
+          chaingPart.params
+        );
+        return () => this[chaingPart.name].call(this, chaingPart.params);
+      });
+
+      //Register the card that is activating the effect
+      activeCardEffect.current.card = card;
+
+      // Effects are resolved by this
+      this.iterator(generator(arrayMethods));
+    },
+
+    setMode(params) {
+      const { mode } = params;
 
       setGameState((state) =>
         state.merge({
-          mode: "",
+          mode,
         })
       );
-
-      this.desactivateCharacterSelectorAll();
-      this.desactivateLeaderSelector();
     },
 
     initPlayCard() {
-      const card = activeCards.hand;
-
-      this.playCard(card);
+      const card = activeCard.current.hand;
+      card;
+      this.playCardFromHand();
     },
 
-    // setters
+    /******************************************/
+    /******** EFFECTS ***********************/
+    /****************************************/
+
+    emitBoard() {},
+
     mergeActiveCard(card, type) {
-      if (["select:character&&leader"].includes(game.mode)) {
-        setActiveCards((state) =>
-          state.merge({
-            [type]: card,
-          })
-        );
-      } else {
-        setActiveCards((state) =>
-          state.set({
-            [type]: card,
-          })
-        );
+      if (
+        board.lockeds[type] ||
+        (game.mode?.includes("select") && !card?.toSelect)
+      ) {
+        return;
       }
+
+      const state = activeCard.current;
+      const modesToMergeWithAll = [
+        "select:character:to:replace",
+        "select:character&&leader",
+      ];
+
+      if (game.mode === "select:character&&leader") {
+        activeCard.current = state.set({
+          [type]: card,
+          don: state.don,
+        });
+      } else if (modesToMergeWithAll.includes(game.mode)) {
+        activeCard.current = state.merge({
+          [type]: card,
+        });
+      } else {
+        activeCard.current = state.set({
+          [type]: card,
+        });
+      }
+
+      setActiveCard(activeCard.current);
+    },
+
+    async awaitSelection() {
+      return new Promise((resolve) => {
+        const handlerClick = (event) => {
+          const { target } = event;
+
+          if (target.name === "buttonToWait") {
+            document.body.removeEventListener("click", handlerClick);
+            resolve();
+          }
+        };
+
+        document.body.addEventListener("click", handlerClick);
+      });
+    },
+
+    lockAllExcept(params) {
+      const { exeptions } = params;
+      setBoard((state) => state.lockAllExcept(exeptions));
+    },
+
+    unlockAll() {
+      setBoard((state) => state.unlockAll());
     },
 
     activateLeaderSelector() {
@@ -132,7 +238,271 @@ function DuelProvider({ children }) {
       );
     },
 
-    desactivateCharacterSelectorAll() {
+    addAttack(params) {
+      const { amount, targets } =
+        params ||
+        activeCardEffect.current.effectNamesAndParams.get("addAttack");
+
+      const [cardType, card] = Object.entries(activeCard.current).find(
+        ([type, value]) => value != null && targets.includes(type)
+      );
+
+      setBoard((state) => {
+        let leader =
+          cardType === "leader"
+            ? { ...card, powerAdded: [...card.powerAdded, amount] }
+            : state.leader;
+
+        let characters =
+          cardType === "character"
+            ? state.characters.map((item) => {
+                let powerAdded = item.powerAdded;
+
+                if (item.uuid == card.uuid) {
+                  powerAdded = [...item.powerAdded, amount];
+                }
+
+                return {
+                  ...item,
+                  powerAdded,
+                };
+              })
+            : state.characters;
+
+        return state.merge({
+          leader,
+          characters,
+        });
+      });
+    },
+
+    addAttackToAll(params) {
+      const { amount } = params;
+
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.map((character) => {
+            return {
+              ...character,
+              powerAdded: [...character.powerAdded, amount],
+            };
+          }),
+        })
+      );
+    },
+
+    setActiveDonUnderCard() {
+      const don = activeCard.current.don;
+      const [type, card] = Object.entries(activeCard.current).find(
+        ([, value]) => value != null && value.uuid !== don.uuid
+      );
+
+      setBoard((state) => {
+        let object = {
+          costs: state.costs.filter((item) => item.uuid !== don.uuid),
+        };
+
+        if (type === "leader") {
+          object["leader"] = {
+            ...state.leader,
+            overCards: [...state.leader.overCards, { ...don, rested: true }],
+          };
+        } else if (type === "character") {
+          object["characters"] = state.characters.map((item) => {
+            if (item.uuid === card.uuid) {
+              return {
+                ...item,
+                overCards: [...item.overCards, { ...don, rested: true }],
+              };
+            }
+
+            return item;
+          });
+        }
+
+        return state.merge(object);
+      });
+    },
+
+    playCardFromHand() {
+      const card = activeCard.current.hand;
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.filter((handCard) => handCard.uuid !== card.uuid),
+          characters: [...state.characters, card],
+        })
+      );
+
+      this.cleanAll();
+    },
+
+    restMultipleDonsFromActive(params) {
+      const { target } = params;
+      const card = activeCard.current[target];
+
+      this.restMultipleDons({
+        quantity: card.cost,
+      });
+    },
+
+    restMultipleDons(params) {
+      const { quantity } = params;
+
+      setBoard((state) => {
+        let iteration = quantity;
+        let costs = state.costs.map((cost) => {
+          if (iteration > 0 && cost.rested == false) {
+            iteration--;
+            return { ...cost, rested: true };
+          }
+
+          return cost;
+        });
+
+        return state.merge({
+          costs,
+        });
+      });
+    },
+
+    replaceCharacter() {
+      const { character, hand } = activeCard.current;
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.filter((handCard) => handCard.uuid !== hand.uuid),
+          characters: state.characters.map((currentCharacter) => {
+            return currentCharacter.uuid == character.uuid
+              ? hand
+              : currentCharacter;
+          }),
+          trash: [...state.trash, character],
+        })
+      );
+    },
+
+    registerPlay(params) {
+      const { type, effectName } = params;
+
+      setGameState((state) =>
+        state.mergePlay({
+          effectName,
+          type,
+          playerId: board.id,
+        })
+      );
+    },
+
+    returnCharacterFromFieldToHand(params) {
+      const { character } = activeCard.current;
+      const { registerAffectedCard } = params;
+
+      setBoard((state) =>
+        state.merge({
+          characters: state.characters.filter(
+            (currentCharacter) => currentCharacter.uuid !== character.uuid
+          ),
+          hand: [...state.hand, character],
+        })
+      );
+
+      if (registerAffectedCard) {
+        this.setAffectedCards({ cards: [character] });
+      }
+    },
+
+    setAffectedCards(params) {
+      const { cards } = params;
+
+      cards.forEach((card) => {
+        activeCardEffect.current.affectedCards.add(card);
+      });
+    },
+
+    activateHandSelectorFilteredOr(params) {
+      let filteredHand = [];
+      const filters = Object.entries(params);
+
+      for (const [functionName, functionParams] of filters) {
+        filteredHand = [
+          ...filteredHand,
+          ...this[functionName]({ arr: board.hand, ...functionParams }),
+        ];
+      }
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.map((handCard) => {
+            if (filteredHand.find((card) => card.uuid === handCard.uuid)) {
+              return { ...handCard, toSelect: true };
+            }
+
+            return handCard;
+          }),
+        })
+      );
+    },
+
+    activateHandSelectorFilteredAnd(params) {
+      let filteredHand = board.hand;
+      const filters = Object.entries(params);
+
+      for (const [functionName, functionParams] of filters) {
+        filteredHand = this[functionName]({
+          arr: filteredHand,
+          ...functionParams,
+        });
+      }
+
+      setBoard((state) =>
+        state.merge({
+          hand: state.hand.map((handCard) => {
+            if (filteredHand.find((card) => card.uuid === handCard.uuid)) {
+              return { ...handCard, toSelect: true };
+            }
+
+            return handCard;
+          }),
+        })
+      );
+    },
+
+    filterByColor(params) {
+      const { arr, equal, from } = params;
+
+      let colors = [];
+
+      if (from === "activeCard") {
+        colors = [];
+      } else if (from === "affectedCards") {
+        colors = [...activeCardEffect.current.affectedCards.values()]
+          .map((card) => card.colors)
+          .flat();
+      }
+
+      return arr.filter((card) => {
+        let hasColor = false;
+
+        for (let color of colors) {
+          hasColor = card.colors.includes(color);
+          if (hasColor) break;
+        }
+
+        return equal ? hasColor : !hasColor;
+      });
+    },
+
+    filterByCost(params) {
+      const { arr, cost, symbol } = params;
+
+      return arr.filter((card) => eval(`${card.cost} ${symbol} ${cost}`));
+    },
+
+    /******************************************/
+    /******** CLEANERS ***********************/
+    /****************************************/
+    cleanCharacterSelectorAll() {
       setBoard((state) =>
         state.merge({
           characters: state.characters.map((character) => {
@@ -142,7 +512,7 @@ function DuelProvider({ children }) {
       );
     },
 
-    desactivateLeaderSelector() {
+    cleanLeaderSelector() {
       setBoard((state) =>
         state.merge({
           leader: {
@@ -153,121 +523,120 @@ function DuelProvider({ children }) {
       );
     },
 
-    plusAttakFromDon() {
-      const { character, leader, don } = activeCards;
-      console.log(activeCards);
-
-      setBoard((state) =>
-        state.merge({
-          costs: state.costs.filter((cost) => cost.uuid != don.uuid),
-          leader: {
-            ...state.leader,
-            powerAdded: leader
-              ? [...state.leader.powerAdded, 1000]
-              : state.leader.powerAdded,
-            overCards: leader
-              ? [...state.leader.overCards, don]
-              : state.leader.overCards,
-          },
-
-          characters: character
-            ? state.characters.map((item) => {
-                let powerAdded = item.powerAdded;
-                let overCards = item.overCards;
-
-                if (item.uuid == character.uuid) {
-                  powerAdded = [...item.powerAdded, 1000];
-                  overCards = [...item.overCards, don];
-                }
-
-                return {
-                  ...item,
-                  powerAdded,
-                  overCards,
-                };
-              })
-            : state.characters,
-        })
-      );
-
-      this.endSumAttackFromDonEvent();
+    cleanActiveCards() {
+      const active = ActiveCard.getDefault();
+      activeCard.current = active;
+      setActiveCard(active);
     },
 
-    addAttactToAllCharacters(attack = 1000) {
-      setBoard((currentBoard) => {
-        return {
-          ...currentBoard,
-          characters: currentBoard.characters.map((currentCharacter) => {
-            return {
-              ...currentCharacter,
-              powerAdded: [...currentCharacter.powerAdded, attack],
-            };
-          }),
-        };
-      });
-    },
-
-    playCardFromHand(card) {
-      setBoard((state) =>
+    cleanGameMode() {
+      setGameState((state) =>
         state.merge({
-          hand: state.hand.filter((handCard) => handCard.uuid !== card.uuid),
-          characters: [...state.characters, card],
+          mode: "",
         })
       );
-
-      setActiveCards((state) => state.getDefault());
-
-      this.restedMultipleDons(card.cost);
     },
 
-    restedMultipleDons(quantity = 1) {
-      setBoard((state) =>
+    cleanHandSelector() {
+      return setBoard((state) =>
         state.merge({
-          costs: state.costs.map((cost) => {
-            quantity--;
-            return {
-              ...cost,
-              rested: quantity >= 0 ? true : cost.rested,
-            };
-          }),
+          hand: state.hand.map((card) => ({ ...card, toSelect: false })),
         })
       );
+    },
+
+    removeClickFromStack() {
+      // este proceso es para que el evento click del boton no se quede en el stack
+      const elementWithHandler = document.createElement("button");
+      elementWithHandler.name = "buttonToWait";
+      elementWithHandler.onclick = () => {};
+      document.body.appendChild(elementWithHandler);
+      elementWithHandler.click();
+      document.body.removeChild(elementWithHandler);
+    },
+
+    cancel() {
+      stopPile.current = true;
+      this.removeClickFromStack();
+      this.cleanAll();
+    },
+
+    cleanAll() {
+      this.cleanGameMode();
+      this.cleanActiveCards();
+      this.cleanCharacterSelectorAll();
+      this.cleanLeaderSelector();
+      this.unlockAll();
+      this.cleanHandSelector();
+
+      activeCardEffect.current = {
+        ...defaultActiveEffect,
+      };
     },
   };
 
   const conditions = {
-    hasAvaibleCost() {
-      const don = activeCards.don;
-      return effectRules.hasAvaibleCost({ board, don });
+    resolveCard({ card, name }) {
+      const currentCard = card;
+      const effect = currentCard.effects[name];
+      const chaing = effect.conditions;
+
+      return chaing.every((rule) => {
+        return (
+          effectRules[rule.name]({
+            board,
+            game,
+            activeCards: activeCard.current,
+            currentCard,
+            effectName: name,
+            params: rule.params,
+          }) === true
+        );
+      });
     },
-    attack() {
-      const card = activeCards.character;
-      return effectRules.attack({ board, card, game });
+
+    resolve({ where, name }) {
+      const currentCard = activeCard.current[where];
+      const effect = currentCard.effects[name];
+      const chaing = effect.conditions;
+
+      return chaing.every((rule) => {
+        return effectRules[rule.name]({
+          board,
+          game,
+          activeCards: activeCard.current,
+          currentCard,
+          effectName: name,
+          params: rule.params,
+        });
+      });
     },
+    // canAttack() {
+    //   const card = activeCard.current.character;
+    //   return effectRules.attack({ board, card, game });
+    // },
     canAddAtkFromDon() {
-      const don = activeCards.don;
+      const don = activeCard.current.don;
       return effectRules.canAddAtkFromDon({ game, don });
     },
     canShowConfirmButton() {
       return effectRules.canShowConfirmButton({
-        activeCards,
+        activeCards: activeCard.current,
         game,
         board,
       });
     },
-    rest() {
-      const card = activeCards.don || activeCards.character;
-      return effectRules.rest({ board, card });
-    },
+    // canRest() {
+    //   const card = activeCard.current.don || activeCard.current.character;
+    //   return effectRules.rest({ board, card });
+    // },
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });
     },
+
     canActiveEffect() {
-      return effectRules.canActiveEffect({ activeCards, game, board });
-    },
-    canPlayCard() {
-      return effectRules.canPlayCard({
-        card: activeCards.hand,
+      return effectRules.canActiveEffect({
+        activeCards: activeCard.current,
         game,
         board,
       });
@@ -279,6 +648,28 @@ function DuelProvider({ children }) {
       states.decks[1](decks);
     });
   }, []);
+
+  /******************************************/
+  /******** AUTOMATIC EFFECTS **************/
+  /****************************************/
+  useEffect(() => {
+    if (!board.leader) return;
+
+    Object.entries(board.leader.effects).forEach(
+      ([effectName, effectValue]) => {
+        const result = conditions.resolveCard({
+          card: board.leader,
+          name: effectName,
+        });
+
+        if (result) {
+          if (effectValue.trigger === "auto") {
+            actions.resolveCard({ name: effectName, card: board.leader });
+          }
+        }
+      }
+    );
+  }, [board.leader]);
 
   return (
     <DuelContext.Provider
@@ -295,4 +686,4 @@ function DuelProvider({ children }) {
 }
 const duelProvider = { DuelProvider, DuelContext };
 
-export default Boolean(testMode) === true ? duelTestProvide : duelProvider;
+export default testMode === "true" ? duelTestProvide : duelProvider;

@@ -1,6 +1,14 @@
 import axios from 'axios';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL + 'deck';
+const swalMessage = (title, html, icon) => {
+  Swal.fire({
+    title,
+    html,
+    icon,
+  });
+};
+const baseUrl = import.meta.env.VITE_APP_BACKEND_URL + 'deck';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -18,7 +26,7 @@ const getDecks = async (filters = {}) => {
     const response = await axios.get(`${baseUrl}?${formatedFilters}`, options);
     return response.data;
   } catch (err) {
-    throw err;
+    swalMessage('Error', 'Error al obtener decks', 'error');
   }
 };
 
@@ -28,7 +36,7 @@ const saveDeck = async (deck) => {
     const response = await axios.post(baseUrl, deck, options);
     return response.data.deck;
   } catch (err) {
-    throw err;
+    swalMessage('Error', 'Error al Almacenar el deck', 'error');
   }
 };
 
@@ -45,17 +53,21 @@ const findDeck = async (deckId) => {
     const deck = response.data;
     return deck;
   } catch (err) {
-    throw err;
+    swalMessage('Error', 'Error al Buscar deck', 'error');
   }
 };
 
 const updateDeck = async (deck) => {
   try {
     const options = { headers };
-    const response = await axios.put(`${baseUrl}/${deck.id}/edit`, deck, options);
+    const response = await axios.put(
+      `${baseUrl}/${deck.id}/edit`,
+      deck,
+      options
+    );
     return response.data.deck;
   } catch (err) {
-    throw err;
+    swalMessage('Error', 'Error al actualizar el deck', 'error');
   }
 };
 

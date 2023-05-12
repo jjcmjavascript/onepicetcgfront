@@ -1,14 +1,20 @@
 version: '3.9'
 services:
-  node:
+  front:
     build:
       context: ./
       dockerfile: dockerfile
+<<<<<<< HEAD
+=======
+    command: npm run docker
+>>>>>>> 15c8a658331758a1e9c9c4565359229b4321d608
     volumes:
       - ./:/app
-      - /app/node_modules
+      - modules_front:/app/node_modules
     ports:
       - 3000:3000
     networks:
       - default
     env_file: .env
+volumes:
+  modules_front: {}

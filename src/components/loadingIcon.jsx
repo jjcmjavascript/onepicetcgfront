@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./css/loadingIcon.css";
 
 function LoadingIcon() {

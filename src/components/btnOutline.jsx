@@ -1,5 +1,3 @@
-import React from "react";
-
 const btn = ({ children, className, onClick, disabled, title }) => {
   const defaultClass = "btn btn-outline-success";
   const newClassName = `btn btn-outline-${className}`;

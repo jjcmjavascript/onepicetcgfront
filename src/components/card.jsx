@@ -1,5 +1,3 @@
-import React from "react";
-
 export const CardImage = ({ src, alt, className = "card-img-top" }) => {
   return <img className={className} src={src} alt={alt} />;
 };

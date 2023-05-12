@@ -1,4 +1,3 @@
-import React from "react";
 import ContainerFluidDark from "../../../components/containerFluidDark";
 import LoadingIcon from "../../../components/loadingIcon";
 

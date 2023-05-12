@@ -1,17 +1,17 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 
-import deckService from "../services/deckService";
-import useSocket from "../../../hooks/useSocket";
+import deckService from "@duels/services/deckService";
+import useSocket from "@hooks/useSocket";
 
-import * as effectRules from "../services/effectRules";
+import * as effectRules from "@duels/services/effectRules";
 
-import BoardGenerator from "../../../services/BoardGenerator";
-import GameState from "../../../models/GameState";
-import constants from "../services/constants";
-import ActiveCard from "../../../models/ActiveCard";
+import BoardGenerator from "@duels/services/BoardGenerator";
+import GameState from "@models/GameState";
+import constants from "@duels/services/constants";
+import ActiveCard from "@models/ActiveCard";
+import { pause } from "@helpers";
 
-import { pause } from "../../../helpers";
-// import Swal from "sweetalert2";
+// import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 
 const State = GameState.getDefault();
 const Board = new BoardGenerator({}).generateDeckStructure().merge({
@@ -171,7 +171,7 @@ function DuelProvider({ children }) {
     mergeActiveCard(card, type) {
       if (
         board.lockeds[type] ||
-        (game.mode.includes("select") && !card?.toSelect)
+        (game.mode?.includes("select") && !card?.toSelect)
       ) {
         return;
       }
