@@ -662,10 +662,8 @@ function DuelProvider({ children }) {
           name: effectName,
         });
 
-        if (result) {
-          if (effectValue.trigger === "auto") {
-            actions.resolveCard({ name: effectName, card: board.leader });
-          }
+        if (result && effectValue.trigger === "auto") {
+          actions.resolveCard({ name: effectName, card: board.leader });
         }
       }
     );

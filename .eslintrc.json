@@ -23,6 +23,18 @@
     "react/jsx-filename-extension": [
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
+    // "complexity": [
+    //   "error",
+    //   {
+    //     "max": 4
+    //   }
+    // ],
+    "max-depth": [
+      "error",
+      {
+        "max": 2
+      }
     ]
   },
   "settings": {
