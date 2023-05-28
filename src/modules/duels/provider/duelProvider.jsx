@@ -633,7 +633,6 @@ function DuelProvider({ children }) {
     characterSelect(card) {
       return effectRules.characterSelect({ game, card });
     },
-
     canActiveEffect() {
       return effectRules.canActiveEffect({
         activeCards: activeCard.current,
@@ -662,8 +661,10 @@ function DuelProvider({ children }) {
           name: effectName,
         });
 
-        if (result && effectValue.trigger === "auto") {
-          actions.resolveCard({ name: effectName, card: board.leader });
+        if (result) {
+          if (effectValue.trigger === "auto") {
+            actions.resolveCard({ name: effectName, card: board.leader });
+          }
         }
       }
     );
