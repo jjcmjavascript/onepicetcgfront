@@ -20,8 +20,8 @@ class BoardGenerator {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
-      card.code = 'OP01-001';
-      card.name = 'RoronoaZoro';
+      card.code = 'OP01-002';
+      card.name = 'Trafalgar Law';
       deck.push(card);
     }
 
@@ -50,10 +50,10 @@ class BoardGenerator {
 
   generateDeckStructure() {
     const deck = this.generateFakeDeck({
-      character: 36,
+      character: 46,
       leader: 1,
-      stage: 4,
-      event: 10,
+      stage: 2,
+      event: 2,
       dons: 10,
     });
 

@@ -80,7 +80,7 @@ class Card {
     const fakeCard = {
       id: faker.datatype.uuid(),
       uuid: faker.datatype.uuid(),
-      cost: faker.datatype.number({ min: 1, max: 1 }),
+      cost: faker.datatype.number({ min: 6, max: 6 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
       power: faker.helpers.arrayElement(
@@ -92,7 +92,7 @@ class Card {
       typeId: faker.datatype.uuid(),
       packId: faker.datatype.uuid(),
       code: faker.datatype.string(5),
-      cardNumber: faker.datatype.number({ min: 1, max: 100 }),
+      cardNumber: faker.datatype.number({ min: 1, max: 9999 }),
       cardText: faker.lorem.sentences(2),
       imageId: faker.datatype.uuid(),
       fullImageId: faker.datatype.uuid(),
@@ -122,7 +122,7 @@ class Card {
       ]),
       pack: faker.lorem.word(),
       categories: faker.helpers.arrayElements(
-        ['DRAGON', 'NINJA', 'ZOMBIE', 'MACHINE'],
+        ['Supernova', 'Straw Hat Crew', 'ZOMBIE', 'MACHINE'],
         faker.datatype.number({ min: 1, max: 2 })
       ),
       _image: {

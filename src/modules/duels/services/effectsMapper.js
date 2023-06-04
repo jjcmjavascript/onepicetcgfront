@@ -73,7 +73,7 @@ function getEffect(name) {
     },
 
     'roronoazoro:OP01-001': {
-      'RoronoaZoro:OP01-001:EFFECT:1': {
+      'roronoazoro:OP01-001:EFFECT:1': {
         label: '+1000 a todos los personajes',
         trigger: 'auto',
         conditions: [
@@ -86,7 +86,7 @@ function getEffect(name) {
           effects('addAttackToAll'),
           effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'RoronoaZoro:OP01-001:EFFECT:1',
+            effectName: 'roronoazoro:OP01-001:EFFECT:1',
             effectScope: 'always',
           }),
           effects('cleanAll'),
@@ -95,7 +95,7 @@ function getEffect(name) {
     },
 
     'trafalgarlaw:OP01-002': {
-      'TrafalgarLaw:OP01-002:EFFECT:1': {
+      'trafalgarlaw:OP01-002:EFFECT:1': {
         label: 'Regresar 1 y Jugar 1',
         trigger: 'activate',
         conditions: [
@@ -116,7 +116,7 @@ function getEffect(name) {
           effects('awaitSelection'),
           effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'TrafalgarLaw:OP01-002:EFFECT:1',
+            effectName: 'trafalgarlaw:OP01-002:EFFECT:1',
           }),
           effects('restMultipleDons', { quantity: 2 }),
           effects('returnCharacterFromFieldToHand'),
@@ -146,8 +146,8 @@ function getEffect(name) {
       },
     },
 
-    'monkeyd.Luffy:OP01-003': {
-      'MonkeyD.Luffy:OP01-003:EFFECT:1': {
+    'monkeyd.luffy:OP01-003': {
+      'monkeyd.luffy:OP01-003:EFFECT:1': {
         label: 'Regresar 1 y Jugar 1',
         trigger: 'activate',
         conditions: [
@@ -155,7 +155,12 @@ function getEffect(name) {
           conditions('currentMode'),
           conditions('phase'),
           conditions('hasAvaibleCost', { quantity: 4 }),
-          conditions('hasExactCharacters', { quantity: 5 }),
+          conditions('hasCharactersInHand'),
+          conditions('hasCharactersTypesInHand', [
+            'pirate',
+            'captain',
+          ]),
+
         ],
         chaing: [
           effects('setMode', {
@@ -168,7 +173,7 @@ function getEffect(name) {
           effects('awaitSelection'),
           effects('registerPlay', {
             type: 'leader_effect',
-            effectName: 'MonkeyD.Luffy:OP01-003:EFFECT:1',
+            effectName: 'monkeyd.luffy:OP01-003:EFFECT:1',
           }),
           effects('restMultipleDons', { quantity: 2 }),
           effects('returnCharacterFromFieldToHand'),

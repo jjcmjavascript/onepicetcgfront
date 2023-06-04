@@ -1,4 +1,10 @@
 class Conditions {
+  generic(params) {
+    return {
+      ...params,
+    };
+  }
+
   currentMode(params) {
     return {
       name: 'mode',
@@ -59,6 +65,27 @@ class Conditions {
     return {
       name: 'canReplaceCharacterForPlay',
       params: {},
+    };
+  }
+
+  hasCharactersInHand(params) {
+    return {
+      name: 'hasCharactersInHand',
+      params: {
+        min: 1,
+        max: Infinity,
+        ...params,
+      },
+    };
+  }
+
+  hasCharactersTypesInHand(params) {
+    return {
+      name: 'hasCharactersTypesInHand',
+      params: {
+        types: [],
+        ...params,
+      },
     };
   }
 }

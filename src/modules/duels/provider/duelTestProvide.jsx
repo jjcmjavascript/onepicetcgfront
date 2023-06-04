@@ -98,6 +98,7 @@ function DuelProvider({ children }) {
     async iterator(generator) {
       for (const value of generator) {
         if (stopPile.current) {
+          generator.return();
           stopPile.current = false;
           break;
         }
