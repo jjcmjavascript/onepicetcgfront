@@ -685,14 +685,10 @@ function DuelProvider({ children }) {
   useEffect(() => {
     if (duelSocket) {
       duelSocket.on(constants.GAME_STATE, (payload) => {
-        console.log(constants.GAME_STATE);
-
         setGameState(payload.game);
       });
 
       duelSocket.on(constants.GAME_FAKE_STATE_CREATED, (payload) => {
-        console.log(constants.GAME_FAKE_STATE_CREATED, payload);
-
         joinRoom(SOCKET_DUEL_URL, payload.room);
 
         setBoard((state) => state.merge(payload.board));

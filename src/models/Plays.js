@@ -20,7 +20,6 @@ class Plays {
 
   mapObjectToClasses(plays) {
     return Object.entries(plays.list).reduce((acc, [key, value]) => {
-      console.log('key', key, value);
       acc[key] = value.map((play) => new Play(play));
 
       return acc;

@@ -43,8 +43,6 @@ class BoardGenerator {
       card.type = 'Don';
       card.code = 'don';
       deck.push(card);
-
-      console.log(card.codeName);
     }
 
     return deck;
