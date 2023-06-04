@@ -1,84 +1,47 @@
-const GAME_FAKE_STATE_CREATE = 'game:fakeStateCreate';
-const GAME_FAKE_STATE_CREATED = 'game:fakeStateCreated';
+export default Object.seal({
+  GAME_FAKE_STATE_CREATE: 'game:fakeStateCreate',
+  GAME_FAKE_STATE_CREATED: 'game:fakeStateCreated',
 
-const GAME_INITIAL_BOARD_STATE = 'game:boardState';
-const GAME_DECK_SELECTED = 'game:deckSelected';
-const GAME_TURN_SELECTION_INIT = 'game:turnSelectionInit';
-const GAME_TURN_SELECTION_END = 'game:turnSelectionEnd';
-const GAME_TURN_SELECTION_CHOICE = 'game:turnSelectionChoice';
-const GAME_STATE = 'game:gameState';
+  GAME_INITIAL_BOARD_STATE: 'game:boardState',
+  GAME_DECK_SELECTED: 'game:deckSelected',
+  GAME_TURN_SELECTION_INIT: 'game:turnSelectionInit',
+  GAME_TURN_SELECTION_END: 'game:turnSelectionEnd',
+  GAME_TURN_SELECTION_CHOICE: 'game:turnSelectionChoice',
+  GAME_STATE: 'game:gameState',
 
-// LISTENERS
-const GAME_ROOM_JOIN = 'game:room_join';
-const GAME_ROCK_SCISSORS_PAPER_RESULT = 'game:rockScissorsPaperResult';
-const GAME_ROCK_SCISSORS_PAPER_START = 'game:initRockPaperScissors';
-const GAME_ROCK_PAPER_SCISSORS_CHOICE = 'game:rockPaperScissorsChoice';
+  // LISTENERS
+  GAME_ROOM_JOIN: 'game:room_join',
+  GAME_ROCK_SCISSORS_PAPER_RESULT: 'game:rockScissorsPaperResult',
+  GAME_ROCK_SCISSORS_PAPER_START: 'game:initRockPaperScissors',
+  GAME_ROCK_PAPER_SCISSORS_CHOICE: 'game:rockPaperScissorsChoice',
 
-// no used
-const GAME_TURN_START = 'game:turnStart';
-const GAME_ROOM_CANCEL = 'game:cancel';
-const GAME_TURN_WAIT = 'game:turnWait';
-const GAME_TURN_END = 'game:turnEnd';
+  // no used
+  GAME_TURN_START: 'game:turnStart',
+  GAME_ROOM_CANCEL: 'game:cancel',
+  GAME_TURN_WAIT: 'game:turnWait',
+  GAME_TURN_END: 'game:turnEnd',
 
-// playin
-const GAME_MULLIGAN = 'game:mulligan';
-const GAME_PHASES_MULLIGAN = 'game:phasesMulligan';
-const GAME_PHASES_REFRESH = 'game:phasesRefresh';
-const GAME_PHASES_REFRESH_END = 'game:phasesRefreshEnd';
-const GAME_PHASES_DRAW = 'game:phasesDraw';
-const GAME_PHASES_DRAW_END = 'game:phasesDrawEnd';
-const GAME_PHASES_DON = 'game:phasesDon';
-const GAME_PHASES_DON_END = 'game:phasesDonEnd';
-const GAME_PHASES_MAIN = 'game:phasesMain';
-const GAME_PHASES_MAIN_END = 'game:phasesMainEnd';
-const GAME_PHASE_END = 'game:phaseEnd';
+  // playin
+  GAME_MULLIGAN: 'game:mulligan',
+  GAME_PHASES_MULLIGAN: 'game:phasesMulligan',
+  GAME_PHASES_REFRESH: 'game:phasesRefresh',
+  GAME_PHASES_REFRESH_END: 'game:phasesRefreshEnd',
+  GAME_PHASES_DRAW: 'game:phasesDraw',
+  GAME_PHASES_DRAW_END: 'game:phasesDrawEnd',
+  GAME_PHASES_DON: 'game:phasesDon',
+  GAME_PHASES_DON_END: 'game:phasesDonEnd',
+  GAME_PHASES_MAIN: 'game:phasesMain',
+  GAME_PHASES_MAIN_END: 'game:phasesMainEnd',
+  GAME_PHASE_END: 'game:phaseEnd',
 
-const GAME_DON_PLUS = 'game:donPlus';
+  GAME_DON_PLUS: 'game:donPlus',
 
-// RIVAL EVENTS
-const GAME_RIVAL_PHASES_REFRESH = 'game:rivalPhasesRefresh';
-const GAME_RIVAL_PHASES_DRAW = 'game:rivalPhasesDraw';
-const GAME_RIVAL_MULLIGAN = 'game:rivalMulligan';
-const GAME_RIVAL_PHASES_DON = 'game:rivalPhasesDon';
-const GAME_RIVAL_PHASES_MAIN = 'game:rivalPhasesMain';
-const GAME_RIVAL_PHASES_END = 'game:rivalPhasesEnd';
-const GAME_RIVAL_DON_PLUS = 'game:rivalDonPlus';
-
-export default {
-  GAME_ROOM_JOIN,
-  GAME_ROCK_PAPER_SCISSORS_CHOICE,
-  GAME_ROCK_SCISSORS_PAPER_RESULT,
-  GAME_ROCK_SCISSORS_PAPER_START,
-  GAME_ROOM_CANCEL,
-  GAME_DECK_SELECTED,
-  GAME_INITIAL_BOARD_STATE,
-  GAME_STATE,
-  GAME_TURN_START,
-  GAME_TURN_WAIT,
-  GAME_TURN_END,
-  GAME_MULLIGAN,
-  GAME_PHASES_MULLIGAN,
-  GAME_PHASES_REFRESH,
-  GAME_RIVAL_PHASES_REFRESH,
-  GAME_PHASES_REFRESH_END,
-  GAME_PHASES_DRAW,
-  GAME_PHASES_DRAW_END,
-  GAME_RIVAL_PHASES_DRAW,
-  GAME_RIVAL_MULLIGAN,
-  GAME_PHASES_DON,
-  GAME_RIVAL_PHASES_DON,
-  GAME_PHASES_DON_END,
-  GAME_PHASES_MAIN,
-  GAME_PHASES_MAIN_END,
-  GAME_PHASE_END,
-  GAME_RIVAL_PHASES_MAIN,
-  GAME_RIVAL_PHASES_END,
-  GAME_TURN_SELECTION_INIT,
-  GAME_TURN_SELECTION_CHOICE,
-  GAME_TURN_SELECTION_END,
-  GAME_DON_PLUS,
-  GAME_RIVAL_DON_PLUS,
-
-  GAME_FAKE_STATE_CREATE,
-  GAME_FAKE_STATE_CREATED,
-};
+  // RIVAL EVENTS
+  GAME_RIVAL_PHASES_REFRESH: 'game:rivalPhasesRefresh',
+  GAME_RIVAL_PHASES_DRAW: 'game:rivalPhasesDraw',
+  GAME_RIVAL_MULLIGAN: 'game:rivalMulligan',
+  GAME_RIVAL_PHASES_DON: 'game:rivalPhasesDon',
+  GAME_RIVAL_PHASES_MAIN: 'game:rivalPhasesMain',
+  GAME_RIVAL_PHASES_END: 'game:rivalPhasesEnd',
+  GAME_RIVAL_DON_PLUS: 'game:rivalDonPlus',
+});

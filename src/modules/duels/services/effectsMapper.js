@@ -1,22 +1,6 @@
 import effects from './effects';
 import conditions from './conditions';
-
-const targetTypes = Object.seal({
-  SELF: 'self',
-  ALL: 'all',
-  LEADER: 'leader',
-  STAGE: 'stage',
-  CHARACTER: 'character',
-  EVENT: 'event',
-  DON: 'don',
-  OPPONENT: 'opponent',
-  OPPONENT_LEADER: 'opponentLeader',
-  OPPONENT_STAGE: 'opponentStage',
-  OPPONENT_CHARACTER: 'opponentCharacter',
-  OPPONENT_EVENT: 'opponentEvent',
-  OPPONENT_DON: 'opponentDon',
-  ACTIVE_HAND: 'hand',
-});
+import targetTypes from '@duels/constants/targetTypes';
 
 const categories = Object.seal({
   SUPER_NOVA: 'Super Nova',
