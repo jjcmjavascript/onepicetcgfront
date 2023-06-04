@@ -4,7 +4,7 @@ import Store from "../provider/duelProvider";
 import ContainerFluidDark from "../../../components/containerFluidDark";
 import { FaHandMiddleFinger, FaRegHandScissors } from "react-icons/fa";
 
-import constants from "../services/constants";
+import constants from "../constants/socketEvents";
 
 const TurnSelectorContainer = ({ children }) => {
   return <div className="turnSelector--box">{children}</div>;

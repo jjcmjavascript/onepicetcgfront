@@ -123,3 +123,26 @@ export const mode = ({ game, params }) => game.mode === params.mode;
 export const hasExactCharacters = ({ board, params }) => {
   return board.characters.length === params.quantity;
 };
+
+export const hasRestedCharacters = ({ board }) => {
+  return board.characters.some((character) => character.rested);
+};
+
+export const hasRestedCharactersByCategories = ({ board, params }) => {
+  return board.characters.some(
+    (character) =>
+      character.rested &&
+      params.categories.some((category) =>
+        character.categories.includes(category)
+      )
+  );
+};
+
+export const hasRestedCharactersByCategoriesAndCosts = ({ board, params }) => {
+  return hasRestedCharactersByCategories({
+    board,
+    params: {
+      categories: params.filterByCategories.categories,
+    },
+  });
+};

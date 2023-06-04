@@ -6,7 +6,8 @@ import deckService from "@duels/services/deckService";
 
 import * as effectRules from "@duels/services/effectRules";
 
-import constants from "@duels/services/constants";
+import constants from "@duels/constants/socketEvents";
+
 import { pause } from "@helpers";
 
 import GameState from "@models/GameState";

@@ -20,8 +20,8 @@ class BoardGenerator {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
-      card.code = 'OP01-002';
-      card.name = 'Trafalgar Law';
+      card.code = 'OP01-003';
+      card.name = 'monkey D. Luffy';
       deck.push(card);
     }
 

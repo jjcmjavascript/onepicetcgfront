@@ -7,7 +7,7 @@ import * as effectRules from "@duels/services/effectRules";
 
 import BoardGenerator from "@duels/services/BoardGenerator";
 import GameState from "@models/GameState";
-import constants from "@duels/services/constants";
+import constants from "@duels/constants/socketEvents";
 import ActiveCard from "@models/ActiveCard";
 import { pause } from "@helpers";
 

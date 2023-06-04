@@ -8,7 +8,7 @@ import VsPlayer from "@duels/components/vsPlayer";
 import TurnSelector from "@duels/components/turnSelector";
 
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
-import constants from "@duels/services/constants";
+import constants from "@duels/constants/socketEvents";
 
 const views = {
   duel: <VsPlayer />,

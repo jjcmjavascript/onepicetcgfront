@@ -1,7 +1,7 @@
 import effects from './effects';
 import conditions from './conditions';
 
-const TARGET_TYPES = Object.seal({
+const targetTypes = Object.seal({
   SELF: 'self',
   ALL: 'all',
   LEADER: 'leader',
@@ -18,6 +18,11 @@ const TARGET_TYPES = Object.seal({
   ACTIVE_HAND: 'hand',
 });
 
+const categories = Object.seal({
+  SUPER_NOVA: 'Super Nova',
+  STRAW_HAT: 'Straw Hat Crew',
+});
+
 function getEffect(name) {
   const effectsHash = {
     characters: {
@@ -27,7 +32,7 @@ function getEffect(name) {
         conditions: [conditions('canPlayCardCharacter')],
         chaing: [
           effects('restMultipleDonsFromActive', {
-            target: TARGET_TYPES.ACTIVE_HAND,
+            target: targetTypes.ACTIVE_HAND,
           }),
           effects('initPlayCard'),
           effects('cleanAll'),
@@ -43,7 +48,7 @@ function getEffect(name) {
           effects('activateCharacterSelectorAll'),
           effects('awaitSelection'),
           effects('restMultipleDonsFromActive', {
-            target: TARGET_TYPES.ACTIVE_HAND,
+            target: targetTypes.ACTIVE_HAND,
           }),
           effects('replaceCharacter'),
           effects('cleanAll'),
@@ -63,7 +68,7 @@ function getEffect(name) {
           effects('activateCharacterSelectorAll'),
           effects('awaitSelection'),
           effects('addAttack', {
-            targets: [TARGET_TYPES.LEADER, TARGET_TYPES.CHARACTER],
+            targets: [targetTypes.LEADER, targetTypes.CHARACTER],
           }),
           effects('setActiveDonUnderCard'),
           effects('cleanAll'),
@@ -148,19 +153,22 @@ function getEffect(name) {
 
     'monkeyd.luffy:OP01-003': {
       'monkeyd.luffy:OP01-003:EFFECT:1': {
-        label: 'Regresar 1 y Jugar 1',
+        label: 'Cambia a activa un personaje',
         trigger: 'activate',
         conditions: [
           conditions('oncePerTurn'),
           conditions('currentMode'),
           conditions('phase'),
           conditions('hasAvaibleCost', { quantity: 4 }),
-          conditions('hasCharactersInHand'),
-          conditions('hasCharactersTypesInHand', [
-            'pirate',
-            'captain',
-          ]),
-
+          conditions('hasRestedCharactersByCategoriesAndCosts', {
+            filterByCategories: {
+              categories: [categories.SUPER_NOVA, categories.STRAW_HAT],
+            },
+            filterByCost: {
+              cost: 5,
+              symbol: '<=',
+            },
+          }),
         ],
         chaing: [
           effects('setMode', {
@@ -169,12 +177,13 @@ function getEffect(name) {
           effects('lockAllExcept', {
             exeptions: ['character'],
           }),
-          effects('activateCharacterSelectorAll'),
-          effects('awaitSelection'),
           effects('registerPlay', {
             type: 'leader_effect',
             effectName: 'monkeyd.luffy:OP01-003:EFFECT:1',
           }),
+          effects('activateCharacterSelectorAll'),
+          effects('awaitSelection'),
+
           effects('restMultipleDons', { quantity: 2 }),
           effects('returnCharacterFromFieldToHand'),
           effects('cleanCharacterSelectorAll'),
@@ -186,7 +195,7 @@ function getEffect(name) {
           effects('activateHandSelectorFilteredAnd', {
             filterByColor: {
               equal: false,
-              from: 'affectedCards', // card / affectedCards
+              from: 'affectedCards',
             },
             filterByCost: {
               cost: 5,

@@ -1,10 +1,4 @@
 class Conditions {
-  generic(params) {
-    return {
-      ...params,
-    };
-  }
-
   currentMode(params) {
     return {
       name: 'mode',
@@ -79,11 +73,31 @@ class Conditions {
     };
   }
 
-  hasCharactersTypesInHand(params) {
+  hasCharactersCategoriesInHand(params) {
     return {
-      name: 'hasCharactersTypesInHand',
+      name: 'hasCharactersCategoriesInHand',
       params: {
-        types: [],
+        categories: [],
+        ...params,
+      },
+    };
+  }
+
+  hasRestedCharacters(params) {
+    return {
+      name: 'hasRestedCharacters',
+      params: {
+        min: 1,
+        max: Infinity,
+        ...params,
+      },
+    };
+  }
+
+  hasRestedCharactersByCategoriesAndCosts(params) {
+    return {
+      name: 'hasRestedCharactersByCategoriesAndCosts',
+      params: {
         ...params,
       },
     };

@@ -8,7 +8,7 @@ import {
   FaRegHandPaper,
 } from "react-icons/fa";
 
-import constants from "../services/constants";
+import constants from "../constants/socketEvents";
 
 const RockScissorsPaperContainer = ({ children }) => {
   return <div className="rockScissorsPaperContainer--box">{children}</div>;
