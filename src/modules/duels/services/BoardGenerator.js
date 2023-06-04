@@ -14,6 +14,7 @@ class BoardGenerator {
     for (let i = 0; i < character; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Character';
+      card.rested = true;
       deck.push(card);
     }
 

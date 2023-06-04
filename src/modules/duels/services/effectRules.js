@@ -138,11 +138,30 @@ export const hasRestedCharactersByCategories = ({ board, params }) => {
   );
 };
 
+export const hasRestedCharactersByCosts = ({ board, params }) => {
+  const symbol = params.symbol;
+  const cost = params.cost;
+
+  return board.characters.some(
+    (character) => character.rested && eval(`${character.cost}${symbol}${cost}`)
+  );
+};
+
 export const hasRestedCharactersByCategoriesAndCosts = ({ board, params }) => {
-  return hasRestedCharactersByCategories({
+  const byCost = hasRestedCharactersByCosts({
+    board,
+    params: {
+      symbol: params.filterByCost.symbol,
+      cost: params.filterByCost.cost,
+    },
+  });
+
+  const byCategories = hasRestedCharactersByCategories({
     board,
     params: {
       categories: params.filterByCategories.categories,
     },
   });
+
+  return byCost && byCategories;
 };

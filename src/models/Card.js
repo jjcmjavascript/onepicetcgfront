@@ -80,7 +80,7 @@ class Card {
     const fakeCard = {
       id: faker.datatype.uuid(),
       uuid: faker.datatype.uuid(),
-      cost: faker.datatype.number({ min: 6, max: 6 }),
+      cost: faker.datatype.number({ min: 1, max: 10 }),
       name: faker.lorem.words(2),
       otherName: faker.lorem.words(2),
       power: faker.helpers.arrayElement(
