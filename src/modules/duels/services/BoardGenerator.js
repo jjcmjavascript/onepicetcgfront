@@ -20,6 +20,8 @@ class BoardGenerator {
     for (let i = 0; i < leader; i++) {
       let card = Card.generateFakeCard();
       card.type = 'Leader';
+      card.code = 'OP01-001';
+      card.name = 'RoronoaZoro';
       deck.push(card);
     }
 
@@ -39,8 +41,10 @@ class BoardGenerator {
       let card = Card.generateFakeCard();
       card.name = 'DON!!';
       card.type = 'Don';
-      card.code = 'OP01-001';
+      card.code = 'don';
       deck.push(card);
+
+      console.log(card.codeName);
     }
 
     return deck;

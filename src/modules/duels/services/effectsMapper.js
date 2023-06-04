@@ -51,7 +51,7 @@ function getEffect(name) {
       },
     },
 
-    'Don!!:don': {
+    'don!!:don': {
       addAttackFromDon: {
         trigger: 'activate',
         chaing: [
@@ -72,7 +72,7 @@ function getEffect(name) {
       },
     },
 
-    'RoronoaZoro:OP01-001': {
+    'roronoazoro:OP01-001': {
       'RoronoaZoro:OP01-001:EFFECT:1': {
         label: '+1000 a todos los personajes',
         trigger: 'auto',
@@ -94,7 +94,7 @@ function getEffect(name) {
       },
     },
 
-    'TrafalgarLaw:OP01-002': {
+    'trafalgarlaw:OP01-002': {
       'TrafalgarLaw:OP01-002:EFFECT:1': {
         label: 'Regresar 1 y Jugar 1',
         trigger: 'activate',
@@ -146,7 +146,7 @@ function getEffect(name) {
       },
     },
 
-    'MonkeyD.Luffy:OP01-003': {
+    'monkeyd.Luffy:OP01-003': {
       'MonkeyD.Luffy:OP01-003:EFFECT:1': {
         label: 'Regresar 1 y Jugar 1',
         trigger: 'activate',
@@ -202,4 +202,4 @@ function getEffect(name) {
   return effectsHash[name] || {};
 }
 
-export default Object.seal(getEffect);
+export default getEffect;

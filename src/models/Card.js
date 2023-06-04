@@ -50,16 +50,16 @@ class Card {
     return this.power + this.powerAdded.reduce((a, b) => a + b, 0);
   }
 
-  get effects() {
-    const name = this.name
+  get codeName() {
+    return this.name
       .toString()
       .toLowerCase()
-      .split(' ')
-      .map((word) => word[0].toUpperCase() + word.slice(1))
-      .join('')
+      .replace(/\s/g, '')
       .concat(`:${this.code}`);
+  }
 
-    let effects = effectsMapper(name) || {};
+  get effects() {
+    let effects = effectsMapper(this.codeName);
 
     if (this.type === 'Character') {
       effects = {
